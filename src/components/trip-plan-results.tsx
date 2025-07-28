@@ -538,7 +538,7 @@ export default function TripPlanResults({ data, isLoading, initialTool }: TripPl
             Fill out your budget details, and we'll craft a personalized itinerary for your Ghanaian adventure.
           </p>
           <Image
-            src="https://www.letvisitghana.com/wp-content/uploads/2024/05/Kakum-Canopy-Walk.jpg"
+            src="https://placehold.co/400x300.png"
             alt="Scenic view of a Ghanaian canopy walk"
             width={400}
             height={300}

@@ -111,7 +111,7 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
             Your personalized budget estimate will appear here once you fill out the form.
           </p>
           <Image
-            src="https://www.letvisitghana.com/wp-content/uploads/2024/05/Nzulezu-Stilt-Village.jpg"
+            src="https://placehold.co/400x300.png"
             alt="Scenic view of a Ghanaian stilt village"
             width={400}
             height={300}
