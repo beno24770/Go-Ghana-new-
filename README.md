@@ -42,3 +42,13 @@ A dedicated page showcases a curated list of vetted, professional local drivers.
 - **Framework**: Next.js (App Router) with React and TypeScript
 - **AI/Generative AI**: Google's Gemini models via Genkit for flows, prompts, and tool use.
 - **UI/Styling**: ShadCN UI components and Tailwind CSS for a modern, responsive design.
+
+## Future Roadmap: The Ghana Travel Graph
+
+Our long-term vision is to create a proprietary, real-time "Ghana Travel Graph"—a comprehensive database of destinations, accommodations, transportation options, and activities, all curated and maintained by our on-the-ground team in Ghana. This unique, defensible asset will allow us to:
+
+- **Deliver Hyper-Personalized & Authentic Recommendations**: Leverage deep local knowledge to suggest hidden gems and experiences that generic AI models don't know about.
+- **Provide Real-Time "Insider" Information**: Offer features like a "Local Pulse" to inform travelers about current events, festivals, and conditions.
+- **Power Advanced Planning Tools**: Build features like an interactive map-based itinerary planner and themed "trip blueprints" for different travel styles (e.g., "Heritage Tour," "Adventure Seeker").
+
+By combining our unique data with powerful AI, we will create the most intelligent, trustworthy, and personalized tool for planning travel to Ghana.
