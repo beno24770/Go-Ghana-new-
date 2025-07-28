@@ -218,7 +218,7 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                                     <p className="text-sm text-muted-foreground">
                                         Let local experts help you refine and book your perfect Ghanaian adventure.
                                     </p>
-                                    <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                                    <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-center">
                                          <Button asChild variant="outline">
                                             <Link href="https://letvisitghana.com" target="_blank">
                                                 <BookText /> <span className="ml-2">Read More Guides</span>
