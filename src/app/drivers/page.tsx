@@ -1,7 +1,6 @@
 
 import DriverProfileCard from '@/components/driver-profile-card';
 import { Button } from '@/components/ui/button';
-import Image from 'next/image';
 import Link from 'next/link';
 
 const drivers = [
@@ -46,23 +45,15 @@ const drivers = [
 export default function DriversPage() {
   return (
     <main className="flex-1">
-      <div className="relative flex h-[40vh] min-h-[300px] items-center justify-center px-4 text-center">
-          <Image
-              src="https://www.letvisitghana.com/wp-content/uploads/2024/05/Accra-city.jpg"
-              alt="A street in Accra with cars"
-              fill
-              className="object-cover -z-10 brightness-50"
-              priority
-              data-ai-hint="accra street"
-          />
-          <div className="max-w-3xl">
-              <h1 className="font-headline text-3xl font-bold text-white shadow-lg sm:text-4xl md:text-5xl">
-                  Connect with a Trusted Local Driver
-              </h1>
-              <p className="mt-4 text-base text-white/90 sm:text-lg md:text-xl">
-                Travel with confidence. Our vetted drivers are more than just transport—they're your personal guides to experiencing the real Ghana at a fair, negotiated price.
-              </p>
-          </div>
+      <div className="bg-muted py-20">
+        <div className="container mx-auto max-w-3xl px-4 text-center">
+            <h1 className="font-headline text-3xl font-bold sm:text-4xl md:text-5xl">
+                Connect with a Trusted Local Driver
+            </h1>
+            <p className="mt-4 text-base text-muted-foreground sm:text-lg md:text-xl">
+              Travel with confidence. Our vetted drivers are more than just transport—they're your personal guides to experiencing the real Ghana at a fair, negotiated price.
+            </p>
+        </div>
       </div>
 
       <div className="container mx-auto max-w-5xl px-4 py-16 sm:py-24">
