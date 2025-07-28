@@ -8,22 +8,26 @@ const features = [
     {
         icon: <DollarSign className="h-8 w-8 text-primary" />,
         title: "AI Budget Estimator",
-        description: "Get a detailed cost breakdown for your trip based on your travel style, duration, and desired regions."
+        description: "Get a detailed cost breakdown for your trip based on your travel style, duration, and desired regions.",
+        href: "/planner?tab=estimate"
     },
     {
         icon: <Map className="h-8 w-8 text-primary" />,
         title: "AI Itinerary Planner",
-        description: "Generate a personalized, day-by-day itinerary with activity suggestions tailored to your budget and interests."
+        description: "Generate a personalized, day-by-day itinerary with activity suggestions tailored to your budget and interests.",
+        href: "/planner?tab=plan"
     },
     {
         icon: <ListChecks className="h-8 w-8 text-primary" />,
         title: "Personalized Packing List",
-        description: "Receive a custom packing checklist based on your trip's specifics so you don't forget a thing."
+        description: "Receive a custom packing checklist based on your trip's specifics so you don't forget a thing.",
+        href: "/planner?tab=plan"
     },
     {
         icon: <Languages className="h-8 w-8 text-primary" />,
         title: "Interactive Language Guide",
-        description: "Learn essential phrases in local languages with audio pronunciation to connect with the culture."
+        description: "Learn essential phrases in local languages with audio pronunciation to connect with the culture.",
+        href: "/planner?tab=plan"
     }
 ]
 
@@ -61,7 +65,8 @@ export default function Home() {
 
         <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             {features.map(feature => (
-                <Card key={feature.title} className="text-center">
+              <Link href={feature.href} key={feature.title} className="block hover:scale-105 transition-transform duration-300">
+                <Card className="text-center h-full">
                     <CardHeader>
                         <div className="mx-auto bg-primary/10 p-3 rounded-full w-fit">
                             {feature.icon}
@@ -72,6 +77,7 @@ export default function Home() {
                         <p className="text-muted-foreground">{feature.description}</p>
                     </CardContent>
                 </Card>
+              </Link>
             ))}
         </div>
       </div>
