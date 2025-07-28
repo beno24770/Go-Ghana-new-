@@ -108,12 +108,12 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
             Your personalized budget estimate will appear here once you fill out the form.
           </p>
           <Image 
-            src="https://placehold.co/400x300.png"
+            src="https://placehold.co/400x300/1a1a1a/ffcc00.png"
             alt="Scenic view of a Ghanaian coastline with colorful fishing boats"
             width={400}
             height={300}
             className="mt-6 rounded-lg object-cover"
-            data-ai-hint="ghana coastline"
+            data-ai-hint="ghana landscape"
           />
         </div>
       </div>
