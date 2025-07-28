@@ -35,13 +35,15 @@ import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { getAudio, getItinerary, getLanguageGuide, getPackingList, regenerateItinerary } from '@/app/actions';
 import { useEffect, useState, useMemo } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import Link from 'next/link';
 import { marked } from 'marked';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { z } from 'zod';
 import { Textarea } from './ui/textarea';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
 
 
 type TripPlanData = {
@@ -69,6 +71,75 @@ interface ItineraryDialogProps {
     onOpenChange: (open: boolean) => void;
 }
 
+const downloadFormSchema = z.object({
+    name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+    email: z.string().email({ message: "Please enter a valid email address." }),
+});
+
+
+function DownloadDialog({ itineraryAsMarkdown, onOpenChange }: { itineraryAsMarkdown: string; onOpenChange: (open: boolean) => void }) {
+    const [formData, setFormData] = useState({ name: '', email: '' });
+    const [errors, setErrors] = useState<{ name?: string; email?: string }>({});
+    const { toast } = useToast();
+
+    const handleDownload = (e: React.FormEvent) => {
+        e.preventDefault();
+        const result = downloadFormSchema.safeParse(formData);
+        if (!result.success) {
+            const formattedErrors: { name?: string; email?: string } = {};
+            result.error.errors.forEach(err => {
+                if (err.path[0] === 'name') formattedErrors.name = err.message;
+                if (err.path[0] === 'email') formattedErrors.email = err.message;
+            });
+            setErrors(formattedErrors);
+            return;
+        }
+        
+        // At this point, you would typically send the lead (formData.name, formData.email) to your backend.
+        // For this prototype, we'll just log it and proceed with the download.
+        console.log("Lead captured:", { name: formData.name, email: formData.email });
+        toast({ title: "Success!", description: "Your itinerary is downloading." });
+
+
+        const blob = new Blob([itineraryAsMarkdown], { type: 'text/markdown;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'goghana-itinerary.md';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        onOpenChange(false);
+    };
+
+    return (
+        <DialogContent>
+            <DialogHeader>
+                <DialogTitle className="font-headline">Download Your Itinerary</DialogTitle>
+                <DialogDescription>
+                    Enter your details below to get your personalized itinerary.
+                </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleDownload} className="space-y-4">
+                <div className="space-y-2">
+                    <Label htmlFor="name">Name</Label>
+                    <Input id="name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                    {errors.name && <p className="text-sm text-destructive">{errors.name}</p>}
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input id="email" type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
+                     {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
+                </div>
+                <DialogFooter>
+                    <Button type="submit">Download Now</Button>
+                </DialogFooter>
+            </form>
+        </DialogContent>
+    );
+}
+
 
 function ItineraryDialog({ planData, initialTool, open, onOpenChange }: ItineraryDialogProps) {
     const [isLoading, setIsLoading] = useState({ itinerary: false, packingList: false, languageGuide: false, audio: '' });
@@ -79,6 +150,7 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
     const [activeTab, setActiveTab] = useState('itinerary');
     const [isEditing, setIsEditing] = useState(false);
     const [editedItinerary, setEditedItinerary] = useState('');
+    const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false);
 
     const { toast } = useToast();
 
@@ -129,19 +201,6 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
             toast({ variant: 'destructive', title: 'Error', description: result.error });
         }
         setIsLoading(prev => ({ ...prev, itinerary: false }));
-    };
-
-    const handleDownloadAndEdit = () => {
-        const blob = new Blob([itineraryAsMarkdown], { type: 'text/markdown;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'goghana-itinerary.md';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-        setIsEditing(true);
     };
 
     const handleGeneratePackingList = async () => {
@@ -279,15 +338,21 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
                         Let local experts help you refine and book your perfect Ghanaian adventure.
                     </p>
                     <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-center">
-                        <Button onClick={handleDownloadAndEdit} variant="outline">
-                            <Download /> <span className="ml-2">Download & Edit</span>
+                         <Button onClick={() => setIsEditing(true)} variant="outline">
+                            <Pencil /> <span className="ml-2">Edit</span>
                         </Button>
-                        <Button asChild variant="secondary">
+                        <Dialog open={isDownloadDialogOpen} onOpenChange={setIsDownloadDialogOpen}>
+                            <DialogTrigger asChild>
+                                <Button variant="outline"><Download /> <span className="ml-2">Download</span></Button>
+                            </DialogTrigger>
+                            <DownloadDialog itineraryAsMarkdown={itineraryAsMarkdown} onOpenChange={setIsDownloadDialogOpen} />
+                        </Dialog>
+                        <Button asChild>
                             <Link href="/drivers">
                                 <Car /> <span className="ml-2">Go Solo</span>
                             </Link>
                         </Button>
-                        <Button asChild>
+                        <Button asChild variant="secondary">
                             <Link href="https://letvisitghanatours.com" target="_blank">
                                 <Briefcase /> <span className="ml-2">Book This Tour</span>
                             </Link>
