@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { Logo } from '@/components/logo';
+import { Button } from '@/components/ui/button';
 
 const ptSans = PT_Sans({
   subsets: ['latin'],
@@ -37,10 +38,21 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={cn("font-body antialiased", ptSans.variable, playfairDisplay.variable)}>
         <div className="flex min-h-screen flex-col">
-           <header className="container mx-auto max-w-5xl px-4 py-6">
+           <header className="container mx-auto flex max-w-5xl items-center justify-between px-4 py-6">
              <Link href="/">
                 <Logo />
              </Link>
+             <nav className="hidden items-center gap-4 sm:flex">
+                <Button asChild variant="ghost">
+                    <Link href="/">Home</Link>
+                </Button>
+                <Button asChild variant="ghost">
+                    <Link href="/planner">Planner</Link>
+                </Button>
+                <Button asChild variant="ghost">
+                    <Link href="/drivers">Drivers</Link>
+                </Button>
+             </nav>
            </header>
           {children}
           <footer className="container mx-auto max-w-5xl px-4 py-6 text-center text-sm text-muted-foreground">
