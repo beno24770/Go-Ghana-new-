@@ -349,17 +349,15 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
 function PlanSection({ title, cost, description, icon, cta }: { title: string; cost: number; description: string; icon: React.ReactNode, cta?: React.ReactNode }) {
   return (
     <div>
-        <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-                {icon}
-                <div>
-                    <h3 className="text-xl font-bold font-headline">{title}</h3>
-                    <p className="text-lg font-semibold text-primary">${cost.toLocaleString()}</p>
-                </div>
+        <div className="flex items-center gap-4">
+            {icon}
+            <div>
+                <h3 className="text-xl font-bold font-headline">{title}</h3>
+                <p className="text-lg font-semibold text-primary">${cost.toLocaleString()}</p>
             </div>
-            {cta}
         </div>
       <p className="mt-2 text-muted-foreground">{description}</p>
+      {cta && <div className="mt-4">{cta}</div>}
     </div>
   );
 }
