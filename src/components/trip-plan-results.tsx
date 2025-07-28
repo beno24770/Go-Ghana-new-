@@ -163,7 +163,7 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                                                 <AccordionTrigger className="font-bold hover:no-underline">Day {dayPlan.day}: {dayPlan.title}</AccordionTrigger>
                                                 <AccordionContent>
                                                 <div 
-                                                    className="prose prose-sm dark:prose-invert max-w-none" 
+                                                    className="prose dark:prose-invert max-w-none" 
                                                     dangerouslySetInnerHTML={{ __html: marked(dayPlan.details) as string }} 
                                                 />
                                                 </AccordionContent>
@@ -288,12 +288,12 @@ export default function TripPlanResults({ data, isLoading }: TripPlanResultsProp
             Fill out your budget details, and we'll craft a personalized itinerary for your Ghanaian adventure.
           </p>
           <Image
-            src="https://www.letvisitghana.com/wp-content/uploads/2024/05/Nzulezu-Stilt-Village.jpg"
-            alt="Scenic view of a Ghanaian stilt village"
+            src="https://www.letvisitghana.com/wp-content/uploads/2024/05/Kakum-Canopy-Walk.jpg"
+            alt="Scenic view of a Ghanaian canopy walk"
             width={400}
             height={300}
             className="mt-6 rounded-lg object-cover"
-            data-ai-hint="ghana stilt village"
+            data-ai-hint="ghana canopy walk"
           />
         </div>
       </div>
