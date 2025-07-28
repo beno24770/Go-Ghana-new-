@@ -196,10 +196,10 @@ export default function TripPlanResults({ data, isLoading }: TripPlanResultsProp
             Fill out your budget details, and we'll craft a personalized itinerary for your Ghanaian adventure.
           </p>
           <Image
-            src="https://placehold.co/600x400.png"
+            src="https://placehold.co/400x300.png"
             alt="Vibrant Ghanaian market scene with colorful textiles and produce"
-            width={600}
-            height={400}
+            width={400}
+            height={300}
             className="mt-6 rounded-lg object-cover"
             data-ai-hint="ghanaian market"
           />
