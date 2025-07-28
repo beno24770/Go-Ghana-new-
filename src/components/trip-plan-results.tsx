@@ -2,9 +2,12 @@
 
 import {
   BedDouble,
+  BookOpenCheck,
+  Briefcase,
   Car,
   Copy,
   LoaderCircle,
+  Mail,
   Share2,
   Ticket,
   Utensils,
@@ -27,6 +30,7 @@ import { getItinerary } from '@/app/actions';
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
+import Link from 'next/link';
 
 type TripPlanData = {
   inputs: PlanTripInput;
@@ -102,16 +106,38 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                         </div>
                     )}
                     {itinerary && (
-                         <Accordion type="single" collapsible className="w-full">
-                            {itinerary.itinerary.map((dayPlan) => (
-                                <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
-                                    <AccordionTrigger className="font-bold hover:no-underline">Day {dayPlan.day}: {dayPlan.title}</AccordionTrigger>
-                                    <AccordionContent>
-                                       <div className="prose prose-sm dark:prose-invert" dangerouslySetInnerHTML={{ __html: dayPlan.details.replace(/\n/g, '<br />') }} />
-                                    </AccordionContent>
-                                </AccordionItem>
-                            ))}
-                        </Accordion>
+                         <div>
+                            <Accordion type="single" collapsible className="w-full">
+                                {itinerary.itinerary.map((dayPlan) => (
+                                    <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
+                                        <AccordionTrigger className="font-bold hover:no-underline">Day {dayPlan.day}: {dayPlan.title}</AccordionTrigger>
+                                        <AccordionContent>
+                                        <div className="prose prose-sm dark:prose-invert" dangerouslySetInnerHTML={{ __html: dayPlan.details.replace(/\n/g, '<br />') }} />
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                ))}
+                            </Accordion>
+                            <div className="mt-6 space-y-3 border-t pt-6 text-center">
+                                <h4 className="font-headline text-lg">Ready for the next step?</h4>
+                                <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                                    <Button asChild variant="outline">
+                                        <Link href="http://letvisitghana.com" target="_blank">
+                                            <BookOpenCheck /> <span>Read More</span>
+                                        </Link>
+                                    </Button>
+                                    <Button asChild variant="outline">
+                                        <Link href="mailto:letvisitghana@gmail.com">
+                                            <Mail /> <span>Customize Trip</span>
+                                        </Link>
+                                    </Button>
+                                    <Button asChild>
+                                        <Link href="http://letvisitghanatour.com" target="_blank">
+                                            <Briefcase /> <span>Book a Tour</span>
+                                        </Link>
+                                    </Button>
+                                </div>
+                            </div>
+                         </div>
                     )}
                 </div>
             </DialogContent>
