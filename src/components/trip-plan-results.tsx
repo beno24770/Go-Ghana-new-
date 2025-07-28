@@ -2,7 +2,7 @@
 
 import {
   BedDouble,
-  BookOpenCheck,
+  BookText,
   Briefcase,
   Car,
   Check,
@@ -164,7 +164,7 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                     <Wand2 className="mr-2 h-4 w-4" /> Plan Details
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-2xl">
+            <DialogContent className="sm:max-w-4xl">
                 <DialogHeader>
                     <DialogTitle className="font-headline text-2xl">Your Trip Tools</DialogTitle>
                     <DialogDescription>
@@ -205,7 +205,7 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                                                 <AccordionContent>
                                                 <div 
                                                     className="prose dark:prose-invert max-w-none" 
-                                                    dangerouslySetInnerHTML={{ __html: marked(dayPlan.details) as string }} 
+                                                    dangerouslySetInnerHTML={{ __html: marked.parse(dayPlan.details) as string }} 
                                                 />
                                                 </AccordionContent>
                                             </AccordionItem>
@@ -220,7 +220,7 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                                 <div className="flex flex-col sm:flex-row gap-2 justify-center">
                                      <Button asChild variant="outline">
                                         <Link href="https://letvisitghana.com" target="_blank">
-                                            <BookOpenCheck /> <span className="ml-2">Read More</span>
+                                            <BookText /> <span className="ml-2">Read More</span>
                                         </Link>
                                     </Button>
                                     <Button asChild variant="outline">
@@ -440,3 +440,5 @@ export default function TripPlanResults({ data, isLoading }: TripPlanResultsProp
     </Card>
   );
 }
+
+    

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useTransition } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -27,11 +27,26 @@ const budgetUrlSchema = EstimateBudgetInputSchema.merge(EstimateBudgetOutputSche
     region: z.union([z.string(), z.array(z.string())]),
     duration: z.coerce.number(),
     numTravelers: z.coerce.number(),
+    total: z.coerce.number(),
+    accommodation: z.coerce.number(),
+    food: z.coerce.number(),
+    transportation: z.coerce.number(),
+    activities: z.coerce.number(),
 });
 
 
 // Zod schema for parsing trip plan data from URL search params
-const planUrlSchema = PlanTripInputSchema.merge(PlanTripOutputSchema).extend({
+const planUrlSchema = PlanTripInputSchema.extend({
+    suggestedTravelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']),
+    'accommodation.cost': z.coerce.number(),
+    'accommodation.description': z.string(),
+    'food.cost': z.coerce.number(),
+    'food.description': z.string(),
+    'transportation.cost': z.coerce.number(),
+    'transportation.description': z.string(),
+    'activities.cost': z.coerce.number(),
+    'activities.description': z.string(),
+    total: z.coerce.number(),
     region: z.union([z.string(), z.array(z.string())]),
     budget: z.coerce.number(),
     duration: z.coerce.number(),
@@ -45,6 +60,7 @@ export default function TripPlannerView() {
   const [tripPlanData, setTripPlanData] = useState<TripPlanData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [formKey, setFormKey] = useState(Date.now());
+  const [isPending, startTransition] = useTransition();
   
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -60,10 +76,6 @@ export default function TripPlannerView() {
         if(key === 'region') {
             if(!data.region) data.region = [];
             data.region.push(value);
-        } else if (key.includes('.')) { // Handle nested objects e.g. accommodation.cost
-            const [parent, child] = key.split('.');
-            if (!data[parent]) data[parent] = {};
-            data[parent][child] = value;
         } else {
             data[key] = value;
         }
@@ -74,7 +86,7 @@ export default function TripPlannerView() {
         data.region = [data.region];
     }
 
-    if (tab === 'estimate') {
+    if (tab === 'estimate' && params.get('duration')) {
         const parsed = budgetUrlSchema.safeParse(data);
         if (parsed.success) {
             const { accommodation, activities, food, transportation, total, ...inputs } = parsed.data;
@@ -86,14 +98,21 @@ export default function TripPlannerView() {
             });
             setFormKey(Date.now()); 
         }
-    } else if (tab === 'plan') {
+    } else if (tab === 'plan' && params.get('budget')) {
         const parsed = planUrlSchema.safeParse(data);
         if (parsed.success) {
-            const { budget, duration, numTravelers, region, ...outputs } = parsed.data;
+            const { budget, duration, numTravelers, region, ...rest } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
             setTripPlanData({
                 inputs: { duration, region: regionArray, budget, numTravelers },
-                outputs: outputs as PlanTripOutput,
+                outputs: {
+                    suggestedTravelStyle: rest.suggestedTravelStyle,
+                    accommodation: { cost: rest['accommodation.cost'], description: rest['accommodation.description'] },
+                    food: { cost: rest['food.cost'], description: rest['food.description'] },
+                    transportation: { cost: rest['transportation.cost'], description: rest['transportation.description'] },
+                    activities: { cost: rest['activities.cost'], description: rest['activities.description'] },
+                    total: rest.total,
+                },
             });
             setFormKey(Date.now());
         }
@@ -118,7 +137,7 @@ export default function TripPlannerView() {
     setIsLoading(false);
   };
   
-  const handlePlan = async (inputs: PlanTripInput) => {
+  const handlePlan = useCallback(async (inputs: PlanTripInput) => {
     setIsLoading(true);
     setTripPlanData(null);
     const result = await getTripPlan(inputs);
@@ -130,30 +149,20 @@ export default function TripPlannerView() {
         toast({ variant: 'destructive', title: 'Error', description: result.error });
     }
     setIsLoading(false);
-  }
+  }, [toast, router]);
 
-  const handlePlanFromBudget = async (budgetInputs: EstimateBudgetInput, totalBudget: number) => {
+  const handlePlanFromBudget = useCallback((budgetInputs: EstimateBudgetInput, totalBudget: number) => {
     const planInputs: PlanTripInput = {
         duration: budgetInputs.duration,
         region: budgetInputs.region,
         numTravelers: budgetInputs.numTravelers,
         budget: totalBudget
     };
-    onTabChange('plan');
-    setTripPlanData({
-        inputs: planInputs,
-        outputs: {
-            suggestedTravelStyle: "Mid-range",
-            accommodation: { cost: 0, description: ""},
-            food: { cost: 0, description: ""},
-            transportation: { cost: 0, description: ""},
-            activities: { cost: 0, description: ""},
-            total: 0
-        }
+    startTransition(() => {
+        onTabChange('plan');
+        handlePlan(planInputs);
     });
-    setFormKey(Date.now());
-    await handlePlan(planInputs);
-  }
+  }, [handlePlan]);
 
   const updateUrl = (tab: string, data: any) => {
     const params = new URLSearchParams();
@@ -209,7 +218,7 @@ export default function TripPlannerView() {
                 <div className="relative">
                     <BudgetResults 
                       data={budgetData} 
-                      isLoading={isLoading && activeTab === 'estimate'} 
+                      isLoading={(isLoading || isPending) && activeTab === 'estimate'} 
                       onPlanItinerary={handlePlanFromBudget}
                     />
                 </div>
@@ -230,7 +239,7 @@ export default function TripPlannerView() {
                         />
                     </div>
                     <div className="relative">
-                        <TripPlanResults data={tripPlanData} isLoading={isLoading && activeTab === 'plan'} />
+                        <TripPlanResults data={tripPlanData} isLoading={(isLoading || isPending) && activeTab === 'plan'} />
                     </div>
                 </div>
             </TabsContent>
@@ -239,3 +248,5 @@ export default function TripPlannerView() {
       </main>
   );
 }
+
+    
