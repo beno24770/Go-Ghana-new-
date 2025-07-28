@@ -14,19 +14,19 @@ const features = [
         href: "/planner?tab=estimate"
     },
     {
-        icon: '📅',
+        icon: <Map className="h-10 w-10" />,
         title: "Custom Itinerary Builder",
         description: "No stress, no spreadsheets. Build a full day-by-day travel plan with suggested activities that match your interests and budget.",
         href: "/planner?tab=plan"
     },
     {
-        icon: '🤝',
+        icon: <Car className="h-10 w-10" />,
         title: "Connect with a Local Driver",
         description: "Travel like a local. Connect with our vetted, trusted drivers for personalized tours and reliable transport at a fair price.",
         href: "/drivers"
     },
     {
-        icon: '🗣️',
+        icon: <Languages className="h-10 w-10" />,
         title: "Ghanaian Language Companion",
         description: "Feel more connected. Learn key phrases in Twi, Ewe, Ga, and more—with audio guides to help you speak confidently.",
         href: "/planner?tab=plan&tool=language-guide"
@@ -73,7 +73,7 @@ export default function Home() {
               <Link href={feature.href} key={feature.title} className="block transition-transform duration-300 hover:scale-105">
                 <Card className="flex h-full flex-col text-left sm:flex-row">
                     <div className="flex items-center justify-center p-6 sm:p-4">
-                        <div className="mx-auto w-fit rounded-full bg-primary/10 p-4 text-4xl">
+                        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 p-4 text-4xl">
                             {feature.icon}
                         </div>
                     </div>

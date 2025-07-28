@@ -120,10 +120,11 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                               <Checkbox
                                 checked={field.value?.includes(region)}
                                 onCheckedChange={(checked) => {
+                                  const currentValue = field.value || [];
                                   return checked
-                                    ? field.onChange([...(field.value || []), region])
+                                    ? field.onChange([...currentValue, region])
                                     : field.onChange(
-                                        field.value?.filter(
+                                        currentValue?.filter(
                                           (value) => value !== region
                                         )
                                       )
@@ -169,10 +170,11 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                               <Checkbox
                                 checked={field.value?.includes(interest.id)}
                                 onCheckedChange={(checked) => {
+                                  const currentValue = field.value || [];
                                   return checked
-                                    ? field.onChange([...(field.value ?? []), interest.id])
+                                    ? field.onChange([...currentValue, interest.id])
                                     : field.onChange(
-                                        field.value?.filter(
+                                        currentValue?.filter(
                                           (value) => value !== interest.id
                                         )
                                       )
