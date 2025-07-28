@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -156,6 +157,70 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
             </div>
         )
     }
+    
+    const ItineraryContent = () => {
+        if (isLoading.itinerary) {
+            return (
+                <div className="flex h-full min-h-[300px] w-full items-center justify-center">
+                    <div className="text-center">
+                        <div className="h-12 w-12 mx-auto animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+                        <p className="mt-4 font-headline text-xl">Crafting your adventure...</p>
+                    </div>
+                </div>
+            )
+        }
+        if (!itinerary) {
+             return (
+                <div className="text-center p-8 flex flex-col items-center justify-center h-full min-h-[400px]">
+                    <p className="mb-4 text-muted-foreground">Click the button below to generate a personalized itinerary.</p>
+                    <Button onClick={handleGenerateItinerary} disabled={isLoading.itinerary}>
+                        {isLoading.itinerary ? <LoaderCircle className="animate-spin" /> : <Wand2 />}
+                        <span className="ml-2">{isLoading.itinerary ? 'Generating...' : 'Generate Itinerary'}</span>
+                    </Button>
+                </div>
+            )
+        }
+        return (
+            <>
+                <Accordion type="single" collapsible className="w-full">
+                    {itinerary.itinerary.map((dayPlan) => (
+                        <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
+                            <AccordionTrigger className="font-bold hover:no-underline text-left">Day {dayPlan.day}: {dayPlan.title}</AccordionTrigger>
+                            <AccordionContent>
+                            <div 
+                                className="prose dark:prose-invert max-w-none" 
+                                dangerouslySetInnerHTML={{ __html: marked.parse(dayPlan.details) as string }} 
+                            />
+                            </AccordionContent>
+                        </AccordionItem>
+                    ))}
+                </Accordion>
+                <div className="mt-6 space-y-3 border-t pt-6 text-center bg-muted/20 p-4 rounded-lg sticky bottom-0">
+                    <h4 className="font-headline text-lg">Ready for the Next Step?</h4>
+                    <p className="text-sm text-muted-foreground">
+                        Let local experts help you refine and book your perfect Ghanaian adventure.
+                    </p>
+                    <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-center">
+                            <Button asChild variant="outline">
+                            <Link href="https://letvisitghana.com" target="_blank">
+                                <BookText /> <span className="ml-2">Read More Guides</span>
+                            </Link>
+                        </Button>
+                        <Button asChild variant="secondary">
+                            <Link href="https://wa.me/233200635250" target="_blank">
+                                <Mail /> <span className="ml-2">Customize with an Expert</span>
+                            </Link>
+                        </Button>
+                        <Button asChild>
+                            <Link href="https://letvisitghanatours.com" target="_blank">
+                                <Briefcase /> <span className="ml-2">Book This Tour</span>
+                            </Link>
+                        </Button>
+                    </div>
+                </div>
+            </>
+        )
+    }
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -164,103 +229,43 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                     <Wand2 className="mr-2 h-4 w-4" /> Plan Details
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-4xl">
+            <DialogContent className="sm:max-w-4xl max-h-[90svh] flex flex-col">
                 <DialogHeader>
                     <DialogTitle className="font-headline text-2xl">Your Trip Tools</DialogTitle>
                     <DialogDescription>
                         Generate a sample itinerary, packing list, and language guide for your trip.
                     </DialogDescription>
                 </DialogHeader>
-                <Tabs defaultValue="itinerary" className="w-full">
+                <Tabs defaultValue="itinerary" className="w-full overflow-hidden flex-grow flex flex-col">
                     <TabsList className="grid w-full grid-cols-3">
                         <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
                         <TabsTrigger value="packing-list">Packing List</TabsTrigger>
                         <TabsTrigger value="language-guide">Language</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="itinerary">
-                        <div className="py-4 min-h-[400px]">
-                            {!itinerary && !isLoading.itinerary && (
-                                <div className="text-center p-8 flex flex-col items-center justify-center h-full">
-                                    <p className="mb-4 text-muted-foreground">Click the button below to generate a personalized itinerary.</p>
-                                    <Button onClick={handleGenerateItinerary} disabled={isLoading.itinerary}>
-                                        {isLoading.itinerary ? <LoaderCircle className="animate-spin" /> : <Wand2 />}
-                                        <span className="ml-2">{isLoading.itinerary ? 'Generating...' : 'Generate Itinerary'}</span>
-                                    </Button>
-                                </div>
-                            )}
-                            {isLoading.itinerary && (
-                                <div className="flex h-full min-h-[300px] w-full items-center justify-center">
-                                    <div className="text-center">
-                                        <div className="h-12 w-12 mx-auto animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-                                        <p className="mt-4 font-headline text-xl">Crafting your adventure...</p>
-                                    </div>
-                                </div>
-                            )}
-                            {itinerary && (
-                                <>
-                                <ScrollArea className="h-[450px] pr-4">
-                                    <Accordion type="single" collapsible className="w-full">
-                                        {itinerary.itinerary.map((dayPlan) => (
-                                            <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
-                                                <AccordionTrigger className="font-bold hover:no-underline">Day {dayPlan.day}: {dayPlan.title}</AccordionTrigger>
-                                                <AccordionContent>
-                                                <div 
-                                                    className="prose dark:prose-invert max-w-none" 
-                                                    dangerouslySetInnerHTML={{ __html: marked.parse(dayPlan.details) as string }} 
-                                                />
-                                                </AccordionContent>
-                                            </AccordionItem>
-                                        ))}
-                                    </Accordion>
-                                </ScrollArea>
-                                 <div className="mt-6 space-y-3 border-t pt-6 text-center bg-muted/20 p-4 rounded-lg">
-                                    <h4 className="font-headline text-lg">Ready for the Next Step?</h4>
-                                    <p className="text-sm text-muted-foreground">
-                                        Let local experts help you refine and book your perfect Ghanaian adventure.
-                                    </p>
-                                    <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-center">
-                                         <Button asChild variant="outline">
-                                            <Link href="https://letvisitghana.com" target="_blank">
-                                                <BookText /> <span className="ml-2">Read More Guides</span>
-                                            </Link>
-                                        </Button>
-                                        <Button asChild variant="secondary">
-                                            <Link href="https://wa.me/233200635250" target="_blank">
-                                                <Mail /> <span className="ml-2">Customize with an Expert</span>
-                                            </Link>
-                                        </Button>
-                                        <Button asChild>
-                                            <Link href="https://letvisitghanatours.com" target="_blank">
-                                                <Briefcase /> <span className="ml-2">Book This Tour</span>
-                                            </Link>
+                    <ScrollArea className="flex-grow">
+                        <TabsContent value="itinerary" className="pr-4 mt-0">
+                           <ItineraryContent />
+                        </TabsContent>
+                        <TabsContent value="packing-list" className="pr-4 mt-0">
+                            <div className="py-4 min-h-[400px]">
+                                {!packingList && !isLoading.packingList && (
+                                    <div className="text-center p-8 flex flex-col items-center justify-center h-full">
+                                        <p className="mb-4 text-muted-foreground">Click the button below to generate a personalized packing list.</p>
+                                        <Button onClick={handleGeneratePackingList} disabled={isLoading.packingList}>
+                                            {isLoading.packingList ? <LoaderCircle className="animate-spin" /> : <Wand2 />}
+                                            <span className="ml-2">{isLoading.packingList ? 'Generating...' : 'Generate Packing List'}</span>
                                         </Button>
                                     </div>
-                                </div>
-                                </>
-                            )}
-                        </div>
-                    </TabsContent>
-                    <TabsContent value="packing-list">
-                        <div className="py-4 min-h-[400px]">
-                            {!packingList && !isLoading.packingList && (
-                                <div className="text-center p-8 flex flex-col items-center justify-center h-full">
-                                    <p className="mb-4 text-muted-foreground">Click the button below to generate a personalized packing list.</p>
-                                    <Button onClick={handleGeneratePackingList} disabled={isLoading.packingList}>
-                                        {isLoading.packingList ? <LoaderCircle className="animate-spin" /> : <Wand2 />}
-                                        <span className="ml-2">{isLoading.packingList ? 'Generating...' : 'Generate Packing List'}</span>
-                                    </Button>
-                                </div>
-                            )}
-                            {isLoading.packingList && (
-                                <div className="flex h-full min-h-[300px] w-full items-center justify-center">
-                                    <div className="text-center">
-                                        <div className="h-12 w-12 mx-auto animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-                                        <p className="mt-4 font-headline text-xl">Creating your list...</p>
+                                )}
+                                {isLoading.packingList && (
+                                    <div className="flex h-full min-h-[300px] w-full items-center justify-center">
+                                        <div className="text-center">
+                                            <div className="h-12 w-12 mx-auto animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+                                            <p className="mt-4 font-headline text-xl">Creating your list...</p>
+                                        </div>
                                     </div>
-                                </div>
-                            )}
-                            {packingList && (
-                                 <ScrollArea className="h-[450px] pr-4">
+                                )}
+                                {packingList && (
                                     <div className="space-y-6">
                                         <PackingListCategory title="Clothing" items={packingList.clothing} />
                                         <PackingListCategory title="Toiletries" items={packingList.toiletries} />
@@ -269,31 +274,29 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                                         <PackingListCategory title="Electronics" items={packingList.electronics} />
                                         <PackingListCategory title="Miscellaneous" items={packingList.miscellaneous} />
                                     </div>
-                                 </ScrollArea>
-                            )}
-                        </div>
-                    </TabsContent>
-                     <TabsContent value="language-guide">
-                        <div className="py-4 min-h-[400px]">
-                            {!languageGuide && !isLoading.languageGuide && (
-                                <div className="text-center p-8 flex flex-col items-center justify-center h-full">
-                                    <p className="mb-4 text-muted-foreground">Click the button below to generate a quick language guide.</p>
-                                    <Button onClick={handleGenerateLanguageGuide} disabled={isLoading.languageGuide}>
-                                        {isLoading.languageGuide ? <LoaderCircle className="animate-spin" /> : <Languages />}
-                                        <span className="ml-2">{isLoading.languageGuide ? 'Generating...' : 'Generate Language Guide'}</span>
-                                    </Button>
-                                </div>
-                            )}
-                            {isLoading.languageGuide && (
-                                <div className="flex h-full min-h-[300px] w-full items-center justify-center">
-                                    <div className="text-center">
-                                        <div className="h-12 w-12 mx-auto animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-                                        <p className="mt-4 font-headline text-xl">Teaching the AI some local phrases...</p>
+                                )}
+                            </div>
+                        </TabsContent>
+                        <TabsContent value="language-guide" className="pr-4 mt-0">
+                            <div className="py-4 min-h-[400px]">
+                                {!languageGuide && !isLoading.languageGuide && (
+                                    <div className="text-center p-8 flex flex-col items-center justify-center h-full">
+                                        <p className="mb-4 text-muted-foreground">Click the button below to generate a quick language guide.</p>
+                                        <Button onClick={handleGenerateLanguageGuide} disabled={isLoading.languageGuide}>
+                                            {isLoading.languageGuide ? <LoaderCircle className="animate-spin" /> : <Languages />}
+                                            <span className="ml-2">{isLoading.languageGuide ? 'Generating...' : 'Generate Language Guide'}</span>
+                                        </Button>
                                     </div>
-                                </div>
-                            )}
-                            {languageGuide && (
-                                <ScrollArea className="h-[450px] pr-4">
+                                )}
+                                {isLoading.languageGuide && (
+                                    <div className="flex h-full min-h-[300px] w-full items-center justify-center">
+                                        <div className="text-center">
+                                            <div className="h-12 w-12 mx-auto animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+                                            <p className="mt-4 font-headline text-xl">Teaching the AI some local phrases...</p>
+                                        </div>
+                                    </div>
+                                )}
+                                {languageGuide && (
                                     <div className="space-y-4">
                                         <div className="text-center p-2 rounded-lg bg-muted/50">
                                             <p className="text-sm font-semibold">Primary Language for your trip:</p>
@@ -322,10 +325,10 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                                             </Card>
                                         ))}
                                     </div>
-                                </ScrollArea>
-                            )}
-                        </div>
-                    </TabsContent>
+                                )}
+                            </div>
+                        </TabsContent>
+                    </ScrollArea>
                 </Tabs>
             </DialogContent>
         </Dialog>
