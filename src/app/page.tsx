@@ -8,7 +8,7 @@ import Link from "next/link";
 
 const features = [
     {
-        icon: '🧮',
+        icon: <Calculator className="h-10 w-10" />,
         title: "Smart Budget Estimator",
         description: "Know what to expect. Get a detailed cost breakdown based on your travel style, trip duration, and the regions you want to explore.",
         href: "/planner?tab=estimate"

@@ -4,6 +4,7 @@
 import DriverProfileCard from '@/components/driver-profile-card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { UserPlus } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -97,13 +98,14 @@ export default function DriversPage() {
             )}
         </div>
 
-         <div className="mt-16 rounded-lg border-2 border-dashed border-primary bg-primary/5 p-8 text-center">
+         <div className="mt-16 rounded-lg bg-primary/5 p-8 text-center">
             <h2 className="font-headline text-2xl font-bold">Are You a Driver?</h2>
             <p className="mx-auto mt-2 max-w-xl text-muted-foreground">
               If you're a professional, reliable driver with a deep knowledge of Ghana and a passion for tourism, we'd love to hear from you. Join our trusted network.
             </p>
             <Button asChild size="lg" className="mt-6">
               <Link href="https://wa.me/233200635250" target="_blank">
+                <UserPlus />
                 Apply to Join
               </Link>
             </Button>
