@@ -113,6 +113,15 @@ function DownloadDialog({ itineraryAsMarkdown, onOpenChange }: { itineraryAsMark
         onOpenChange(false);
     };
 
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value } = e.target;
+        setFormData(prev => ({ ...prev, [id]: value }));
+        // Clear errors on change
+        if (errors[id as keyof typeof errors]) {
+            setErrors(prev => ({ ...prev, [id]: undefined }));
+        }
+    }
+
     return (
         <DialogContent>
             <DialogHeader>
@@ -124,12 +133,12 @@ function DownloadDialog({ itineraryAsMarkdown, onOpenChange }: { itineraryAsMark
             <form onSubmit={handleDownload} className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="name">Name</Label>
-                    <Input id="name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                    <Input id="name" value={formData.name} onChange={handleInputChange} />
                     {errors.name && <p className="text-sm text-destructive">{errors.name}</p>}
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
+                    <Input id="email" type="email" value={formData.email} onChange={handleInputChange} />
                      {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
                 </div>
                 <DialogFooter>
@@ -597,3 +606,5 @@ export default function TripPlanResults({ data, isLoading, initialTool }: TripPl
     </Card>
   );
 }
+
+    
