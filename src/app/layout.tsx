@@ -6,6 +6,8 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Menu } from 'lucide-react';
 
 const ptSans = PT_Sans({
   subsets: ['latin'],
@@ -53,6 +55,29 @@ export default function RootLayout({
                     <Link href="/drivers">Drivers</Link>
                 </Button>
              </nav>
+             <div className="sm:hidden">
+                <Sheet>
+                    <SheetTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                            <Menu className="h-6 w-6" />
+                            <span className="sr-only">Open menu</span>
+                        </Button>
+                    </SheetTrigger>
+                    <SheetContent side="right">
+                        <nav className="flex flex-col gap-6 pt-12 text-lg font-medium">
+                            <SheetClose asChild>
+                                <Link href="/">Home</Link>
+                            </SheetClose>
+                            <SheetClose asChild>
+                                <Link href="/planner">Planner</Link>
+                            </SheetClose>
+                            <SheetClose asChild>
+                                <Link href="/drivers">Drivers</Link>
+                            </SheetClose>
+                        </nav>
+                    </SheetContent>
+                </Sheet>
+             </div>
            </header>
           {children}
           <footer className="container mx-auto max-w-5xl px-4 py-6 text-center text-sm text-muted-foreground">
