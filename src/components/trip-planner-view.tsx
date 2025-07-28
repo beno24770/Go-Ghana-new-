@@ -101,18 +101,13 @@ export default function TripPlannerView() {
     }
     const region = params.getAll('region');
     if (region.length > 0) {
-        data.region = region.length === 1 ? region[0] : region;
-    } else if (params.has('region')) {
-        data.region = params.get('region')!;
+        data.region = region;
     }
     
     const interests = params.getAll('interests');
     if (interests.length > 0) {
-        data.interests = interests.length === 1 ? interests[0] : interests;
-    } else if (params.has('interests')) {
-        data.interests = params.get('interests')!;
+        data.interests = interests;
     }
-
 
     if (tab === 'estimate' && params.get('duration')) {
         const parsed = budgetUrlSchema.safeParse(data);
@@ -137,7 +132,7 @@ export default function TripPlannerView() {
         if (parsed.success) {
             const { budget, duration, numTravelers, region, travelStyle, interests, ...rest } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
-            const interestsArray = Array.isArray(interests) ? interests : (interests ? [interests] : undefined);
+            const interestsArray = Array.isArray(interests) ? interests : (interests ? [interests] : []);
             setTripPlanData({
                 inputs: { duration, region: regionArray, budget, numTravelers, travelStyle, interests: interestsArray },
                 outputs: {
@@ -163,21 +158,22 @@ export default function TripPlannerView() {
     params.set('tab', tab);
     
     const flatData = flattenObject(data);
+    
+    // Clear array keys before appending
+    params.delete('region');
+    params.delete('interests');
+
     for (const key in flatData) {
         if(key === 'inputs.region') {
             if(Array.isArray(flatData[key])) {
                 flatData[key].forEach((r: string) => params.append('region', r));
-            } else {
-                params.append('region', flatData[key]);
             }
         } else if (key === 'inputs.interests') {
             if(Array.isArray(flatData[key])) {
                 flatData[key].forEach((i: string) => params.append('interests', i));
-            } else if (flatData[key]) {
-                params.append('interests', flatData[key]);
             }
-        } else {
-            params.set(key.replace('inputs.', '').replace('outputs.', 'outputs.'), flatData[key]);
+        } else if (flatData[key] !== undefined) {
+             params.set(key.replace('inputs.', '').replace('outputs.', 'outputs.'), flatData[key]);
         }
     }
 
@@ -213,46 +209,30 @@ export default function TripPlannerView() {
   }, [toast, updateUrl]);
 
   const handlePlanFromBudget = useCallback((budgetInputs: EstimateBudgetInput, totalBudget: number) => {
-    const planInputs: Partial<PlanTripInput> = {
+    const planInputs: PlanTripInput = {
         duration: budgetInputs.duration,
         region: budgetInputs.region,
         numTravelers: budgetInputs.numTravelers,
         budget: totalBudget,
-        travelStyle: budgetInputs.travelStyle
+        travelStyle: budgetInputs.travelStyle,
+        interests: ['Culture', 'Heritage & History'] // Default interests
     };
+    
     startTransition(() => {
         onTabChange('plan');
-        setTripPlanData(null)
-        setBudgetData(null)
-        const params = new URLSearchParams(window.location.search);
-        params.set('tab', 'plan');
-        router.push(`/planner?${params.toString()}`, { scroll: false });
-        // Set default values for the form, then it can be submitted by the user
-        const defaultTripPlanData = {
-            inputs: {
-                ...planInputs,
-                interests: ['Culture', 'Heritage & History']
-            }
-        }
-        setTripPlanData(defaultTripPlanData as TripPlanData)
-        setFormKey(Date.now())
+        handlePlan(planInputs);
     });
-  }, [router]);
+  }, [handlePlan]);
 
   const onTabChange = (value: string) => {
     startTransition(() => {
         setActiveTab(value);
-        const params = new URLSearchParams(window.location.search);
+        setBudgetData(null);
+        setTripPlanData(null);
+        const params = new URLSearchParams();
         params.set('tab', value);
-        // Clear other params when switching tabs
-        const keysToRemove: string[] = [];
-        params.forEach((_, key) => {
-            if (key !== 'tab') {
-                keysToRemove.push(key);
-            }
-        });
-        keysToRemove.forEach(key => params.delete(key));
         router.push(`/planner?${params.toString()}`, { scroll: false });
+        setFormKey(Date.now());
     });
   }
 

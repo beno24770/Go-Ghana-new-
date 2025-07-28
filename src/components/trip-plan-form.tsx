@@ -1,3 +1,4 @@
+
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,7 +26,7 @@ const ghanaRegions = [
   "Upper East", "Upper West", "Volta", "Western", "Western North"
 ];
 
-const travelStyles: EstimateBudgetInput['travelStyle'][] = ['Budget', 'Mid-range', 'Luxury'];
+const travelStyles: PlanTripInput['travelStyle'][] = ['Budget', 'Mid-range', 'Luxury'];
 
 const interests = [
   { id: 'Culture', label: 'Culture' },
