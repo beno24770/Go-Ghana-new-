@@ -1,3 +1,4 @@
+import { InstallPwaButton } from "@/components/install-pwa-button";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, Languages, ListChecks, Map } from "lucide-react";
@@ -81,6 +82,7 @@ export default function Home() {
             ))}
         </div>
       </div>
+      <InstallPwaButton />
     </main>
   );
 }
