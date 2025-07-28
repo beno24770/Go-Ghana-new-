@@ -181,21 +181,23 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
             )
         }
         return (
-            <>
-                <Accordion type="single" collapsible className="w-full">
-                    {itinerary.itinerary.map((dayPlan) => (
-                        <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
-                            <AccordionTrigger className="font-bold hover:no-underline text-left">Day {dayPlan.day}: {dayPlan.title}</AccordionTrigger>
-                            <AccordionContent>
-                            <div 
-                                className="prose dark:prose-invert max-w-none" 
-                                dangerouslySetInnerHTML={{ __html: marked.parse(dayPlan.details) as string }} 
-                            />
-                            </AccordionContent>
-                        </AccordionItem>
-                    ))}
-                </Accordion>
-                <div className="mt-6 space-y-3 border-t pt-6 text-center bg-muted/20 p-4 rounded-lg sticky bottom-0">
+            <div className="flex flex-col h-full">
+                <div className="flex-grow overflow-y-auto">
+                    <Accordion type="single" collapsible className="w-full">
+                        {itinerary.itinerary.map((dayPlan) => (
+                            <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
+                                <AccordionTrigger className="font-bold hover:no-underline text-left">Day {dayPlan.day}: {dayPlan.title}</AccordionTrigger>
+                                <AccordionContent>
+                                <div 
+                                    className="prose dark:prose-invert max-w-none" 
+                                    dangerouslySetInnerHTML={{ __html: marked.parse(dayPlan.details) as string }} 
+                                />
+                                </AccordionContent>
+                            </AccordionItem>
+                        ))}
+                    </Accordion>
+                </div>
+                <div className="mt-6 space-y-3 border-t pt-6 text-center bg-muted/20 p-4 rounded-lg">
                     <h4 className="font-headline text-lg">Ready for the Next Step?</h4>
                     <p className="text-sm text-muted-foreground">
                         Let local experts help you refine and book your perfect Ghanaian adventure.
@@ -218,7 +220,7 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                         </Button>
                     </div>
                 </div>
-            </>
+            </div>
         )
     }
 
@@ -242,8 +244,8 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                         <TabsTrigger value="packing-list">Packing List</TabsTrigger>
                         <TabsTrigger value="language-guide">Language</TabsTrigger>
                     </TabsList>
-                    <ScrollArea className="flex-grow">
-                        <TabsContent value="itinerary" className="pr-4 mt-0">
+                    <div className="flex-grow overflow-y-auto">
+                        <TabsContent value="itinerary" className="mt-0">
                            <ItineraryContent />
                         </TabsContent>
                         <TabsContent value="packing-list" className="pr-4 mt-0">
@@ -328,7 +330,7 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                                 )}
                             </div>
                         </TabsContent>
-                    </ScrollArea>
+                    </div>
                 </Tabs>
             </DialogContent>
         </Dialog>
@@ -446,3 +448,5 @@ export default function TripPlanResults({ data, isLoading }: TripPlanResultsProp
     </Card>
   );
 }
+
+    
