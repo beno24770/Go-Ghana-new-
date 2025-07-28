@@ -20,9 +20,9 @@ const generateLanguageGuidePrompt = ai.definePrompt({
     prompt: `You are a Ghana travel and language expert. A first-time solo traveler is visiting the following regions in Ghana: {{#each region}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}.
 
 Your Task:
-1.  **Identify the Primary Language**: Determine the most common local language spoken across the majority of the selected regions. If regions have different primary languages, choose the one that would be most useful for a traveler (e.g., Twi is widely spoken).
+1.  **Identify the Primary Language**: The primary language for a traveler in Ghana should be Twi, as it is the most widely spoken and understood across the country. Your primary output should be in Twi.
 2.  **Generate a List of Phrases**: Create a list of 10-15 essential phrases for a traveler. The list should cover categories like Greetings, Common Questions, Market/Shopping, and Directions.
-3.  **Provide Clear Translations**: For each phrase, provide the English version, the translated version in the identified local language, and the name of that language.
+3.  **Provide Clear Translations**: For each phrase, provide the English version, the translated version in Twi, and confirm the language name is "Twi".
 4.  **Ensure Accuracy**: The translations must be accurate and culturally appropriate. Use the examples below as a guide for quality.
 
 Example for Ashanti region:
