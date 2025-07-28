@@ -31,6 +31,8 @@ import { useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import Link from 'next/link';
+import { marked } from 'marked';
+
 
 type TripPlanData = {
   inputs: PlanTripInput;
@@ -112,7 +114,10 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                                     <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
                                         <AccordionTrigger className="font-bold hover:no-underline">Day {dayPlan.day}: {dayPlan.title}</AccordionTrigger>
                                         <AccordionContent>
-                                        <div className="prose prose-sm dark:prose-invert" dangerouslySetInnerHTML={{ __html: dayPlan.details.replace(/\n/g, '<br />') }} />
+                                          <div 
+                                            className="prose prose-sm dark:prose-invert" 
+                                            dangerouslySetInnerHTML={{ __html: marked(dayPlan.details) as string }} 
+                                          />
                                         </AccordionContent>
                                     </AccordionItem>
                                 ))}
@@ -121,7 +126,7 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                                 <h4 className="font-headline text-lg">Ready for the next step?</h4>
                                 <div className="flex flex-col sm:flex-row gap-2 justify-center">
                                     <Button asChild variant="outline">
-                                        <Link href="http://letvisitghana.com" target="_blank">
+                                        <Link href="https://letvisitghana.com" target="_blank">
                                             <BookOpenCheck /> <span>Read More</span>
                                         </Link>
                                     </Button>
@@ -131,7 +136,7 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                                         </Link>
                                     </Button>
                                     <Button asChild>
-                                        <Link href="http://letvisitghanatour.com" target="_blank">
+                                        <Link href="https://letvisitghanatour.com" target="_blank">
                                             <Briefcase /> <span>Book a Tour</span>
                                         </Link>
                                     </Button>

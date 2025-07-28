@@ -90,7 +90,7 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
             <FormItem>
               <FormLabel>Regions</FormLabel>
               <Card>
-                <CardContent className="p-4">
+                <CardContent className="p-4 pt-4">
                   <ScrollArea className="h-48">
                     <div className="space-y-2">
                     {ghanaRegions.map((region) => (

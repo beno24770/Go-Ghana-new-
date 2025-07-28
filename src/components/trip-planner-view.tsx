@@ -23,12 +23,42 @@ type TripPlanData = {
     outputs: PlanTripOutput;
 }
 
-const budgetUrlSchema = EstimateBudgetInputSchema.merge(EstimateBudgetOutputSchema).extend({
+// Zod schema for parsing budget data from URL search params
+const budgetUrlSchema = EstimateBudgetInputSchema.extend({
     region: z.union([z.string(), z.array(z.string())]),
+    accommodation: z.coerce.number(),
+    food: z.coerce.number(),
+    transportation: z.coerce.number(),
+    activities: z.coerce.number(),
+    total: z.coerce.number(),
+    duration: z.coerce.number(),
+    numTravelers: z.coerce.number(),
 });
 
-const planUrlSchema = PlanTripInputSchema.merge(PlanTripOutputSchema).extend({
+// Zod schema for parsing trip plan data from URL search params
+const planUrlSchema = PlanTripInputSchema.extend({
     region: z.union([z.string(), z.array(z.string())]),
+    budget: z.coerce.number(),
+    duration: z.coerce.number(),
+    numTravelers: z.coerce.number(),
+    suggestedTravelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']),
+    accommodation: z.object({
+      cost: z.coerce.number(),
+      description: z.string(),
+    }),
+    food: z.object({
+      cost: z.coerce.number(),
+      description: z.string(),
+    }),
+    transportation: z.object({
+      cost: z.coerce.number(),
+      description: z.string(),
+    }),
+    activities: z.object({
+      cost: z.coerce.number(),
+      description: z.string(),
+    }),
+    total: z.coerce.number(),
 });
 
 
@@ -53,19 +83,16 @@ export default function TripPlannerView() {
         if(key === 'region') {
             if(!data.region) data.region = [];
             data.region.push(value);
+        } else if (key.includes('.')) { // Handle nested objects e.g. accommodation.cost
+            const [parent, child] = key.split('.');
+            if (!data[parent]) data[parent] = {};
+            data[parent][child] = value;
         } else {
-            // Handle nested objects from URL (e.g., accommodation.cost)
-            if (key.includes('.')) {
-                const [parent, child] = key.split('.');
-                if (!data[parent]) data[parent] = {};
-                data[parent][child] = value;
-            } else {
-                data[key] = value;
-            }
+            data[key] = value;
         }
     }
     
-    // Ensure single region selections are wrapped in an array
+    // Ensure single region selections are still wrapped in an array for consistency
     if (data.region && !Array.isArray(data.region)) {
         data.region = [data.region];
     }
@@ -136,6 +163,7 @@ export default function TripPlannerView() {
         budget: totalBudget
     };
     onTabChange('plan');
+    // Set a temporary loading state for the plan results
     setTripPlanData({
         inputs: planInputs,
         outputs: {
@@ -157,7 +185,7 @@ export default function TripPlannerView() {
     
     const flattenObject = (obj: any, prefix = '') => {
         Object.entries(obj).forEach(([key, value]) => {
-            const newKey = prefix ? `\${prefix}.\${key}` : key;
+            const newKey = prefix ? `${prefix}.${key}` : key;
             if (key === 'region' && Array.isArray(value)) {
                 value.forEach(region => params.append(key, region));
             } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
@@ -171,14 +199,14 @@ export default function TripPlannerView() {
     flattenObject(data.inputs);
     flattenObject(data.outputs);
 
-    router.push(`?\${params.toString()}`, { scroll: false });
+    router.push(`?${params.toString()}`, { scroll: false });
   };
   
   const onTabChange = (value: string) => {
     setActiveTab(value);
     const params = new URLSearchParams(window.location.search);
     params.set('tab', value);
-    router.push(`?\${params.toString()}`, { scroll: false });
+    router.push(`?${params.toString()}`, { scroll: false });
   }
 
   return (
@@ -200,9 +228,9 @@ export default function TripPlannerView() {
                     Select your travel style to get a personalized budget estimate for your adventure in the heart of West Africa.
                     </p>
                     <BudgetForm
-                    key={`budget-\${formKey}`}
+                    key={`budget-${formKey}`}
                     onSubmit={handleEstimate}
-                    isSubmitting={isLoading}
+                    isSubmitting={isLoading && activeTab === 'estimate'}
                     defaultValues={budgetData?.inputs}
                     />
                 </div>
@@ -223,9 +251,9 @@ export default function TripPlannerView() {
                         Enter your total budget, and we'll generate a custom travel plan for you, complete with suggestions for your stay.
                         </p>
                         <TripPlanForm
-                            key={`plan-\${formKey}`}
+                            key={`plan-${formKey}`}
                             onSubmit={handlePlan}
-                            isSubmitting={isLoading}
+                            isSubmitting={isLoading && activeTab === 'plan'}
                             defaultValues={tripPlanData?.inputs}
                         />
                     </div>
