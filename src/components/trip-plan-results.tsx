@@ -32,7 +32,7 @@ import type { GenerateItineraryOutput, GenerateLanguageGuideOutput, GeneratePack
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { getAudio, getItinerary, getLanguageGuide, getPackingList } from '@/app/actions';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import Link from 'next/link';
@@ -49,6 +49,7 @@ type TripPlanData = {
 interface TripPlanResultsProps {
   data: TripPlanData | null;
   isLoading: boolean;
+  initialTool?: string | null;
 }
 
 const categoryIcons = {
@@ -60,18 +61,27 @@ const categoryIcons = {
 
 interface ItineraryDialogProps {
     planData: TripPlanData;
+    initialTool?: string | null;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
 }
 
 
-function ItineraryDialog({ planData }: ItineraryDialogProps) {
-    const [isOpen, setIsOpen] = useState(false);
+function ItineraryDialog({ planData, initialTool, open, onOpenChange }: ItineraryDialogProps) {
     const [isLoading, setIsLoading] = useState({ itinerary: false, packingList: false, languageGuide: false, audio: '' });
     const [itinerary, setItinerary] = useState<GenerateItineraryOutput | null>(null);
     const [packingList, setPackingList] = useState<GeneratePackingListOutput | null>(null);
     const [languageGuide, setLanguageGuide] = useState<GenerateLanguageGuideOutput | null>(null);
     const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+    const [activeTab, setActiveTab] = useState('itinerary');
 
     const { toast } = useToast();
+
+    useEffect(() => {
+        if(open && initialTool) {
+            setActiveTab(initialTool);
+        }
+    }, [open, initialTool]);
 
     const handleGenerateItinerary = async () => {
         setIsLoading(prev => ({...prev, itinerary: true}));
@@ -229,12 +239,7 @@ function ItineraryDialog({ planData }: ItineraryDialogProps) {
     }
 
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger asChild>
-                <Button>
-                    <Wand2 className="mr-2 h-4 w-4" /> Plan Details
-                </Button>
-            </DialogTrigger>
+        <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-4xl max-h-[90svh] flex flex-col p-6">
                 <DialogHeader>
                     <DialogTitle className="font-headline text-2xl">Your Trip Tools</DialogTitle>
@@ -242,7 +247,7 @@ function ItineraryDialog({ planData }: ItineraryDialogProps) {
                         Generate a sample itinerary, packing list, and language guide for your trip.
                     </DialogDescription>
                 </DialogHeader>
-                <Tabs defaultValue="itinerary" className="w-full overflow-hidden flex-grow flex flex-col">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full overflow-hidden flex-grow flex flex-col">
                     <TabsList className="grid w-full grid-cols-3">
                         <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
                         <TabsTrigger value="packing-list">Packing List</TabsTrigger>
@@ -360,8 +365,15 @@ function PlanSection({ title, cost, description, icon, cta }: { title: string; c
 }
 
 
-export default function TripPlanResults({ data, isLoading }: TripPlanResultsProps) {
+export default function TripPlanResults({ data, isLoading, initialTool }: TripPlanResultsProps) {
   const { toast } = useToast();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  useEffect(() => {
+    if (initialTool && data) {
+      setIsDialogOpen(true);
+    }
+  }, [initialTool, data]);
 
   const handleShare = () => {
     if (typeof window !== 'undefined') {
@@ -434,7 +446,11 @@ export default function TripPlanResults({ data, isLoading }: TripPlanResultsProp
             <PlanSection title="Accommodation" cost={outputs.accommodation.cost} description={outputs.accommodation.description} icon={categoryIcons.accommodation} />
             <PlanSection title="Food" cost={outputs.food.cost} description={outputs.food.description} icon={categoryIcons.food} />
             <PlanSection title="Transportation" cost={outputs.transportation.cost} description={outputs.transportation.description} icon={categoryIcons.transportation} />
-            <PlanSection title="Activities" cost={outputs.activities.cost} description={outputs.activities.description} icon={categoryIcons.activities} cta={<ItineraryDialog planData={data} />} />
+            <PlanSection title="Activities" cost={outputs.activities.cost} description={outputs.activities.description} icon={categoryIcons.activities} cta={
+                <Button onClick={() => setIsDialogOpen(true)}>
+                    <Wand2 className="mr-2 h-4 w-4" /> Plan Details
+                </Button>
+            } />
         </div>
         
         <div className="text-center border-t pt-6">
@@ -449,8 +465,12 @@ export default function TripPlanResults({ data, isLoading }: TripPlanResultsProp
           Share This Plan
         </Button>
       </CardContent>
+      <ItineraryDialog 
+        planData={data} 
+        initialTool={initialTool} 
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+      />
     </Card>
   );
 }
-
-    

@@ -35,7 +35,7 @@ export default function DriverProfileCard({ name, regions, bio, vehicle, whatsAp
 
                     <Button asChild className="w-full" size="lg">
                         <Link href={whatsAppUrl} target="_blank">
-                           Contact via WhatsApp
+                           <Car /> Contact via WhatsApp
                         </Link>
                     </Button>
                 </div>

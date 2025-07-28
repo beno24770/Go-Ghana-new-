@@ -85,7 +85,8 @@ export default function TripPlannerView() {
   const [isLoading, setIsLoading] = useState(false);
   const [formKey, setFormKey] = useState(Date.now());
   const [isPending, startTransition] = useTransition();
-  
+  const [initialTool, setInitialTool] = useState<string | null>(null);
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const { toast } = useToast();
@@ -94,19 +95,20 @@ export default function TripPlannerView() {
     const params = new URLSearchParams(searchParams.toString());
     const tab = params.get('tab') || 'estimate';
     setActiveTab(tab);
+    setInitialTool(params.get('tool'));
 
     const data: { [key: string]: any } = {};
     for(const [key, value] of params.entries()) {
         data[key] = value;
     }
-    const region = params.getAll('region');
-    if (region.length > 0) {
-        data.region = region;
+
+    // Since getAll can return an empty array, we check for presence
+    if (params.has('region')) {
+        data.region = params.getAll('region');
     }
     
-    const interests = params.getAll('interests');
-    if (interests.length > 0) {
-        data.interests = interests;
+    if (params.has('interests')) {
+        data.interests = params.getAll('interests');
     }
 
     if (tab === 'estimate' && params.get('duration')) {
@@ -177,7 +179,9 @@ export default function TripPlannerView() {
         }
     }
 
-    router.push(`/planner?${params.toString()}`, { scroll: false });
+    startTransition(() => {
+        router.push(`/planner?${params.toString()}`, { scroll: false });
+    });
   }, [router]);
 
   const handleEstimate = async (inputs: EstimateBudgetInput) => {
@@ -209,7 +213,7 @@ export default function TripPlannerView() {
   }, [toast, updateUrl]);
 
   const handlePlanFromBudget = useCallback((budgetInputs: EstimateBudgetInput, totalBudget: number) => {
-    const planInputs: PlanTripInput = {
+    const planInputs: Partial<PlanTripInput> = {
         duration: budgetInputs.duration,
         region: budgetInputs.region,
         numTravelers: budgetInputs.numTravelers,
@@ -220,19 +224,27 @@ export default function TripPlannerView() {
     
     startTransition(() => {
         onTabChange('plan');
-        handlePlan(planInputs);
+        setTripPlanData(null); 
+        setTimeout(() => { 
+            handlePlan(planInputs as PlanTripInput);
+        }, 0);
     });
   }, [handlePlan]);
 
   const onTabChange = (value: string) => {
     startTransition(() => {
         setActiveTab(value);
-        setBudgetData(null);
-        setTripPlanData(null);
-        const params = new URLSearchParams();
+        const params = new URLSearchParams(searchParams.toString());
         params.set('tab', value);
+        params.delete('tool');
         router.push(`/planner?${params.toString()}`, { scroll: false });
-        setFormKey(Date.now());
+        
+        // Reset data unless navigating with history
+        if (!isPending) {
+            setBudgetData(null);
+            setTripPlanData(null);
+            setFormKey(Date.now());
+        }
     });
   }
 
@@ -281,7 +293,7 @@ export default function TripPlannerView() {
                         />
                     </div>
                     <div className="relative">
-                        <TripPlanResults data={tripPlanData} isLoading={(isLoading || isPending) && activeTab === 'plan'} />
+                        <TripPlanResults data={tripPlanData} isLoading={(isLoading || isPending) && activeTab === 'plan'} initialTool={initialTool} />
                     </div>
                 </div>
             </TabsContent>

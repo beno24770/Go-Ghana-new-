@@ -2,7 +2,7 @@
 import { InstallPwaButton } from "@/components/install-pwa-button";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calculator, Car, Languages, ListChecks, Map } from "lucide-react";
+import { Calculator, Car, Languages, ListChecks, Map, Wand2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -29,7 +29,7 @@ const features = [
         icon: '🗣️',
         title: "Ghanaian Language Companion",
         description: "Feel more connected. Learn key phrases in Twi, Ewe, Ga, and more—with audio guides to help you speak confidently.",
-        href: "/planner?tab=plan"
+        href: "/planner?tab=plan&tool=language-guide"
     }
 ]
 
@@ -52,7 +52,10 @@ export default function Home() {
                   Let Ghana welcome you. Build your dream trip with personalized budgets, custom itineraries, and travel tips—everything crafted to help you experience the real Ghana.
               </p>
               <Button asChild size="lg" className="mt-8">
-                  <Link href="/planner">Start Planning Now</Link>
+                  <Link href="/planner">
+                    <Wand2 />
+                    Start Planning Now
+                  </Link>
               </Button>
           </div>
       </div>

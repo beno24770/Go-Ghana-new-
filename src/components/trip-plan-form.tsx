@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { type PlanTripInput, PlanTripInputSchema, type EstimateBudgetInput } from '@/ai/schemas';
+import { type PlanTripInput, PlanTripInputSchema } from '@/ai/schemas';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from './ui/scroll-area';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
