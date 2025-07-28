@@ -70,12 +70,14 @@ export default function BudgetResults({ data, isLoading }: BudgetResultsProps) {
   const { toast } = useToast();
 
   const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    toast({
-      title: 'Copied to Clipboard',
-      description: 'The link to your budget estimate has been copied.',
-      action: <Copy className="h-4 w-4" />,
-    });
+    if (typeof window !== 'undefined') {
+      navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: 'Copied to Clipboard',
+        description: 'The link to your budget estimate has been copied.',
+        action: <Copy className="h-4 w-4" />,
+      });
+    }
   };
 
   if (isLoading) {
@@ -99,11 +101,11 @@ export default function BudgetResults({ data, isLoading }: BudgetResultsProps) {
           </p>
           <Image 
             src="https://placehold.co/400x300.png"
-            alt="Vibrant Ghanaian market scene with colorful textiles and produce"
+            alt="Scenic view of a Ghanaian beach with palm trees and calm waves"
             width={400}
             height={300}
             className="mt-6 rounded-lg object-cover"
-            data-ai-hint="ghanaian market"
+            data-ai-hint="ghana beach"
           />
         </div>
       </div>
@@ -115,7 +117,7 @@ export default function BudgetResults({ data, isLoading }: BudgetResultsProps) {
     .filter(key => key !== 'total')
     .map(key => ({
       name: key.charAt(0).toUpperCase() + key.slice(1),
-      cost: outputs[key as keyof typeof outputs],
+      cost: outputs[key as keyof Omit<EstimateBudgetOutput, 'total'>],
       fill: `var(--color-${key})`,
     }));
   
@@ -154,7 +156,7 @@ export default function BudgetResults({ data, isLoading }: BudgetResultsProps) {
         </div>
         
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {(Object.keys(outputs) as Array<keyof typeof outputs>)
+            {(Object.keys(outputs) as Array<keyof Omit<EstimateBudgetOutput, 'total'>>)
               .filter(key => key !== 'total')
               .map(key => (
               <Card key={key} className="bg-background/50">

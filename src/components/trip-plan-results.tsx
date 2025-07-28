@@ -168,12 +168,14 @@ export default function TripPlanResults({ data, isLoading }: TripPlanResultsProp
   const { toast } = useToast();
 
   const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    toast({
-      title: 'Copied to Clipboard',
-      description: 'The link to your trip plan has been copied.',
-      action: <Copy className="h-4 w-4" />,
-    });
+    if (typeof window !== 'undefined') {
+      navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: 'Copied to Clipboard',
+        description: 'The link to your trip plan has been copied.',
+        action: <Copy className="h-4 w-4" />,
+      });
+    }
   };
 
   if (isLoading) {
@@ -197,11 +199,11 @@ export default function TripPlanResults({ data, isLoading }: TripPlanResultsProp
           </p>
           <Image
             src="https://placehold.co/400x300.png"
-            alt="Vibrant Ghanaian market scene with colorful textiles and produce"
+            alt="Scenic view of a Ghanaian beach with palm trees and calm waves"
             width={400}
             height={300}
             className="mt-6 rounded-lg object-cover"
-            data-ai-hint="ghanaian market"
+            data-ai-hint="ghana beach"
           />
         </div>
       </div>
