@@ -45,10 +45,10 @@ export default function Home() {
           />
           <div className="max-w-2xl">
               <h1 className="font-headline text-4xl md:text-6xl font-bold text-white shadow-lg">
-                  Plan Your Perfect Ghana Adventure
+                  Go Ghana: Plan Less, Explore More
               </h1>
               <p className="mt-4 text-lg md:text-xl text-white/90">
-                  Your AI-powered guide is here to help you create an unforgettable journey. Get personalized budgets, itineraries, packing lists, and more—all in one place.
+                  Let Ghana welcome you. Build your dream trip with personalized budgets, custom itineraries, and travel tips—everything crafted to help you experience the real Ghana.
               </p>
               <Button asChild size="lg" className="mt-8">
                   <Link href="/planner">Start Planning Now</Link>
