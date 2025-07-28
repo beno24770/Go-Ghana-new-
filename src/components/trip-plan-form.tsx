@@ -26,7 +26,11 @@ const ghanaRegions = [
   "Upper East", "Upper West", "Volta", "Western", "Western North"
 ];
 
-const travelStyles: PlanTripInput['travelStyle'][] = ['Budget', 'Mid-range', 'Luxury'];
+const travelStyles: { name: PlanTripInput['travelStyle'], description: string }[] = [
+    { name: 'Budget', description: '(approx. $60-140/day)' },
+    { name: 'Mid-range', description: '(approx. $150-320/day)' },
+    { name: 'Luxury', description: '(approx. $400+/day)' },
+];
 
 const interests = [
   { id: 'Culture', label: 'Culture' },
@@ -209,11 +213,14 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                   className="flex flex-col space-y-1"
                 >
                   {travelStyles.map(style => (
-                    <FormItem key={style} className="flex items-center space-x-3 space-y-0">
+                    <FormItem key={style.name} className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value={style} />
+                        <RadioGroupItem value={style.name} />
                       </FormControl>
-                      <FormLabel className="font-normal">{style}</FormLabel>
+                      <FormLabel className="font-normal flex items-center">
+                        {style.name}
+                        <span className="text-xs text-muted-foreground ml-2">{style.description}</span>
+                      </FormLabel>
                     </FormItem>
                   ))}
                 </RadioGroup>
