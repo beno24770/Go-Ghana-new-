@@ -33,15 +33,20 @@ Your Task:
 4.  **Ensure Total Matches**: The sum of the costs for each category must equal the total budget provided by the user.
 
 Cost Guidelines (per person per day):
-- Budget: $30 - $115
-- Mid-range: $130 - $300
+- Budget: $60 - $140
+- Mid-range: $150 - $320
 - Luxury: $400 - $1650+
+
+Transportation Facts (use this to inform your suggestions):
+- A budget of ~$25 per day for transport is realistic for inter-city travel (e.g., between Accra, Cape Coast, and Kumasi).
+- A round trip from Accra to Cape Coast or Accra to Kumasi can be done for about $25.
+- A budget of ~$45 can cover round trips for both Accra-Cape Coast and Accra-Kumasi.
 
 Example Descriptions:
 - **Accommodation**: Suggest types of lodging (e.g., "Hostels and budget guesthouses", "Comfortable mid-range hotels and Airbnbs", "Luxury hotels and resorts with premium amenities").
 - **Food**: Describe dining options (e.g., "Local street food stalls and small local eateries (chop bars)", "A mix of local restaurants and some Western-style cafes", "Fine dining restaurants and hotel restaurants").
-- **Transportation**: Mention modes of transport (e.g., "Shared trotros and public buses", "Ride-sharing apps (Uber/Bolt) and occasional private taxis", "Private driver or high-end car rentals").
-- **Activities**: Suggest a plausible itinerary for the duration. For example: "Day 1-2: Explore Accra's markets and Independence Square. Day 3: Visit Kakum National Park..."
+- **Transportation**: Mention modes of transport (e.g., "Shared trotros and public buses for inter-city travel", "Ride-sharing apps (Uber/Bolt) and occasional private taxis", "Private driver or high-end car rentals"). For budget plans, mention that $25/day is a good estimate for moving between major cities.
+- **Activities**: Suggest a plausible itinerary for the duration, keeping in mind that tour site fees are at least $10 per person. For example: "Day 1-2: Explore Accra's markets and Independence Square. Day 3: Visit Kakum National Park (Entrance fee ~$10-15)..."
 
 Generate a response that adheres to the PlanTripOutputSchema.`,
 });

@@ -36,15 +36,15 @@ Your Task:
 Cost Ranges (per person, per day):
 Budget:
   - Accommodation: $20-60
-  - Food: $5-15
-  - Transportation: $5-20
-  - Activities: $0-20
+  - Food: $10-20
+  - Transportation: $20-35
+  - Activities: $10-25
 
 Mid-range:
   - Accommodation: $70-150
   - Food: $20-60
-  - Transportation: $25-50
-  - Activities: $15-40
+  - Transportation: $35-60
+  - Activities: $25-50
 
 Luxury:
   - Accommodation: $200-1000
