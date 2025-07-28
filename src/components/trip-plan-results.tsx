@@ -197,11 +197,11 @@ export default function TripPlanResults({ data, isLoading }: TripPlanResultsProp
           </p>
           <Image
             src="https://placehold.co/600x400.png"
-            alt="Placeholder image of a Ghana landscape"
+            alt="Placeholder image of a Ghanaian market"
             width={600}
             height={400}
             className="mt-6 rounded-lg object-cover"
-            data-ai-hint="ghana travel"
+            data-ai-hint="ghana market"
           />
         </div>
       </div>

@@ -48,7 +48,7 @@ export function Logo() {
             <text x="5" y="40" fontFamily="Verdana, sans-serif" fontSize="32" fontWeight="bold" fill="#006837">
               Go
             </text>
-            <text x="60" y="40" fontFamily="Verdana, sans-serif" fontSize="32" fontWeight="bold" fill="#c1272d">
+            <text x="55" y="40" fontFamily="Verdana, sans-serif" fontSize="32" fontWeight="bold" fill="#c1272d">
               Ghana
             </text>
             <text x="5" y="65" fontFamily="Verdana, sans-serif" fontSize="14" fill="#231F20">
