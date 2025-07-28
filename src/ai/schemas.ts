@@ -92,3 +92,29 @@ export const GeneratePackingListOutputSchema = z.object({
     miscellaneous: z.array(PackingListItemSchema).describe('List of miscellaneous items.'),
 });
 export type GeneratePackingListOutput = z.infer<typeof GeneratePackingListOutputSchema>;
+
+export const GenerateLanguageGuideInputSchema = z.object({
+    region: z.array(z.string()).describe('The regions in Ghana the user will be visiting.'),
+});
+export type GenerateLanguageGuideInput = z.infer<typeof GenerateLanguageGuideInputSchema>;
+
+export const PhraseSchema = z.object({
+    english: z.string().describe('The phrase in English.'),
+    translation: z.string().describe('The translated phrase in the local language.'),
+    languageName: z.string().describe('The name of the local language (e.g., Twi, Ga).'),
+});
+
+export const GenerateLanguageGuideOutputSchema = z.object({
+    phrases: z.array(PhraseSchema).describe('A list of useful phrases for the traveler.'),
+});
+export type GenerateLanguageGuideOutput = z.infer<typeof GenerateLanguageGuideOutputSchema>;
+
+export const GenerateAudioInputSchema = z.object({
+    text: z.string().describe('The text to be converted to speech.'),
+});
+export type GenerateAudioInput = z.infer<typeof GenerateAudioInputSchema>;
+
+export const GenerateAudioOutputSchema = z.object({
+    media: z.string().describe("The generated audio as a data URI. Expected format: 'data:audio/wav;base64,<encoded_data>'."),
+});
+export type GenerateAudioOutput = z.infer<typeof GenerateAudioOutputSchema>;

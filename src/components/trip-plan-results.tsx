@@ -7,11 +7,14 @@ import {
   Car,
   Check,
   Copy,
+  Languages,
   LoaderCircle,
   Mail,
+  PlayCircle,
   Share2,
   Ticket,
   Utensils,
+  Volume2,
   Wallet,
   Wand2,
 } from 'lucide-react';
@@ -24,10 +27,10 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import type { GenerateItineraryOutput, GeneratePackingListOutput, PackingListItemSchema, PlanTripInput, PlanTripOutput } from '@/ai/schemas';
+import type { GenerateItineraryOutput, GenerateLanguageGuideOutput, GeneratePackingListOutput, PackingListItemSchema, PhraseSchema, PlanTripInput, PlanTripOutput } from '@/ai/schemas';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
-import { getItinerary, getPackingList } from '@/app/actions';
+import { getAudio, getItinerary, getLanguageGuide, getPackingList } from '@/app/actions';
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
@@ -57,9 +60,12 @@ const categoryIcons = {
 
 function ItineraryDialog({ planData }: { planData: TripPlanData }) {
     const [isOpen, setIsOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState({ itinerary: false, packingList: false });
+    const [isLoading, setIsLoading] = useState({ itinerary: false, packingList: false, languageGuide: false, audio: '' });
     const [itinerary, setItinerary] = useState<GenerateItineraryOutput | null>(null);
     const [packingList, setPackingList] = useState<GeneratePackingListOutput | null>(null);
+    const [languageGuide, setLanguageGuide] = useState<GenerateLanguageGuideOutput | null>(null);
+    const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+
     const { toast } = useToast();
 
     const handleGenerateItinerary = async () => {
@@ -96,6 +102,40 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
         }
         setIsLoading(prev => ({...prev, packingList: false}));
     }
+
+    const handleGenerateLanguageGuide = async () => {
+        setIsLoading(prev => ({...prev, languageGuide: true}));
+        setLanguageGuide(null);
+        const result = await getLanguageGuide({ region: planData.inputs.region });
+
+        if (result.success) {
+            setLanguageGuide(result.data);
+        } else {
+            toast({ variant: 'destructive', title: 'Error', description: result.error });
+        }
+        setIsLoading(prev => ({...prev, languageGuide: false}));
+    }
+
+    const handlePlayAudio = async (text: string, phraseIndex: number) => {
+        if (audio?.src) {
+            audio.pause();
+            audio.currentTime = 0;
+            setAudio(null);
+        }
+
+        setIsLoading(prev => ({...prev, audio: `phrase-${phraseIndex}`}));
+        const result = await getAudio({ text });
+
+        if (result.success) {
+            const newAudio = new Audio(result.data.media);
+            setAudio(newAudio);
+            newAudio.play();
+            newAudio.onended = () => setAudio(null);
+        } else {
+            toast({ variant: 'destructive', title: 'Error', description: result.error });
+        }
+        setIsLoading(prev => ({...prev, audio: ''}));
+    }
     
     function PackingListCategory({ title, items }: { title: string; items: z.infer<typeof PackingListItemSchema>[] }) {
         if (!items || items.length === 0) return null;
@@ -128,13 +168,14 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                 <DialogHeader>
                     <DialogTitle className="font-headline text-2xl">Your Trip Tools</DialogTitle>
                     <DialogDescription>
-                        Generate a sample itinerary and a personalized packing list for your trip.
+                        Generate a sample itinerary, packing list, and language guide for your trip.
                     </DialogDescription>
                 </DialogHeader>
                 <Tabs defaultValue="itinerary" className="w-full">
-                    <TabsList className="grid w-full grid-cols-2">
+                    <TabsList className="grid w-full grid-cols-3">
                         <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
                         <TabsTrigger value="packing-list">Packing List</TabsTrigger>
+                        <TabsTrigger value="language-guide">Language</TabsTrigger>
                     </TabsList>
                     <TabsContent value="itinerary">
                         <div className="py-4 min-h-[400px]">
@@ -197,7 +238,7 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                         )}
                     </TabsContent>
                     <TabsContent value="packing-list">
-                    <div className="py-4 min-h-[400px]">
+                        <div className="py-4 min-h-[400px]">
                             {!packingList && !isLoading.packingList && (
                                 <div className="text-center p-8 flex flex-col items-center justify-center h-full">
                                     <p className="mb-4 text-muted-foreground">Click the button below to generate a personalized packing list.</p>
@@ -226,6 +267,59 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                                         <PackingListCategory title="Miscellaneous" items={packingList.miscellaneous} />
                                     </div>
                                  </ScrollArea>
+                            )}
+                        </div>
+                    </TabsContent>
+                     <TabsContent value="language-guide">
+                        <div className="py-4 min-h-[400px]">
+                            {!languageGuide && !isLoading.languageGuide && (
+                                <div className="text-center p-8 flex flex-col items-center justify-center h-full">
+                                    <p className="mb-4 text-muted-foreground">Click the button below to generate a quick language guide.</p>
+                                    <Button onClick={handleGenerateLanguageGuide} disabled={isLoading.languageGuide}>
+                                        {isLoading.languageGuide ? <LoaderCircle className="animate-spin" /> : <Languages />}
+                                        <span className="ml-2">{isLoading.languageGuide ? 'Generating...' : 'Generate Language Guide'}</span>
+                                    </Button>
+                                </div>
+                            )}
+                            {isLoading.languageGuide && (
+                                <div className="flex h-full min-h-[300px] w-full items-center justify-center">
+                                    <div className="text-center">
+                                        <div className="h-12 w-12 mx-auto animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+                                        <p className="mt-4 font-headline text-xl">Teaching the AI some local phrases...</p>
+                                    </div>
+                                </div>
+                            )}
+                            {languageGuide && (
+                                <ScrollArea className="h-[450px] pr-4">
+                                    <div className="space-y-4">
+                                        <div className="text-center p-2 rounded-lg bg-muted/50">
+                                            <p className="text-sm font-semibold">Primary Language for your trip:</p>
+                                            <p className="text-lg font-bold text-primary">{languageGuide.phrases[0]?.languageName}</p>
+                                        </div>
+                                        {languageGuide.phrases.map((phrase, index) => (
+                                            <Card key={index} className="p-3">
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <p className="text-sm text-muted-foreground">{phrase.english}</p>
+                                                        <p className="font-bold text-lg">{phrase.translation}</p>
+                                                    </div>
+                                                    <Button 
+                                                        size="icon" 
+                                                        variant="ghost" 
+                                                        onClick={() => handlePlayAudio(phrase.translation, index)} 
+                                                        disabled={!!isLoading.audio}
+                                                        aria-label={`Play audio for "${phrase.translation}"`}
+                                                    >
+                                                        {isLoading.audio === `phrase-${index}` ? 
+                                                            <LoaderCircle className="animate-spin" /> : 
+                                                            <Volume2 />
+                                                        }
+                                                    </Button>
+                                                </div>
+                                            </Card>
+                                        ))}
+                                    </div>
+                                </ScrollArea>
                             )}
                         </div>
                     </TabsContent>
