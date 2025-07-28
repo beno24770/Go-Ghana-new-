@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -32,9 +33,9 @@ Your Task:
 4.  **Ensure Total Matches**: The sum of the costs for each category must equal the total budget provided by the user.
 
 Cost Guidelines (per person per day):
-- Budget: $18 - $55
-- Mid-range: $75 - $190
-- Luxury: $230 - $850+
+- Budget: $30 - $115
+- Mid-range: $130 - $300
+- Luxury: $400 - $1650+
 
 Example Descriptions:
 - **Accommodation**: Suggest types of lodging (e.g., "Hostels and budget guesthouses", "Comfortable mid-range hotels and Airbnbs", "Luxury hotels and resorts with premium amenities").

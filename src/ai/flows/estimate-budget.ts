@@ -29,21 +29,21 @@ Number of Travelers: {{numTravelers}}
 Consider the following cost ranges based on the travel style:
 
 Budget:
-  - Accommodation: $10-30 per night
+  - Accommodation: $20-60 per night
   - Food: $5-15 per day
-  - Transportation: $3-10 per day
-  - Activities: $0-10 per day
+  - Transportation: $5-20 per day
+  - Activities: $0-20 per day
 
 Mid-range:
-  - Accommodation: $40-100 per night
-  - Food: $20-40 per day
-  - Transportation: $10-20 per day
-  - Activities: $15-30 per day
+  - Accommodation: $70-150 per night
+  - Food: $20-60 per day
+  - Transportation: $25-50 per day
+  - Activities: $15-40 per day
 
 Luxury:
-  - Accommodation: $150-500 per night
-  - Food: $50-150 per day
-  - Transportation: $30-100 per day
+  - Accommodation: $200-1000 per night
+  - Food: $70-300 per day
+  - Transportation: $80-150 per day
   - Activities: $50-200 per day`,
 });
 
