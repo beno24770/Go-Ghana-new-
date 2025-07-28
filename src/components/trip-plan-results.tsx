@@ -170,7 +170,7 @@ export default function TripPlanResults({ data, isLoading }: TripPlanResultsProp
             Fill out your budget details, and we'll craft a personalized itinerary for your Ghanaian adventure.
           </p>
           <Image
-            src="https://placehold.co/600x400"
+            src="https://placehold.co/600x400.png"
             alt="Placeholder image of a Ghana landscape"
             width={600}
             height={400}

@@ -98,7 +98,7 @@ export default function BudgetResults({ data, isLoading }: BudgetResultsProps) {
             Your personalized budget estimate will appear here once you fill out the form.
           </p>
           <Image 
-            src="https://placehold.co/600x400"
+            src="https://placehold.co/600x400.png"
             alt="Placeholder image of a Ghana landscape"
             width={600}
             height={400}
