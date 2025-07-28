@@ -8,7 +8,7 @@ import BudgetForm from '@/components/budget-form';
 import BudgetResults from '@/components/budget-results';
 import TripPlanForm from '@/components/trip-plan-form';
 import TripPlanResults from '@/components/trip-plan-results';
-import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, PlanTripOutputSchema, EstimateBudgetInputSchema } from '@/ai/schemas';
+import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, PlanTripOutputSchema, EstimateBudgetInputSchema, EstimateBudgetOutputSchema } from '@/ai/schemas';
 import { getBudgetEstimate, getTripPlan } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Logo } from '@/components/logo';
@@ -23,34 +23,14 @@ type TripPlanData = {
     outputs: PlanTripOutput;
 }
 
-const budgetDataSchema = z.object({
-  duration: z.coerce.number().int().min(1),
-  region: z.union([z.string(), z.array(z.string())]),
-  travelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']),
-  numTravelers: z.coerce.number().int().min(1),
-  accommodation: z.coerce.number(),
-  food: z.coerce.number(),
-  transportation: z.coerce.number(),
-  activities: z.coerce.number(),
-  total: z.coerce.number(),
+const budgetUrlSchema = EstimateBudgetInputSchema.merge(EstimateBudgetOutputSchema).extend({
+    region: z.union([z.string(), z.array(z.string())]),
 });
 
-const planDataSchema = z.object({
-    duration: z.coerce.number().int().min(1),
+const planUrlSchema = PlanTripInputSchema.merge(PlanTripOutputSchema).extend({
     region: z.union([z.string(), z.array(z.string())]),
-    budget: z.coerce.number().int().min(1),
-    numTravelers: z.coerce.number().int().min(1),
-    suggestedTravelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']),
-    accommodationCost: z.coerce.number(),
-    accommodationDesc: z.string(),
-    foodCost: z.coerce.number(),
-    foodDesc: z.string(),
-    transportationCost: z.coerce.number(),
-    transportationDesc: z.string(),
-    activitiesCost: z.coerce.number(),
-    activitiesDesc: z.string(),
-    total: z.coerce.number(),
-  });
+});
+
 
 export default function TripPlannerView() {
   const [activeTab, setActiveTab] = useState('estimate');
@@ -68,21 +48,25 @@ export default function TripPlannerView() {
     const tab = params.get('tab') || 'estimate';
     setActiveTab(tab);
 
-    if (tab === 'estimate') {
-        const data: { [key: string]: any } = { region: params.getAll('region') };
-        params.forEach((value, key) => {
-            if (key !== 'region') {
-                data[key] = value
+    const data: { [key: string]: any } = {};
+    for(const [key, value] of params.entries()) {
+        if(key === 'region') {
+            if(!data.region) data.region = [];
+            data.region.push(value);
+        } else {
+            // Handle nested objects from URL (e.g., accommodation.cost)
+            if (key.includes('.')) {
+                const [parent, child] = key.split('.');
+                if (!data[parent]) data[parent] = {};
+                data[parent][child] = value;
+            } else {
+                data[key] = value;
             }
-        });
-        
-        if (Array.isArray(data.region) && data.region.length === 1 && data.region[0].includes(',')) {
-            data.region = data.region[0].split(',');
         }
+    }
 
-
-        const parsed = budgetDataSchema.safeParse(data);
-
+    if (tab === 'estimate') {
+        const parsed = budgetUrlSchema.safeParse(data);
         if (parsed.success) {
             const { duration, region, travelStyle, numTravelers, accommodation, food, transportation, activities, total } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
@@ -94,43 +78,13 @@ export default function TripPlannerView() {
             setFormKey(Date.now()); 
         }
     } else if (tab === 'plan') {
-        const data: { [key: string]: any } = { region: params.getAll('region') };
-         // Manually map flat params to nested structure for parsing
-         params.forEach((value, key) => {
-            if (key !== 'region') {
-                if (key.endsWith('Cost')) {
-                    const newKey = key.replace('Cost', '.cost');
-                    const [parent, child] = newKey.split('.');
-                    if (!data[parent]) data[parent] = {};
-                    data[parent][child] = value;
-                } else if (key.endsWith('Desc')) {
-                    const newKey = key.replace('Desc', '.description');
-                    const [parent, child] = newKey.split('.');
-                    if (!data[parent]) data[parent] = {};
-                    data[parent][child] = value;
-                } else {
-                    data[key] = value;
-                }
-            }
-        });
-
-        if (Array.isArray(data.region) && data.region.length === 1 && data.region[0].includes(',')) {
-            data.region = data.region[0].split(',');
-        }
-
-        const parsed = PlanTripOutputSchema.extend({
-            duration: z.coerce.number().int().min(1),
-            region: z.union([z.string(), z.array(z.string())]),
-            budget: z.coerce.number().int().min(1),
-            numTravelers: z.coerce.number().int().min(1),
-        }).safeParse(data);
-
+        const parsed = planUrlSchema.safeParse(data);
         if (parsed.success) {
             const { duration, region, budget, numTravelers, ...outputs } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
             setTripPlanData({
                 inputs: { duration, region: regionArray, budget, numTravelers },
-                outputs: outputs,
+                outputs: outputs as PlanTripOutput, // Zod parsing ensures this is correct
             });
             setFormKey(Date.now());
         }
@@ -173,25 +127,21 @@ export default function TripPlannerView() {
     const params = new URLSearchParams();
     params.set('tab', tab);
     
-    Object.entries(data.inputs).forEach(([key, value]) => {
-      if (key === 'region' && Array.isArray(value)) {
-        value.forEach(region => params.append(key, region));
-      } else {
-        params.append(key, String(value));
-      }
-    });
-    
-    // Flatten the outputs for the URL
-    Object.entries(data.outputs).forEach(([key, value]) => {
-        if (typeof value === 'object' && value !== null) {
-            Object.entries(value).forEach(([subKey, subValue]) => {
-                const paramKey = `${key}${subKey.charAt(0).toUpperCase() + subKey.slice(1)}`;
-                params.append(paramKey, String(subValue));
-            });
-        } else {
-            params.append(key, String(value));
-        }
-    });
+    const flattenObject = (obj: any, prefix = '') => {
+        Object.entries(obj).forEach(([key, value]) => {
+            const newKey = prefix ? `${prefix}.${key}` : key;
+            if (key === 'region' && Array.isArray(value)) {
+                value.forEach(region => params.append(key, region));
+            } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+                flattenObject(value, newKey);
+            } else {
+                params.append(newKey, String(value));
+            }
+        });
+    }
+
+    flattenObject(data.inputs);
+    flattenObject(data.outputs);
 
     router.push(`?${params.toString()}`, { scroll: false });
   };
