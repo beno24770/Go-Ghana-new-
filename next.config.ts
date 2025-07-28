@@ -9,6 +9,13 @@ const withPWA = require('@ducanh2912/next-pwa').default({
   workboxOptions: {
     disableDevLogs: true,
   },
+  webpack: (config) => {
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      'node-fetch': false,
+    };
+    return config;
+  },
 });
 
 const nextConfig = {
