@@ -59,7 +59,12 @@ const categoryIcons = {
   activities: <Ticket className="h-6 w-6 text-muted-foreground" />,
 };
 
-function ItineraryDialog({ planData }: { planData: TripPlanData }) {
+interface ItineraryDialogProps {
+    planData: TripPlanData;
+}
+
+
+function ItineraryDialog({ planData }: ItineraryDialogProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState({ itinerary: false, packingList: false, languageGuide: false, audio: '' });
     const [itinerary, setItinerary] = useState<GenerateItineraryOutput | null>(null);
@@ -182,7 +187,7 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
         }
         return (
             <div className="flex flex-col h-full">
-                <div className="flex-grow overflow-y-auto">
+                <div className="flex-grow overflow-y-auto pr-4 -mr-4">
                     <Accordion type="single" collapsible className="w-full">
                         {itinerary.itinerary.map((dayPlan) => (
                             <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
@@ -197,7 +202,7 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                         ))}
                     </Accordion>
                 </div>
-                <div className="mt-6 space-y-3 border-t pt-6 text-center bg-muted/20 p-4 rounded-lg">
+                <div className="mt-6 space-y-3 border-t pt-6 text-center bg-muted/20 p-4 rounded-lg -mx-6">
                     <h4 className="font-headline text-lg">Ready for the Next Step?</h4>
                     <p className="text-sm text-muted-foreground">
                         Let local experts help you refine and book your perfect Ghanaian adventure.
@@ -231,7 +236,7 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                     <Wand2 className="mr-2 h-4 w-4" /> Plan Details
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-4xl max-h-[90svh] flex flex-col">
+            <DialogContent className="sm:max-w-4xl max-h-[90svh] flex flex-col p-6">
                 <DialogHeader>
                     <DialogTitle className="font-headline text-2xl">Your Trip Tools</DialogTitle>
                     <DialogDescription>
@@ -245,7 +250,7 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                         <TabsTrigger value="language-guide">Language</TabsTrigger>
                     </TabsList>
                     <div className="flex-grow overflow-y-auto">
-                        <TabsContent value="itinerary" className="mt-0">
+                        <TabsContent value="itinerary" className="mt-4 h-full">
                            <ItineraryContent />
                         </TabsContent>
                         <TabsContent value="packing-list" className="pr-4 mt-0">

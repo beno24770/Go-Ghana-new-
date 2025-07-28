@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useCallback, useTransition } from 'react';
@@ -8,7 +9,7 @@ import BudgetForm from '@/components/budget-form';
 import BudgetResults from '@/components/budget-results';
 import TripPlanForm from '@/components/trip-plan-form';
 import TripPlanResults from '@/components/trip-plan-results';
-import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, EstimateBudgetInputSchema, PlanTripInputSchema, PlanTripOutputSchema } from '@/ai/schemas';
+import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, EstimateBudgetInputSchema, PlanTripInputSchema } from '@/ai/schemas';
 import { getBudgetEstimate, getTripPlan } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 
@@ -24,38 +25,56 @@ type TripPlanData = {
 
 // Zod schema for parsing budget data from URL search params
 const budgetUrlSchema = EstimateBudgetInputSchema.extend({
-    region: z.union([z.string(), z.array(z.string())]),
     duration: z.coerce.number(),
     numTravelers: z.coerce.number(),
-    total: z.coerce.number(),
-    'accommodation.perDay': z.coerce.number(),
-    'accommodation.total': z.coerce.number(),
-    'food.perDay': z.coerce.number(),
-    'food.total': z.coerce.number(),
-    'transportation.perDay': z.coerce.number(),
-    'transportation.total': z.coerce.number(),
-    'activities.perDay': z.coerce.number(),
-    'activities.total': z.coerce.number(),
-});
-
+    region: z.union([z.string(), z.array(z.string())]),
+}).merge(z.object({
+    "outputs.accommodation.perDay": z.coerce.number(),
+    "outputs.accommodation.total": z.coerce.number(),
+    "outputs.food.perDay": z.coerce.number(),
+    "outputs.food.total": z.coerce.number(),
+    "outputs.transportation.perDay": z.coerce.number(),
+    "outputs.transportation.total": z.coerce.number(),
+    "outputs.activities.perDay": z.coerce.number(),
+    "outputs.activities.total": z.coerce.number(),
+    "outputs.total": z.coerce.number(),
+}));
 
 // Zod schema for parsing trip plan data from URL search params
 const planUrlSchema = PlanTripInputSchema.extend({
-    suggestedTravelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']),
-    'accommodation.cost': z.coerce.number(),
-    'accommodation.description': z.string(),
-    'food.cost': z.coerce.number(),
-    'food.description': z.string(),
-    'transportation.cost': z.coerce.number(),
-    'transportation.description': z.string(),
-    'activities.cost': z.coerce.number(),
-    'activities.description': z.string(),
-    total: z.coerce.number(),
-    region: z.union([z.string(), z.array(z.string())]),
-    budget: z.coerce.number(),
     duration: z.coerce.number(),
     numTravelers: z.coerce.number(),
-});
+    budget: z.coerce.number(),
+    region: z.union([z.string(), z.array(z.string())]),
+}).merge(z.object({
+    "outputs.suggestedTravelStyle": z.enum(['Budget', 'Mid-range', 'Luxury']),
+    "outputs.accommodation.cost": z.coerce.number(),
+    "outputs.accommodation.description": z.string(),
+    "outputs.food.cost": z.coerce.number(),
+    "outputs.food.description": z.string(),
+    "outputs.transportation.cost": z.coerce.number(),
+    "outputs.transportation.description": z.string(),
+    "outputs.activities.cost": z.coerce.number(),
+    "outputs.activities.description": z.string(),
+    "outputs.total": z.coerce.number(),
+}));
+
+// Helper to flatten object for URL params
+const flattenObject = (obj: any, prefix = '') => {
+  const result: Record<string, any> = {};
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      const newKey = prefix ? `${prefix}.${key}` : key;
+      const value = obj[key];
+      if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+        Object.assign(result, flattenObject(value, newKey));
+      } else {
+        result[newKey] = value;
+      }
+    }
+  }
+  return result;
+};
 
 
 export default function TripPlannerView() {
@@ -77,33 +96,28 @@ export default function TripPlannerView() {
 
     const data: { [key: string]: any } = {};
     for(const [key, value] of params.entries()) {
-        if(key === 'region') {
-            if(!data.region) data.region = [];
-            data.region.push(value);
-        } else {
-            data[key] = value;
-        }
+        data[key] = value;
     }
-    
-    // Ensure single region selections are still wrapped in an array for consistency
-    if (data.region && !Array.isArray(data.region)) {
-        data.region = [data.region];
+    data.region = params.getAll('region');
+    if (data.region.length === 0 && params.has('region')) {
+        data.region = params.get('region')!;
     }
+
 
     if (tab === 'estimate' && params.get('duration')) {
         const parsed = budgetUrlSchema.safeParse(data);
         if (parsed.success) {
-            const { duration, region, travelStyle, numTravelers, total, ...rest } = parsed.data;
+            const { duration, region, travelStyle, numTravelers, ...rest } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
 
             setBudgetData({
                 inputs: { duration, region: regionArray, travelStyle, numTravelers },
                 outputs: {
-                    accommodation: { perDay: rest['accommodation.perDay'], total: rest['accommodation.total'] },
-                    food: { perDay: rest['food.perDay'], total: rest['food.total'] },
-                    transportation: { perDay: rest['transportation.perDay'], total: rest['transportation.total'] },
-                    activities: { perDay: rest['activities.perDay'], total: rest['activities.total'] },
-                    total,
+                    accommodation: { perDay: rest['outputs.accommodation.perDay'], total: rest['outputs.accommodation.total'] },
+                    food: { perDay: rest['outputs.food.perDay'], total: rest['outputs.food.total'] },
+                    transportation: { perDay: rest['outputs.transportation.perDay'], total: rest['outputs.transportation.total'] },
+                    activities: { perDay: rest['outputs.activities.perDay'], total: rest['outputs.activities.total'] },
+                    total: rest['outputs.total'],
                 },
             });
             setFormKey(Date.now()); 
@@ -116,12 +130,12 @@ export default function TripPlannerView() {
             setTripPlanData({
                 inputs: { duration, region: regionArray, budget, numTravelers },
                 outputs: {
-                    suggestedTravelStyle: rest.suggestedTravelStyle,
-                    accommodation: { cost: rest['accommodation.cost'], description: rest['accommodation.description'] },
-                    food: { cost: rest['food.cost'], description: rest['food.description'] },
-                    transportation: { cost: rest['transportation.cost'], description: rest['transportation.description'] },
-                    activities: { cost: rest['activities.cost'], description: rest['activities.description'] },
-                    total: rest.total,
+                    suggestedTravelStyle: rest['outputs.suggestedTravelStyle'],
+                    accommodation: { cost: rest['outputs.accommodation.cost'], description: rest['outputs.accommodation.description'] },
+                    food: { cost: rest['outputs.food.cost'], description: rest['outputs.food.description'] },
+                    transportation: { cost: rest['outputs.transportation.cost'], description: rest['outputs.transportation.description'] },
+                    activities: { cost: rest['outputs.activities.cost'], description: rest['outputs.activities.description'] },
+                    total: rest['outputs.total'],
                 },
             });
             setFormKey(Date.now());
@@ -132,6 +146,26 @@ export default function TripPlannerView() {
   useEffect(() => {
     parseUrlParams();
   }, [parseUrlParams]);
+
+  const updateUrl = useCallback((tab: string, data: any) => {
+    const params = new URLSearchParams();
+    params.set('tab', tab);
+    
+    const flatData = flattenObject(data);
+    for (const key in flatData) {
+        if(key === 'inputs.region') {
+            if(Array.isArray(flatData[key])) {
+                flatData[key].forEach((r: string) => params.append('region', r));
+            } else {
+                params.append('region', flatData[key]);
+            }
+        } else {
+            params.set(key.replace('inputs.', '').replace('outputs.', 'outputs.'), flatData[key]);
+        }
+    }
+
+    router.push(`/planner?${params.toString()}`, { scroll: false });
+  }, [router]);
 
   const handleEstimate = async (inputs: EstimateBudgetInput) => {
     setIsLoading(true);
@@ -159,7 +193,7 @@ export default function TripPlannerView() {
         toast({ variant: 'destructive', title: 'Error', description: result.error });
     }
     setIsLoading(false);
-  }, [toast, router]);
+  }, [toast, updateUrl]);
 
   const handlePlanFromBudget = useCallback((budgetInputs: EstimateBudgetInput, totalBudget: number) => {
     const planInputs: PlanTripInput = {
@@ -174,33 +208,18 @@ export default function TripPlannerView() {
     });
   }, [handlePlan]);
 
-  const updateUrl = (tab: string, data: any) => {
-    const params = new URLSearchParams();
-    params.set('tab', tab);
-    
-    const flattenObject = (obj: any, prefix = '') => {
-        Object.entries(obj).forEach(([key, value]) => {
-            const newKey = prefix ? `${prefix}.${key}` : key;
-            if (key === 'region' && Array.isArray(value)) {
-                value.forEach(region => params.append(key, region));
-            } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-                flattenObject(value, newKey);
-            } else if (value !== undefined) {
-                params.append(newKey, String(value));
-            }
-        });
-    }
-
-    flattenObject(data.inputs);
-    flattenObject(data.outputs);
-
-    router.push(`/planner?${params.toString()}`, { scroll: false });
-  };
-  
   const onTabChange = (value: string) => {
     setActiveTab(value);
     const params = new URLSearchParams(window.location.search);
     params.set('tab', value);
+    // Clear other params when switching tabs
+    const keysToRemove: string[] = [];
+    params.forEach((_, key) => {
+        if (key !== 'tab') {
+            keysToRemove.push(key);
+        }
+    });
+    keysToRemove.forEach(key => params.delete(key));
     router.push(`/planner?${params.toString()}`, { scroll: false });
   }
 
@@ -258,3 +277,5 @@ export default function TripPlannerView() {
       </main>
   );
 }
+
+    

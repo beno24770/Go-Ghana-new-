@@ -28,7 +28,6 @@ export function InstallPwaButton() {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
-          variant="primary"
           className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg"
           aria-label="Install App"
         >
@@ -70,3 +69,5 @@ export function InstallPwaButton() {
     </AlertDialog>
   );
 }
+
+    
