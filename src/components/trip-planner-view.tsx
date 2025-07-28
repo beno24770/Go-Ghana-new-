@@ -233,16 +233,14 @@ export default function TripPlannerView() {
   const onTabChange = (value: string) => {
     startTransition(() => {
         setActiveTab(value);
-        const params = new URLSearchParams(searchParams.toString());
-        params.set('tab', value);
-        params.delete('tool');
-        router.push(`/planner?${params.toString()}`, { scroll: false });
-        
-        // Reset data unless navigating with history
-        if (!isPending) {
-            setBudgetData(null);
-            setTripPlanData(null);
+        if (value === 'plan') {
+          setBudgetData(null);
+        } else {
+          setTripPlanData(null);
         }
+        const params = new URLSearchParams();
+        params.set('tab', value);
+        router.push(`/planner?${params.toString()}`, { scroll: false });
     });
   }
 
@@ -261,7 +259,6 @@ export default function TripPlannerView() {
                     Select your travel style to get a personalized budget estimate for your adventure in the heart of West Africa.
                     </p>
                     <BudgetForm
-                    key={`budget-${activeTab}`}
                     onSubmit={handleEstimate}
                     isSubmitting={isLoading && activeTab === 'estimate'}
                     defaultValues={budgetData?.inputs}
@@ -284,7 +281,6 @@ export default function TripPlannerView() {
                         Enter your total budget, and we'll craft a personalized travel plan for you, complete with suggestions for your stay.
                         </p>
                         <TripPlanForm
-                            key={`plan-${activeTab}`}
                             onSubmit={handlePlan}
                             isSubmitting={isLoading && activeTab === 'plan'}
                             defaultValues={tripPlanData?.inputs}

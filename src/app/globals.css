@@ -34,9 +34,9 @@
   .dark {
     --background: 20 14.3% 4.1%;
     --foreground: 60 9.1% 97.8%;
-    --card: 35 15% 10%;
+    --card: 20 14.3% 4.1%;
     --card-foreground: 60 9.1% 97.8%;
-    --popover: 35 15% 10%;
+    --popover: 20 14.3% 4.1%;
     --popover-foreground: 60 9.1% 97.8%;
     --primary: 0 72% 51%; /* Kente Red */
     --primary-foreground: 60 9.1% 97.8%;
