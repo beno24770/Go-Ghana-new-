@@ -46,6 +46,7 @@ const planUrlSchema = PlanTripInputSchema.extend({
     numTravelers: z.coerce.number(),
     budget: z.coerce.number(),
     region: z.union([z.string(), z.array(z.string())]),
+    interests: z.union([z.string(), z.array(z.string())]).optional(),
 }).merge(z.object({
     "outputs.suggestedTravelStyle": z.enum(['Budget', 'Mid-range', 'Luxury']),
     "outputs.accommodation.cost": z.coerce.number(),
@@ -104,6 +105,13 @@ export default function TripPlannerView() {
     } else if (params.has('region')) {
         data.region = params.get('region')!;
     }
+    
+    const interests = params.getAll('interests');
+    if (interests.length > 0) {
+        data.interests = interests.length === 1 ? interests[0] : interests;
+    } else if (params.has('interests')) {
+        data.interests = params.get('interests')!;
+    }
 
 
     if (tab === 'estimate' && params.get('duration')) {
@@ -127,10 +135,11 @@ export default function TripPlannerView() {
     } else if (tab === 'plan' && params.get('budget')) {
         const parsed = planUrlSchema.safeParse(data);
         if (parsed.success) {
-            const { budget, duration, numTravelers, region, travelStyle, ...rest } = parsed.data;
+            const { budget, duration, numTravelers, region, travelStyle, interests, ...rest } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
+            const interestsArray = Array.isArray(interests) ? interests : (interests ? [interests] : undefined);
             setTripPlanData({
-                inputs: { duration, region: regionArray, budget, numTravelers, travelStyle },
+                inputs: { duration, region: regionArray, budget, numTravelers, travelStyle, interests: interestsArray },
                 outputs: {
                     suggestedTravelStyle: rest['outputs.suggestedTravelStyle'],
                     accommodation: { cost: rest['outputs.accommodation.cost'], description: rest['outputs.accommodation.description'] },
@@ -160,6 +169,12 @@ export default function TripPlannerView() {
                 flatData[key].forEach((r: string) => params.append('region', r));
             } else {
                 params.append('region', flatData[key]);
+            }
+        } else if (key === 'inputs.interests') {
+            if(Array.isArray(flatData[key])) {
+                flatData[key].forEach((i: string) => params.append('interests', i));
+            } else if (flatData[key]) {
+                params.append('interests', flatData[key]);
             }
         } else {
             params.set(key.replace('inputs.', '').replace('outputs.', 'outputs.'), flatData[key]);
@@ -198,7 +213,7 @@ export default function TripPlannerView() {
   }, [toast, updateUrl]);
 
   const handlePlanFromBudget = useCallback((budgetInputs: EstimateBudgetInput, totalBudget: number) => {
-    const planInputs: PlanTripInput = {
+    const planInputs: Partial<PlanTripInput> = {
         duration: budgetInputs.duration,
         region: budgetInputs.region,
         numTravelers: budgetInputs.numTravelers,
@@ -207,9 +222,22 @@ export default function TripPlannerView() {
     };
     startTransition(() => {
         onTabChange('plan');
-        handlePlan(planInputs);
+        setTripPlanData(null)
+        setBudgetData(null)
+        const params = new URLSearchParams(window.location.search);
+        params.set('tab', 'plan');
+        router.push(`/planner?${params.toString()}`, { scroll: false });
+        // Set default values for the form, then it can be submitted by the user
+        const defaultTripPlanData = {
+            inputs: {
+                ...planInputs,
+                interests: ['Culture', 'Heritage & History']
+            }
+        }
+        setTripPlanData(defaultTripPlanData as TripPlanData)
+        setFormKey(Date.now())
     });
-  }, [handlePlan]);
+  }, [router]);
 
   const onTabChange = (value: string) => {
     startTransition(() => {

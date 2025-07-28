@@ -26,11 +26,14 @@ User Preferences:
 - Total Budget: \${{budget}}
 - Number of Travelers: {{numTravelers}}
 - Travel Style: {{travelStyle}}
+{{#if interests}}
+- Interests: {{#each interests}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
+{{/if}}
 
 Your Task:
 1.  **Use the Provided Travel Style**: The user has specified their travel style. You must adhere to this choice.
 2.  **Allocate Budget**: Distribute the total budget among accommodation, food, transportation, and activities, ensuring the allocation is realistic for the chosen travel style and fits within the total budget.
-3.  **Provide Descriptions**: For each category (accommodation, food, transportation, activities), provide a description of what the user can expect. For activities, suggest a brief itinerary covering the selected regions.
+3.  **Provide Descriptions**: For each category (accommodation, food, transportation, activities), provide a description of what the user can expect. For activities, suggest a brief itinerary covering the selected regions, tailored to the user's interests.
 4.  **Ensure Total Matches**: The sum of the costs for each category must equal the total budget provided by the user. If the budget is too low for the selected travel style, you must still adhere to the budget, but you can mention in the descriptions that the experience may be more constrained (e.g., "On a tight budget for luxury, so focus on one or two key high-end experiences.").
 5.  **Confirm Travel Style**: The 'suggestedTravelStyle' in the output must match the user's selected 'travelStyle'.
 
@@ -48,7 +51,7 @@ Example Descriptions:
 - **Accommodation**: Suggest types of lodging (e.g., "Hostels and budget guesthouses", "Comfortable mid-range hotels and Airbnbs", "Luxury hotels and resorts with premium amenities").
 - **Food**: Describe dining options (e.g., "Local street food stalls and small local eateries (chop bars)", "A mix of local restaurants and some Western-style cafes", "Fine dining restaurants and hotel restaurants").
 - **Transportation**: Mention modes of transport (e.g., "Shared trotros and public buses for inter-city travel", "Ride-sharing apps (Uber/Bolt) and occasional private taxis", "Private driver or high-end car rentals"). For budget plans, mention that $25/day is a good estimate for moving between major cities.
-- **Activities**: Suggest a plausible itinerary for the duration, keeping in mind that tour site fees are at least $10 per person. For example: "Day 1-2: Explore Accra's markets and Independence Square. Day 3: Visit Kakum National Park (Entrance fee ~$10-15)..."
+- **Activities**: Suggest a plausible itinerary for the duration, keeping in mind that tour site fees are at least $10 per person. Tailor this to the user's interests. For example if the user is interested in 'History', suggest: "Day 1-2: Explore Accra's historical sites like Independence Square and Jamestown Lighthouse. Day 3: Visit the Cape Coast Castle (Entrance fee ~$10-15) to learn about the slave trade..."
 
 Generate a response that adheres to the PlanTripOutputSchema.`,
 });

@@ -32,6 +32,7 @@ export const PlanTripInputSchema = z.object({
   budget: z.number().describe('The total budget for the trip in USD.'),
   numTravelers: z.number().describe('The number of travelers.'),
   travelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']).describe('The travel style of the user.'),
+  interests: z.array(z.string()).optional().describe('The interests of the user, e.g., Culture, Heritage, Adventure.'),
 });
 export type PlanTripInput = z.infer<typeof PlanTripInputSchema>;
 

@@ -27,6 +27,14 @@ const ghanaRegions = [
 
 const travelStyles: EstimateBudgetInput['travelStyle'][] = ['Budget', 'Mid-range', 'Luxury'];
 
+const interests = [
+  { id: 'Culture', label: 'Culture' },
+  { id: 'Heritage & History', label: 'Heritage & History' },
+  { id: 'Adventure', label: 'Adventure' },
+  { id: 'Nature & Wildlife', label: 'Nature & Wildlife' },
+  { id: 'Beaches & Relaxation', label: 'Beaches & Relaxation' },
+  { id: 'Nightlife & Urban', label: 'Nightlife & Urban' },
+]
 
 interface TripPlanFormProps {
   onSubmit: (data: PlanTripInput) => void;
@@ -43,6 +51,7 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
       budget: 1000,
       numTravelers: 1,
       travelStyle: 'Mid-range',
+      interests: ['Culture', 'Heritage & History'],
       ...defaultValues,
     },
   });
@@ -129,6 +138,55 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                     ))}
                     </div>
                   </ScrollArea>
+                </CardContent>
+              </Card>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+         <FormField
+          control={form.control}
+          name="interests"
+          render={() => (
+            <FormItem>
+              <FormLabel>Interests</FormLabel>
+              <Card>
+                <CardContent className="p-4 pt-4">
+                  <div className="space-y-2">
+                  {interests.map((interest) => (
+                    <FormField
+                      key={interest.id}
+                      control={form.control}
+                      name="interests"
+                      render={({ field }) => {
+                        return (
+                          <FormItem
+                            key={interest.id}
+                            className="flex flex-row items-start space-x-3 space-y-0"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(interest.id)}
+                                onCheckedChange={(checked) => {
+                                  return checked
+                                    ? field.onChange([...(field.value ?? []), interest.id])
+                                    : field.onChange(
+                                        field.value?.filter(
+                                          (value) => value !== interest.id
+                                        )
+                                      )
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {interest.label}
+                            </FormLabel>
+                          </FormItem>
+                        )
+                      }}
+                    />
+                  ))}
+                  </div>
                 </CardContent>
               </Card>
               <FormMessage />
