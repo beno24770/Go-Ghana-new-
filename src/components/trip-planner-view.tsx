@@ -8,7 +8,7 @@ import BudgetForm from '@/components/budget-form';
 import BudgetResults from '@/components/budget-results';
 import TripPlanForm from '@/components/trip-plan-form';
 import TripPlanResults from '@/components/trip-plan-results';
-import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, EstimateBudgetInputSchema, EstimateBudgetOutputSchema, PlanTripInputSchema, PlanTripOutputSchema } from '@/ai/schemas';
+import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, EstimateBudgetInputSchema, PlanTripInputSchema, PlanTripOutputSchema } from '@/ai/schemas';
 import { getBudgetEstimate, getTripPlan } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 
@@ -23,15 +23,19 @@ type TripPlanData = {
 }
 
 // Zod schema for parsing budget data from URL search params
-const budgetUrlSchema = EstimateBudgetInputSchema.merge(EstimateBudgetOutputSchema).extend({
+const budgetUrlSchema = EstimateBudgetInputSchema.extend({
     region: z.union([z.string(), z.array(z.string())]),
     duration: z.coerce.number(),
     numTravelers: z.coerce.number(),
     total: z.coerce.number(),
-    accommodation: z.coerce.number(),
-    food: z.coerce.number(),
-    transportation: z.coerce.number(),
-    activities: z.coerce.number(),
+    'accommodation.perDay': z.coerce.number(),
+    'accommodation.total': z.coerce.number(),
+    'food.perDay': z.coerce.number(),
+    'food.total': z.coerce.number(),
+    'transportation.perDay': z.coerce.number(),
+    'transportation.total': z.coerce.number(),
+    'activities.perDay': z.coerce.number(),
+    'activities.total': z.coerce.number(),
 });
 
 
@@ -89,12 +93,18 @@ export default function TripPlannerView() {
     if (tab === 'estimate' && params.get('duration')) {
         const parsed = budgetUrlSchema.safeParse(data);
         if (parsed.success) {
-            const { accommodation, activities, food, transportation, total, ...inputs } = parsed.data;
-            const regionArray = Array.isArray(inputs.region) ? inputs.region : [inputs.region];
+            const { duration, region, travelStyle, numTravelers, total, ...rest } = parsed.data;
+            const regionArray = Array.isArray(region) ? region : [region];
 
             setBudgetData({
-                inputs: { ...inputs, region: regionArray },
-                outputs: { accommodation, food, transportation, activities, total },
+                inputs: { duration, region: regionArray, travelStyle, numTravelers },
+                outputs: {
+                    accommodation: { perDay: rest['accommodation.perDay'], total: rest['accommodation.total'] },
+                    food: { perDay: rest['food.perDay'], total: rest['food.total'] },
+                    transportation: { perDay: rest['transportation.perDay'], total: rest['transportation.total'] },
+                    activities: { perDay: rest['activities.perDay'], total: rest['activities.total'] },
+                    total,
+                },
             });
             setFormKey(Date.now()); 
         }
@@ -248,5 +258,3 @@ export default function TripPlannerView() {
       </main>
   );
 }
-
-    

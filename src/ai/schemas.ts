@@ -4,6 +4,11 @@
 
 import { z } from 'zod';
 
+const CostBreakdownSchema = z.object({
+  perDay: z.number().describe('Estimated cost per day for this category.'),
+  total: z.number().describe('Estimated total cost for this category for the entire trip.'),
+});
+
 export const EstimateBudgetInputSchema = z.object({
   duration: z.number().describe('The duration of the trip in days.'),
   region: z.array(z.string()).min(1, 'Please select at least one region.').describe('The regions in Ghana the user will be visiting.'),
@@ -13,10 +18,10 @@ export const EstimateBudgetInputSchema = z.object({
 export type EstimateBudgetInput = z.infer<typeof EstimateBudgetInputSchema>;
 
 export const EstimateBudgetOutputSchema = z.object({
-  accommodation: z.number().describe('Estimated cost of accommodation for the entire trip.'),
-  food: z.number().describe('Estimated cost of food for the entire trip.'),
-  transportation: z.number().describe('Estimated cost of transportation for the entire trip.'),
-  activities: z.number().describe('Estimated cost of activities for the entire trip.'),
+  accommodation: CostBreakdownSchema.describe('Estimated cost of accommodation.'),
+  food: CostBreakdownSchema.describe('Estimated cost of food.'),
+  transportation: CostBreakdownSchema.describe('Estimated cost of transportation.'),
+  activities: CostBreakdownSchema.describe('Estimated cost of activities.'),
   total: z.number().describe('Total estimated cost for the trip.'),
 });
 export type EstimateBudgetOutput = z.infer<typeof EstimateBudgetOutputSchema>;

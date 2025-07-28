@@ -19,32 +19,41 @@ const estimateBudgetPrompt = ai.definePrompt({
   name: 'estimateBudgetPrompt',
   input: {schema: EstimateBudgetInputSchema},
   output: {schema: EstimateBudgetOutputSchema},
-  prompt: `You are a travel expert specializing in trips to Ghana. Based on the user's preferences, provide an estimated budget for their trip, broken down by accommodation, food, transportation, and activities. Provide only numbers in USD, do not add any extra text.
+  prompt: `You are a travel expert specializing in trips to Ghana. Based on the user's preferences, provide an estimated budget for their trip.
 
+User Preferences:
 Duration: {{duration}} days
 Regions: {{#each region}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
 Travel Style: {{travelStyle}}
 Number of Travelers: {{numTravelers}}
 
-Consider the following cost ranges based on the travel style:
+Your Task:
+1.  **Calculate Per-Day Costs**: For each category (accommodation, food, transportation, activities), calculate the average per-day cost based on the travel style.
+2.  **Calculate Total Costs**: Multiply the per-day cost by the duration of the trip to get the total for each category.
+3.  **Calculate Grand Total**: Sum the total costs of all categories to get the grand total for the trip.
+4.  **Format the Output**: Provide the breakdown in the specified JSON schema format, including both 'perDay' and 'total' for each category.
 
+Cost Ranges (per person, per day):
 Budget:
-  - Accommodation: $20-60 per night
-  - Food: $5-15 per day
-  - Transportation: $5-20 per day
-  - Activities: $0-20 per day
+  - Accommodation: $20-60
+  - Food: $5-15
+  - Transportation: $5-20
+  - Activities: $0-20
 
 Mid-range:
-  - Accommodation: $70-150 per night
-  - Food: $20-60 per day
-  - Transportation: $25-50 per day
-  - Activities: $15-40 per day
+  - Accommodation: $70-150
+  - Food: $20-60
+  - Transportation: $25-50
+  - Activities: $15-40
 
 Luxury:
-  - Accommodation: $200-1000 per night
-  - Food: $70-300 per day
-  - Transportation: $80-150 per day
-  - Activities: $50-200 per day`,
+  - Accommodation: $200-1000
+  - Food: $70-300
+  - Transportation: $80-150
+  - Activities: $50-200
+
+The final costs should be for the total number of travelers. Multiply the per-person costs by the 'numTravelers' value.
+Do not add any extra text or explanations. Only provide the JSON output.`,
 });
 
 const estimateBudgetFlow = ai.defineFlow(

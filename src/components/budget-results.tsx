@@ -68,6 +68,8 @@ const categoryIcons = {
   activities: <Ticket className="h-6 w-6 text-muted-foreground" />,
 };
 
+type CategoryKey = keyof Omit<EstimateBudgetOutput, 'total'>;
+
 export default function BudgetResults({ data, isLoading, onPlanItinerary }: BudgetResultsProps) {
   const { toast } = useToast();
 
@@ -121,11 +123,11 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
   }
 
   const { inputs, outputs } = data;
-  const chartData = Object.keys(outputs)
+  const chartData = (Object.keys(outputs) as CategoryKey[])
     .filter(key => key !== 'total')
     .map(key => ({
       name: key.charAt(0).toUpperCase() + key.slice(1),
-      cost: outputs[key as keyof Omit<EstimateBudgetOutput, 'total'>],
+      cost: outputs[key].total,
       fill: `var(--color-${key})`,
     }));
   
@@ -164,7 +166,7 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
         </div>
         
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {(Object.keys(outputs) as Array<keyof Omit<EstimateBudgetOutput, 'total'>>)
+            {(Object.keys(outputs) as CategoryKey[])
               .filter(key => key !== 'total')
               .map(key => (
               <Card key={key} className="bg-background/50">
@@ -172,10 +174,11 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
                   <CardTitle className="text-sm font-medium">
                     {key.charAt(0).toUpperCase() + key.slice(1)}
                   </CardTitle>
-                  {categoryIcons[key as keyof typeof categoryIcons]}
+                  {categoryIcons[key]}
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">${outputs[key].toLocaleString()}</div>
+                  <div className="text-2xl font-bold">${outputs[key].total.toLocaleString()}</div>
+                  <p className="text-xs text-muted-foreground">${outputs[key].perDay.toLocaleString()} / day</p>
                 </CardContent>
               </Card>
             ))}
