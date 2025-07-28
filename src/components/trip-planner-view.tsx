@@ -83,7 +83,6 @@ export default function TripPlannerView() {
   const [budgetData, setBudgetData] = useState<BudgetData | null>(null);
   const [tripPlanData, setTripPlanData] = useState<TripPlanData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [formKey, setFormKey] = useState(Date.now());
   const [isPending, startTransition] = useTransition();
   const [initialTool, setInitialTool] = useState<string | null>(null);
 
@@ -129,7 +128,6 @@ export default function TripPlannerView() {
                     total: rest['outputs.total'],
                 },
             });
-            setFormKey(Date.now()); 
         }
     } else if (tab === 'plan' && params.get('budget')) {
         const parsed = planUrlSchema.safeParse(data);
@@ -148,7 +146,6 @@ export default function TripPlannerView() {
                     total: rest['outputs.total'],
                 },
             });
-            setFormKey(Date.now());
         }
     }
   }, [searchParams]);
@@ -245,7 +242,6 @@ export default function TripPlannerView() {
         if (!isPending) {
             setBudgetData(null);
             setTripPlanData(null);
-            setFormKey(Date.now());
         }
     });
   }
@@ -265,7 +261,7 @@ export default function TripPlannerView() {
                     Select your travel style to get a personalized budget estimate for your adventure in the heart of West Africa.
                     </p>
                     <BudgetForm
-                    key={`budget-${formKey}`}
+                    key={`budget-${activeTab}`}
                     onSubmit={handleEstimate}
                     isSubmitting={isLoading && activeTab === 'estimate'}
                     defaultValues={budgetData?.inputs}
@@ -288,7 +284,7 @@ export default function TripPlannerView() {
                         Enter your total budget, and we'll craft a personalized travel plan for you, complete with suggestions for your stay.
                         </p>
                         <TripPlanForm
-                            key={`plan-${formKey}`}
+                            key={`plan-${activeTab}`}
                             onSubmit={handlePlan}
                             isSubmitting={isLoading && activeTab === 'plan'}
                             defaultValues={tripPlanData?.inputs}

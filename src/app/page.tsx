@@ -42,7 +42,8 @@ export default function Home() {
               alt="Beautiful landscape of Ghana"
               fill
               className="object-cover -z-10 brightness-50"
-              priority
+              priority={false}
+              data-ai-hint="ghana landscape"
           />
           <div className="max-w-2xl">
               <h1 className="font-headline text-3xl font-bold text-white shadow-lg sm:text-4xl md:text-6xl">

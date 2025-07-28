@@ -31,17 +31,18 @@ const travelStyles: EstimateBudgetInput['travelStyle'][] = ['Budget', 'Mid-range
 interface BudgetFormProps {
   onSubmit: (data: EstimateBudgetInput) => void;
   isSubmitting: boolean;
-  defaultValues?: EstimateBudgetInput;
+  defaultValues?: Partial<EstimateBudgetInput>;
 }
 
 export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: BudgetFormProps) {
   const form = useForm<EstimateBudgetInput>({
     resolver: zodResolver(EstimateBudgetInputSchema),
-    defaultValues: defaultValues || {
+    defaultValues: {
       duration: 7,
       region: ['Greater Accra'],
       travelStyle: 'Mid-range',
       numTravelers: 1,
+      ...defaultValues
     },
   });
 

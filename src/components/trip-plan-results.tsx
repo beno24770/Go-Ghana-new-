@@ -606,5 +606,3 @@ export default function TripPlanResults({ data, isLoading, initialTool }: TripPl
     </Card>
   );
 }
-
-    
