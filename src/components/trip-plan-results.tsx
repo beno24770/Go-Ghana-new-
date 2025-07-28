@@ -38,7 +38,6 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './
 import Link from 'next/link';
 import { marked } from 'marked';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { ScrollArea } from './ui/scroll-area';
 import { z } from 'zod';
 
 
@@ -202,7 +201,7 @@ function ItineraryDialog({ planData }: ItineraryDialogProps) {
                         ))}
                     </Accordion>
                 </div>
-                <div className="mt-6 space-y-3 border-t pt-6 text-center bg-muted/20 p-4 rounded-lg -mx-6">
+                <div className="mt-6 space-y-3 border-t pt-6 text-center bg-muted/20 p-4 rounded-lg -mx-6 -mb-6">
                     <h4 className="font-headline text-lg">Ready for the Next Step?</h4>
                     <p className="text-sm text-muted-foreground">
                         Let local experts help you refine and book your perfect Ghanaian adventure.
