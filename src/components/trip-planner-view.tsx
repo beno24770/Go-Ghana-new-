@@ -8,7 +8,7 @@ import BudgetForm from '@/components/budget-form';
 import BudgetResults from '@/components/budget-results';
 import TripPlanForm from '@/components/trip-plan-form';
 import TripPlanResults from '@/components/trip-plan-results';
-import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, PlanTripInputSchema, PlanTripOutputSchema, EstimateBudgetInputSchema, EstimateBudgetOutputSchema } from '@/ai/schemas';
+import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, EstimateBudgetInputSchema, EstimateBudgetOutputSchema, PlanTripInputSchema, PlanTripOutputSchema } from '@/ai/schemas';
 import { getBudgetEstimate, getTripPlan } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Logo } from '@/components/logo';
@@ -24,41 +24,19 @@ type TripPlanData = {
 }
 
 // Zod schema for parsing budget data from URL search params
-const budgetUrlSchema = EstimateBudgetInputSchema.extend({
+const budgetUrlSchema = EstimateBudgetInputSchema.merge(EstimateBudgetOutputSchema).extend({
     region: z.union([z.string(), z.array(z.string())]),
-    accommodation: z.coerce.number(),
-    food: z.coerce.number(),
-    transportation: z.coerce.number(),
-    activities: z.coerce.number(),
-    total: z.coerce.number(),
     duration: z.coerce.number(),
     numTravelers: z.coerce.number(),
 });
 
+
 // Zod schema for parsing trip plan data from URL search params
-const planUrlSchema = PlanTripInputSchema.extend({
+const planUrlSchema = PlanTripInputSchema.merge(PlanTripOutputSchema).extend({
     region: z.union([z.string(), z.array(z.string())]),
     budget: z.coerce.number(),
     duration: z.coerce.number(),
     numTravelers: z.coerce.number(),
-    suggestedTravelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']),
-    accommodation: z.object({
-      cost: z.coerce.number(),
-      description: z.string(),
-    }),
-    food: z.object({
-      cost: z.coerce.number(),
-      description: z.string(),
-    }),
-    transportation: z.object({
-      cost: z.coerce.number(),
-      description: z.string(),
-    }),
-    activities: z.object({
-      cost: z.coerce.number(),
-      description: z.string(),
-    }),
-    total: z.coerce.number(),
 });
 
 
@@ -100,11 +78,11 @@ export default function TripPlannerView() {
     if (tab === 'estimate') {
         const parsed = budgetUrlSchema.safeParse(data);
         if (parsed.success) {
-            const { duration, region, travelStyle, numTravelers, accommodation, food, transportation, activities, total } = parsed.data;
-            const regionArray = Array.isArray(region) ? region : [region];
+            const { accommodation, activities, food, transportation, total, ...inputs } = parsed.data;
+            const regionArray = Array.isArray(inputs.region) ? inputs.region : [inputs.region];
 
             setBudgetData({
-                inputs: { duration, region: regionArray, travelStyle, numTravelers },
+                inputs: { ...inputs, region: regionArray },
                 outputs: { accommodation, food, transportation, activities, total },
             });
             setFormKey(Date.now()); 
@@ -112,11 +90,11 @@ export default function TripPlannerView() {
     } else if (tab === 'plan') {
         const parsed = planUrlSchema.safeParse(data);
         if (parsed.success) {
-            const { duration, region, budget, numTravelers, ...outputs } = parsed.data;
+            const { budget, duration, numTravelers, region, ...outputs } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
             setTripPlanData({
                 inputs: { duration, region: regionArray, budget, numTravelers },
-                outputs: outputs as PlanTripOutput, // Zod parsing ensures this is correct
+                outputs: outputs as PlanTripOutput,
             });
             setFormKey(Date.now());
         }
@@ -163,7 +141,6 @@ export default function TripPlannerView() {
         budget: totalBudget
     };
     onTabChange('plan');
-    // Set a temporary loading state for the plan results
     setTripPlanData({
         inputs: planInputs,
         outputs: {
@@ -175,7 +152,7 @@ export default function TripPlannerView() {
             total: 0
         }
     });
-    setFormKey(Date.now()); // re-render form with new defaults
+    setFormKey(Date.now());
     await handlePlan(planInputs);
   }
 
