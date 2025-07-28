@@ -50,3 +50,22 @@ export const PlanTripOutputSchema = z.object({
   total: z.number().describe('Total estimated cost for the trip.'),
 });
 export type PlanTripOutput = z.infer<typeof PlanTripOutputSchema>;
+
+export const GenerateItineraryInputSchema = z.object({
+    duration: z.number().describe('The duration of the trip in days.'),
+    region: z.array(z.string()).describe('The regions in Ghana the user will be visiting.'),
+    travelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']).describe('The travel style of the user.'),
+    activitiesBudget: z.number().describe('The budget allocated for activities.'),
+});
+export type GenerateItineraryInput = z.infer<typeof GenerateItineraryInputSchema>;
+
+export const DayItinerarySchema = z.object({
+    day: z.number().describe('The day number of the itinerary.'),
+    title: z.string().describe('A short, catchy title for the day\'s plan.'),
+    details: z.string().describe('A detailed description of the activities for the day.'),
+});
+
+export const GenerateItineraryOutputSchema = z.object({
+    itinerary: z.array(DayItinerarySchema).describe('A day-by-day itinerary for the trip.'),
+});
+export type GenerateItineraryOutput = z.infer<typeof GenerateItineraryOutputSchema>;

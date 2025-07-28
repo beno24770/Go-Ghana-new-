@@ -1,10 +1,13 @@
 'use server';
 
 import { estimateBudget } from '@/ai/flows/estimate-budget';
+import { generateItinerary } from '@/ai/flows/generate-itinerary';
 import { planTrip } from '@/ai/flows/plan-trip';
 import {
   type EstimateBudgetInput,
   type EstimateBudgetOutput,
+  type GenerateItineraryInput,
+  type GenerateItineraryOutput,
   type PlanTripInput,
   type PlanTripOutput,
 } from '@/ai/schemas';
@@ -31,4 +34,16 @@ export async function getTripPlan(
     console.error('Error planning trip:', error);
     return { success: false, error: 'Failed to plan trip. Please try again.' };
   }
+}
+
+export async function getItinerary(
+  data: GenerateItineraryInput
+): Promise<{ success: true; data: GenerateItineraryOutput } | { success: false; error: string }> {
+    try {
+        const result = await generateItinerary(data);
+        return { success: true, data: result };
+    } catch (error) {
+        console.error('Error generating itinerary:', error);
+        return { success: false, error: 'Failed to generate itinerary. Please try again.' };
+    }
 }

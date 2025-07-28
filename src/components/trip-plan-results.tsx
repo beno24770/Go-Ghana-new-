@@ -4,10 +4,12 @@ import {
   BedDouble,
   Car,
   Copy,
+  LoaderCircle,
   Share2,
   Ticket,
   Utensils,
   Wallet,
+  Wand2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,9 +20,13 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import type { PlanTripInput, PlanTripOutput } from '@/ai/schemas';
+import type { GenerateItineraryOutput, PlanTripInput, PlanTripOutput } from '@/ai/schemas';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
+import { getItinerary } from '@/app/actions';
+import { useState } from 'react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 
 type TripPlanData = {
   inputs: PlanTripInput;
@@ -39,15 +45,92 @@ const categoryIcons = {
   activities: <Ticket className="h-6 w-6 text-muted-foreground" />,
 };
 
-function PlanSection({ title, cost, description, icon }: { title: string; cost: number; description: string; icon: React.ReactNode }) {
+function ItineraryDialog({ planData }: { planData: TripPlanData }) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [itinerary, setItinerary] = useState<GenerateItineraryOutput | null>(null);
+    const { toast } = useToast();
+
+    const handleGenerateItinerary = async () => {
+        setIsLoading(true);
+        setItinerary(null);
+        const result = await getItinerary({
+            duration: planData.inputs.duration,
+            region: planData.inputs.region,
+            travelStyle: planData.outputs.suggestedTravelStyle,
+            activitiesBudget: planData.outputs.activities.cost,
+        });
+
+        if (result.success) {
+            setItinerary(result.data);
+        } else {
+            toast({ variant: 'destructive', title: 'Error', description: result.error });
+        }
+        setIsLoading(false);
+    }
+
+    return (
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogTrigger asChild>
+                <Button>
+                    <Wand2 className="mr-2 h-4 w-4" /> Generate Itinerary
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[625px]">
+                <DialogHeader>
+                    <DialogTitle className="font-headline text-2xl">Generated Itinerary</DialogTitle>
+                    <DialogDescription>
+                        Here is a sample itinerary based on your trip plan.
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="py-4">
+                    {!itinerary && !isLoading && (
+                         <div className="text-center p-8">
+                            <p className="mb-4 text-muted-foreground">Click the button below to generate a personalized itinerary.</p>
+                            <Button onClick={handleGenerateItinerary} disabled={isLoading}>
+                                {isLoading ? <LoaderCircle className="animate-spin" /> : <Wand2 />}
+                                <span className="ml-2">{isLoading ? 'Generating...' : 'Generate Ideas'}</span>
+                            </Button>
+                         </div>
+                    )}
+                    {isLoading && (
+                        <div className="flex h-full min-h-[300px] w-full items-center justify-center">
+                            <div className="text-center">
+                                <div className="h-12 w-12 mx-auto animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+                                <p className="mt-4 font-headline text-xl">Crafting your adventure...</p>
+                            </div>
+                        </div>
+                    )}
+                    {itinerary && (
+                         <Accordion type="single" collapsible className="w-full">
+                            {itinerary.itinerary.map((dayPlan) => (
+                                <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
+                                    <AccordionTrigger className="font-bold hover:no-underline">Day {dayPlan.day}: {dayPlan.title}</AccordionTrigger>
+                                    <AccordionContent>
+                                       <div className="prose prose-sm dark:prose-invert" dangerouslySetInnerHTML={{ __html: dayPlan.details.replace(/\n/g, '<br />') }} />
+                                    </AccordionContent>
+                                </AccordionItem>
+                            ))}
+                        </Accordion>
+                    )}
+                </div>
+            </DialogContent>
+        </Dialog>
+    )
+}
+
+function PlanSection({ title, cost, description, icon, cta }: { title: string; cost: number; description: string; icon: React.ReactNode, cta?: React.ReactNode }) {
   return (
     <div>
-        <div className="flex items-center gap-4">
-            {icon}
-            <div>
-                <h3 className="text-xl font-bold font-headline">{title}</h3>
-                <p className="text-lg font-semibold text-primary">${cost.toLocaleString()}</p>
+        <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+                {icon}
+                <div>
+                    <h3 className="text-xl font-bold font-headline">{title}</h3>
+                    <p className="text-lg font-semibold text-primary">${cost.toLocaleString()}</p>
+                </div>
             </div>
+            {cta}
         </div>
       <p className="mt-2 text-muted-foreground">{description}</p>
     </div>
@@ -127,7 +210,7 @@ export default function TripPlanResults({ data, isLoading }: TripPlanResultsProp
             <PlanSection title="Accommodation" cost={outputs.accommodation.cost} description={outputs.accommodation.description} icon={categoryIcons.accommodation} />
             <PlanSection title="Food" cost={outputs.food.cost} description={outputs.food.description} icon={categoryIcons.food} />
             <PlanSection title="Transportation" cost={outputs.transportation.cost} description={outputs.transportation.description} icon={categoryIcons.transportation} />
-            <PlanSection title="Activities" cost={outputs.activities.cost} description={outputs.activities.description} icon={categoryIcons.activities} />
+            <PlanSection title="Activities" cost={outputs.activities.cost} description={outputs.activities.description} icon={categoryIcons.activities} cta={<ItineraryDialog planData={data} />} />
         </div>
         
         <div className="text-center border-t pt-6">
