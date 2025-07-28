@@ -109,6 +109,8 @@ export default function TripPlannerView() {
     
     if (params.has('interests')) {
         data.interests = params.getAll('interests');
+    } else {
+        data.interests = [];
     }
 
     if (tab === 'estimate' && params.get('duration')) {

@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import Link from 'next/link';
-import { Car } from 'lucide-react';
+import { Car, MessageSquare } from 'lucide-react';
 
 interface DriverProfileCardProps {
     name: string;
@@ -35,7 +35,7 @@ export default function DriverProfileCard({ name, regions, bio, vehicle, whatsAp
 
                     <Button asChild className="w-full" size="lg">
                         <Link href={whatsAppUrl} target="_blank">
-                           <Car /> Contact via WhatsApp
+                           <MessageSquare /> Contact via WhatsApp
                         </Link>
                     </Button>
                 </div>

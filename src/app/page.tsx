@@ -29,7 +29,7 @@ const features = [
         icon: <Languages className="h-10 w-10" />,
         title: "Ghanaian Language Companion",
         description: "Feel more connected. Learn key phrases in Twi, Ewe, Ga, and more—with audio guides to help you speak confidently.",
-        href: "/planner?tab=plan&tool=language-guide"
+        href: "/planner?tab=plan"
     }
 ]
 
