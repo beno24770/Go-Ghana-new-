@@ -20,3 +20,33 @@ export const EstimateBudgetOutputSchema = z.object({
   total: z.number().describe('Total estimated cost for the trip.'),
 });
 export type EstimateBudgetOutput = z.infer<typeof EstimateBudgetOutputSchema>;
+
+export const PlanTripInputSchema = z.object({
+  duration: z.number().describe('The duration of the trip in days.'),
+  region: z.string().describe('The region in Ghana the user will be visiting.'),
+  budget: z.number().describe('The total budget for the trip in USD.'),
+  numTravelers: z.number().describe('The number of travelers.'),
+});
+export type PlanTripInput = z.infer<typeof PlanTripInputSchema>;
+
+export const PlanTripOutputSchema = z.object({
+  suggestedTravelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']).describe('The suggested travel style based on the budget.'),
+  accommodation: z.object({
+    cost: z.number().describe('Estimated cost of accommodation.'),
+    description: z.string().describe('Description of accommodation options.'),
+  }),
+  food: z.object({
+    cost: z.number().describe('Estimated cost of food.'),
+    description: z.string().describe('Description of food options and where to eat.'),
+  }),
+  transportation: z.object({
+    cost: z.number().describe('Estimated cost of transportation.'),
+    description: z.string().describe('Description of transportation options.'),
+  }),
+  activities: z.object({
+    cost: z.number().describe('Estimated cost of activities.'),
+    description: z.string().describe('Suggested activities and itineraries.'),
+  }),
+  total: z.number().describe('Total estimated cost for the trip.'),
+});
+export type PlanTripOutput = z.infer<typeof PlanTripOutputSchema>;
