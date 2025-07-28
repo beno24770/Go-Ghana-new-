@@ -98,8 +98,10 @@ export default function TripPlannerView() {
     for(const [key, value] of params.entries()) {
         data[key] = value;
     }
-    data.region = params.getAll('region');
-    if (data.region.length === 0 && params.has('region')) {
+    const region = params.getAll('region');
+    if (region.length > 0) {
+        data.region = region;
+    } else if (params.has('region')) {
         data.region = params.get('region')!;
     }
 
@@ -258,7 +260,7 @@ export default function TripPlannerView() {
                     <div className="space-y-6">
                         <h2 className="font-headline text-3xl font-bold">Plan Your Trip to Ghana</h2>
                         <p className="text-muted-foreground">
-                        Enter your total budget, and we'll generate a custom travel plan for you, complete with suggestions for your stay.
+                        Enter your total budget, and we'll craft a personalized travel plan for you, complete with suggestions for your stay.
                         </p>
                         <TripPlanForm
                             key={`plan-${formKey}`}
@@ -277,5 +279,3 @@ export default function TripPlannerView() {
       </main>
   );
 }
-
-    
