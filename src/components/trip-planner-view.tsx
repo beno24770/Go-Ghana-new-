@@ -8,7 +8,7 @@ import BudgetForm from '@/components/budget-form';
 import BudgetResults from '@/components/budget-results';
 import TripPlanForm from '@/components/trip-plan-form';
 import TripPlanResults from '@/components/trip-plan-results';
-import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, PlanTripOutputSchema, EstimateBudgetInputSchema, EstimateBudgetOutputSchema } from '@/ai/schemas';
+import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, PlanTripInputSchema, PlanTripOutputSchema, EstimateBudgetInputSchema, EstimateBudgetOutputSchema } from '@/ai/schemas';
 import { getBudgetEstimate, getTripPlan } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Logo } from '@/components/logo';
@@ -63,6 +63,11 @@ export default function TripPlannerView() {
                 data[key] = value;
             }
         }
+    }
+    
+    // Ensure single region selections are wrapped in an array
+    if (data.region && !Array.isArray(data.region)) {
+        data.region = [data.region];
     }
 
     if (tab === 'estimate') {
@@ -134,7 +139,7 @@ export default function TripPlannerView() {
                 value.forEach(region => params.append(key, region));
             } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
                 flattenObject(value, newKey);
-            } else {
+            } else if (value !== undefined) {
                 params.append(newKey, String(value));
             }
         });
