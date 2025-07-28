@@ -44,10 +44,10 @@ export default function Home() {
               priority
           />
           <div className="max-w-2xl">
-              <h1 className="font-headline text-4xl md:text-6xl font-bold text-white shadow-lg">
+              <h1 className="font-headline text-3xl sm:text-4xl md:text-6xl font-bold text-white shadow-lg">
                   Go Ghana: Plan Less, Explore More
               </h1>
-              <p className="mt-4 text-lg md:text-xl text-white/90">
+              <p className="mt-4 text-base sm:text-lg md:text-xl text-white/90">
                   Let Ghana welcome you. Build your dream trip with personalized budgets, custom itineraries, and travel tips—everything crafted to help you experience the real Ghana.
               </p>
               <Button asChild size="lg" className="mt-8">
