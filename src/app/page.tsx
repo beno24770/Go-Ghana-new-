@@ -2,7 +2,7 @@
 import { InstallPwaButton } from "@/components/install-pwa-button";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calculator, Languages, ListChecks, Map } from "lucide-react";
+import { Calculator, Car, Languages, ListChecks, Map } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -20,10 +20,10 @@ const features = [
         href: "/planner?tab=plan"
     },
     {
-        icon: '🎒',
-        title: "Your Personal Packing List",
-        description: "Never forget the essentials. Get a checklist tailored to your destinations, season, and trip type.",
-        href: "/planner?tab=plan"
+        icon: '🤝',
+        title: "Connect with a Local Driver",
+        description: "Travel like a local. Connect with our vetted, trusted drivers for personalized tours and reliable transport at a fair price.",
+        href: "/drivers"
     },
     {
         icon: '🗣️',
@@ -36,7 +36,7 @@ const features = [
 export default function Home() {
   return (
     <main className="flex-1">
-      <div className="relative flex h-[60vh] items-center justify-center px-4 text-center">
+      <div className="relative flex h-[60vh] min-h-[400px] items-center justify-center px-4 text-center sm:min-h-[500px]">
           <Image 
               src="https://www.letvisitghana.com/wp-content/uploads/2024/05/Nzulezu-Stilt-Village.jpg"
               alt="Beautiful landscape of Ghana"
