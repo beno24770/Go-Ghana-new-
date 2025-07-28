@@ -6,6 +6,7 @@ import { generatePackingList } from '@/ai/flows/generate-packing-list';
 import { planTrip } from '@/ai/flows/plan-trip';
 import { generateLanguageGuide } from '@/ai/flows/generate-language-guide';
 import { generateAudio } from '@/ai/flows/generate-audio';
+import { regenerateItineraryFromNotes } from '@/ai/flows/regenerate-itinerary';
 import {
   type EstimateBudgetInput,
   type EstimateBudgetOutput,
@@ -19,6 +20,7 @@ import {
   type GenerateLanguageGuideOutput,
   type GenerateAudioInput,
   type GenerateAudioOutput,
+  type RegenerateItineraryInput,
 } from '@/ai/schemas';
 
 export async function getBudgetEstimate(
@@ -54,6 +56,18 @@ export async function getItinerary(
     } catch (error) {
         console.error('Error generating itinerary:', error);
         return { success: false, error: 'Failed to generate itinerary. Please try again.' };
+    }
+}
+
+export async function regenerateItinerary(
+    data: RegenerateItineraryInput
+): Promise<{ success: true; data: GenerateItineraryOutput } | { success: false; error: string }> {
+    try {
+        const result = await regenerateItineraryFromNotes(data);
+        return { success: true, data: result };
+    } catch (error) {
+        console.error('Error regenerating itinerary:', error);
+        return { success: false, error: 'Failed to regenerate itinerary. Please try again.' };
     }
 }
 

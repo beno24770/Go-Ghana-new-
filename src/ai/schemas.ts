@@ -77,6 +77,11 @@ export const GenerateItineraryOutputSchema = z.object({
 });
 export type GenerateItineraryOutput = z.infer<typeof GenerateItineraryOutputSchema>;
 
+export const RegenerateItineraryInputSchema = z.object({
+    notes: z.string().describe('The user\'s edited itinerary notes in Markdown format.'),
+});
+export type RegenerateItineraryInput = z.infer<typeof RegenerateItineraryInputSchema>;
+
 
 export const GeneratePackingListInputSchema = z.object({
     duration: z.number().describe('The duration of the trip in days.'),

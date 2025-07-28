@@ -8,9 +8,11 @@ import {
   Car,
   Check,
   Copy,
+  Download,
   Languages,
   LoaderCircle,
   Mail,
+  Pencil,
   PlayCircle,
   Share2,
   Ticket,
@@ -31,14 +33,15 @@ import { useToast } from '@/hooks/use-toast';
 import type { GenerateItineraryOutput, GenerateLanguageGuideOutput, GeneratePackingListOutput, PackingListItemSchema, PhraseSchema, PlanTripInput, PlanTripOutput } from '@/ai/schemas';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
-import { getAudio, getItinerary, getLanguageGuide, getPackingList } from '@/app/actions';
-import { useEffect, useState } from 'react';
+import { getAudio, getItinerary, getLanguageGuide, getPackingList, regenerateItinerary } from '@/app/actions';
+import { useEffect, useState, useMemo } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import Link from 'next/link';
 import { marked } from 'marked';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { z } from 'zod';
+import { Textarea } from './ui/textarea';
 
 
 type TripPlanData = {
@@ -74,18 +77,32 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
     const [languageGuide, setLanguageGuide] = useState<GenerateLanguageGuideOutput | null>(null);
     const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
     const [activeTab, setActiveTab] = useState('itinerary');
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedItinerary, setEditedItinerary] = useState('');
 
     const { toast } = useToast();
 
+    const itineraryAsMarkdown = useMemo(() => {
+        if (!itinerary) return '';
+        return itinerary.itinerary.map(day => `### Day ${day.day}: ${day.title}\n\n${day.details}`).join('\n\n');
+    }, [itinerary]);
+    
     useEffect(() => {
         if(open && initialTool) {
             setActiveTab(initialTool);
         }
     }, [open, initialTool]);
 
+    useEffect(() => {
+        if (itineraryAsMarkdown) {
+            setEditedItinerary(itineraryAsMarkdown);
+        }
+    }, [itineraryAsMarkdown]);
+
     const handleGenerateItinerary = async () => {
         setIsLoading(prev => ({...prev, itinerary: true}));
         setItinerary(null);
+        setIsEditing(false);
         const result = await getItinerary({
             duration: planData.inputs.duration,
             region: planData.inputs.region,
@@ -100,6 +117,32 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
         }
         setIsLoading(prev => ({...prev, itinerary: false}));
     }
+
+    const handleRegenerateItinerary = async () => {
+        setIsLoading(prev => ({ ...prev, itinerary: true }));
+        setItinerary(null);
+        const result = await regenerateItinerary({ notes: editedItinerary });
+        if (result.success) {
+            setItinerary(result.data);
+            setIsEditing(false);
+        } else {
+            toast({ variant: 'destructive', title: 'Error', description: result.error });
+        }
+        setIsLoading(prev => ({ ...prev, itinerary: false }));
+    };
+
+    const handleDownloadAndEdit = () => {
+        const blob = new Blob([itineraryAsMarkdown], { type: 'text/markdown;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'goghana-itinerary.md';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        setIsEditing(true);
+    };
 
     const handleGeneratePackingList = async () => {
         setIsLoading(prev => ({...prev, packingList: true}));
@@ -194,10 +237,29 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
                 </div>
             )
         }
+        if (isEditing) {
+            return (
+                <div className="flex flex-col h-full">
+                    <Textarea 
+                        value={editedItinerary}
+                        onChange={(e) => setEditedItinerary(e.target.value)}
+                        className="flex-grow min-h-[300px] text-sm"
+                        placeholder="Add your desired destinations or make changes here..."
+                    />
+                    <div className="mt-4 flex justify-end gap-2">
+                        <Button variant="ghost" onClick={() => setIsEditing(false)}>Cancel</Button>
+                        <Button onClick={handleRegenerateItinerary} disabled={isLoading.itinerary}>
+                            {isLoading.itinerary ? <LoaderCircle className="animate-spin" /> : <Wand2 />}
+                            <span className="ml-2">Regenerate Itinerary</span>
+                        </Button>
+                    </div>
+                </div>
+            );
+        }
         return (
             <div className="flex flex-col h-full">
                 <div className="flex-grow overflow-y-auto pr-4 -mr-4">
-                    <Accordion type="single" collapsible className="w-full">
+                    <Accordion type="single" collapsible className="w-full" defaultValue="day-1">
                         {itinerary.itinerary.map((dayPlan) => (
                             <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
                                 <AccordionTrigger className="font-bold hover:no-underline text-left">Day {dayPlan.day}: {dayPlan.title}</AccordionTrigger>
@@ -217,14 +279,12 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
                         Let local experts help you refine and book your perfect Ghanaian adventure.
                     </p>
                     <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-center">
-                            <Button asChild variant="outline">
-                            <Link href="https://letvisitghana.com" target="_blank">
-                                <BookText /> <span className="ml-2">Read More Guides</span>
-                            </Link>
+                        <Button onClick={handleDownloadAndEdit} variant="outline">
+                            <Download /> <span className="ml-2">Download & Edit</span>
                         </Button>
                         <Button asChild variant="secondary">
-                            <Link href="https://wa.me/233200635250" target="_blank">
-                                <Mail /> <span className="ml-2">Customize with an Expert</span>
+                            <Link href="/drivers">
+                                <Car /> <span className="ml-2">Go Solo</span>
                             </Link>
                         </Button>
                         <Button asChild>
@@ -244,7 +304,7 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
                 <DialogHeader>
                     <DialogTitle className="font-headline text-2xl">Your Trip Tools</DialogTitle>
                     <DialogDescription>
-                        Generate a sample itinerary, packing list, and language guide for your trip.
+                        Generate and customize a sample itinerary, packing list, and language guide for your trip.
                     </DialogDescription>
                 </DialogHeader>
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full overflow-hidden flex-grow flex flex-col">
