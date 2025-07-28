@@ -103,7 +103,7 @@ export default function BudgetResults({ data, isLoading }: BudgetResultsProps) {
             width={600}
             height={400}
             className="mt-6 rounded-lg object-cover"
-            data-ai-hint="ghana market"
+            data-ai-hint="ghanaian market"
           />
         </div>
       </div>
