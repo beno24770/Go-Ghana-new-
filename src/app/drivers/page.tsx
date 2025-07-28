@@ -6,9 +6,9 @@ import Link from 'next/link';
 
 const drivers = [
     {
-        name: "Kofi Mensah",
+        name: "Jerome Evame",
         imageUrl: "https://placehold.co/400x400.png",
-        imageHint: "man smiling",
+        imageHint: "pixar style man",
         regions: ["Greater Accra", "Central", "Eastern"],
         bio: "With over 10 years of experience driving in Accra and the coastal regions, I know all the best spots, from historic landmarks to hidden gems. I ensure a safe, comfortable, and insightful journey.",
         vehicle: "Toyota Corolla (A/C)",
@@ -17,7 +17,7 @@ const drivers = [
     {
         name: "Ama Serwaa",
         imageUrl: "https://placehold.co/400x400.png",
-        imageHint: "woman smiling",
+        imageHint: "pixar style woman",
         regions: ["Ashanti", "Bono", "Ahafo"],
         bio: "As a proud Ashanti native, I love sharing the rich culture of my homeland. From the bustling Kejetia market to serene craft villages, I'll guide you through the heart of Ghana with a smile.",
         vehicle: "Hyundai Tucson (SUV)",
