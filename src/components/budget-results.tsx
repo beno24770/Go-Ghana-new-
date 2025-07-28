@@ -110,14 +110,6 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
           <p className="mt-2 text-muted-foreground">
             Your personalized budget estimate will appear here once you fill out the form.
           </p>
-          <Image
-            src="https://placehold.co/400x300.png"
-            alt="Scenic view of a Ghanaian stilt village"
-            width={400}
-            height={300}
-            className="mt-6 rounded-lg object-cover"
-            data-ai-hint="ghana stilt village"
-          />
         </div>
       </div>
     );

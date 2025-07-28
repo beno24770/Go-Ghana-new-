@@ -537,14 +537,6 @@ export default function TripPlanResults({ data, isLoading, initialTool }: TripPl
           <p className="mt-2 text-muted-foreground">
             Fill out your budget details, and we'll craft a personalized itinerary for your Ghanaian adventure.
           </p>
-          <Image
-            src="https://placehold.co/400x300.png"
-            alt="Scenic view of a Ghanaian canopy walk"
-            width={400}
-            height={300}
-            className="mt-6 rounded-lg object-cover"
-            data-ai-hint="ghana canopy walk"
-          />
         </div>
       </div>
     );
