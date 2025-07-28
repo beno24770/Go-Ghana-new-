@@ -168,7 +168,7 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                           >
                             <FormControl>
                               <Checkbox
-                                checked={field.value?.includes(interest.id)}
+                                checked={(field.value || []).includes(interest.id)}
                                 onCheckedChange={(checked) => {
                                   const currentValue = field.value || [];
                                   return checked
