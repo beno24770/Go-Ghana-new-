@@ -187,7 +187,7 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
         <div className="space-y-2">
             <Button onClick={handlePlanClick} className="w-full">
               <Wand2 className="mr-2 h-4 w-4" />
-              Help Me Plan My Itinerary
+              Give Me a Breakdown
             </Button>
             <Button onClick={handleShare} variant="outline" className="w-full">
               <Share2 className="mr-2 h-4 w-4" />
