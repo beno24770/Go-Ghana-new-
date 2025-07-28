@@ -204,11 +204,11 @@ export default function TripPlanResults({ data, isLoading }: TripPlanResultsProp
           </p>
           <Image
             src="https://placehold.co/400x300.png"
-            alt="Scenic view of a Ghanaian beach with palm trees and calm waves"
+            alt="Scenic view of a Ghanaian coastline with colorful fishing boats"
             width={400}
             height={300}
             className="mt-6 rounded-lg object-cover"
-            data-ai-hint="ghana beach"
+            data-ai-hint="ghana coastline"
           />
         </div>
       </div>
