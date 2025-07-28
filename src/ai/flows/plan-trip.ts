@@ -25,14 +25,16 @@ User Preferences:
 - Regions: {{#each region}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
 - Total Budget: \${{budget}}
 - Number of Travelers: {{numTravelers}}
+- Travel Style: {{travelStyle}}
 
 Your Task:
-1.  **Determine Travel Style**: Based on the budget per person per day, determine if the travel style is 'Budget', 'Mid-range', or 'Luxury'.
-2.  **Allocate Budget**: Distribute the total budget among accommodation, food, transportation, and activities. The allocation should be realistic for the determined travel style in the specified region.
+1.  **Use the Provided Travel Style**: The user has specified their travel style. You must adhere to this choice.
+2.  **Allocate Budget**: Distribute the total budget among accommodation, food, transportation, and activities, ensuring the allocation is realistic for the chosen travel style and fits within the total budget.
 3.  **Provide Descriptions**: For each category (accommodation, food, transportation, activities), provide a description of what the user can expect. For activities, suggest a brief itinerary covering the selected regions.
-4.  **Ensure Total Matches**: The sum of the costs for each category must equal the total budget provided by the user.
+4.  **Ensure Total Matches**: The sum of the costs for each category must equal the total budget provided by the user. If the budget is too low for the selected travel style, you must still adhere to the budget, but you can mention in the descriptions that the experience may be more constrained (e.g., "On a tight budget for luxury, so focus on one or two key high-end experiences.").
+5.  **Confirm Travel Style**: The 'suggestedTravelStyle' in the output must match the user's selected 'travelStyle'.
 
-Cost Guidelines (per person per day):
+Cost Guidelines (per person per day) - Use these to inform your allocation:
 - Budget: $60 - $140
 - Mid-range: $150 - $320
 - Luxury: $400 - $1650+

@@ -14,9 +14,10 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { type PlanTripInput, PlanTripInputSchema } from '@/ai/schemas';
+import { type PlanTripInput, PlanTripInputSchema, type EstimateBudgetInput } from '@/ai/schemas';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from './ui/scroll-area';
+import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 
 const ghanaRegions = [
   "Ahafo", "Ashanti", "Bono", "Bono East", "Central", "Eastern",
@@ -24,20 +25,25 @@ const ghanaRegions = [
   "Upper East", "Upper West", "Volta", "Western", "Western North"
 ];
 
+const travelStyles: EstimateBudgetInput['travelStyle'][] = ['Budget', 'Mid-range', 'Luxury'];
+
+
 interface TripPlanFormProps {
   onSubmit: (data: PlanTripInput) => void;
   isSubmitting: boolean;
-  defaultValues?: PlanTripInput;
+  defaultValues?: Partial<PlanTripInput>;
 }
 
 export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: TripPlanFormProps) {
   const form = useForm<PlanTripInput>({
     resolver: zodResolver(PlanTripInputSchema),
-    defaultValues: defaultValues || {
+    defaultValues: {
       duration: 7,
       region: ['Greater Accra'],
       budget: 1000,
       numTravelers: 1,
+      travelStyle: 'Mid-range',
+      ...defaultValues,
     },
   });
 
@@ -105,7 +111,7 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                                 checked={field.value?.includes(region)}
                                 onCheckedChange={(checked) => {
                                   return checked
-                                    ? field.onChange([...field.value, region])
+                                    ? field.onChange([...(field.value || []), region])
                                     : field.onChange(
                                         field.value?.filter(
                                           (value) => value !== region
@@ -125,6 +131,32 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                   </ScrollArea>
                 </CardContent>
               </Card>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="travelStyle"
+          render={({ field }) => (
+            <FormItem className="space-y-3">
+              <FormLabel>Travel Style</FormLabel>
+              <FormControl>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  className="flex flex-col space-y-1"
+                >
+                  {travelStyles.map(style => (
+                    <FormItem key={style} className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value={style} />
+                      </FormControl>
+                      <FormLabel className="font-normal">{style}</FormLabel>
+                    </FormItem>
+                  ))}
+                </RadioGroup>
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}

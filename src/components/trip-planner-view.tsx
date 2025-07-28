@@ -100,7 +100,7 @@ export default function TripPlannerView() {
     }
     const region = params.getAll('region');
     if (region.length > 0) {
-        data.region = region;
+        data.region = region.length === 1 ? region[0] : region;
     } else if (params.has('region')) {
         data.region = params.get('region')!;
     }
@@ -127,10 +127,10 @@ export default function TripPlannerView() {
     } else if (tab === 'plan' && params.get('budget')) {
         const parsed = planUrlSchema.safeParse(data);
         if (parsed.success) {
-            const { budget, duration, numTravelers, region, ...rest } = parsed.data;
+            const { budget, duration, numTravelers, region, travelStyle, ...rest } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
             setTripPlanData({
-                inputs: { duration, region: regionArray, budget, numTravelers },
+                inputs: { duration, region: regionArray, budget, numTravelers, travelStyle },
                 outputs: {
                     suggestedTravelStyle: rest['outputs.suggestedTravelStyle'],
                     accommodation: { cost: rest['outputs.accommodation.cost'], description: rest['outputs.accommodation.description'] },
@@ -202,7 +202,8 @@ export default function TripPlannerView() {
         duration: budgetInputs.duration,
         region: budgetInputs.region,
         numTravelers: budgetInputs.numTravelers,
-        budget: totalBudget
+        budget: totalBudget,
+        travelStyle: budgetInputs.travelStyle
     };
     startTransition(() => {
         onTabChange('plan');
@@ -211,18 +212,20 @@ export default function TripPlannerView() {
   }, [handlePlan]);
 
   const onTabChange = (value: string) => {
-    setActiveTab(value);
-    const params = new URLSearchParams(window.location.search);
-    params.set('tab', value);
-    // Clear other params when switching tabs
-    const keysToRemove: string[] = [];
-    params.forEach((_, key) => {
-        if (key !== 'tab') {
-            keysToRemove.push(key);
-        }
+    startTransition(() => {
+        setActiveTab(value);
+        const params = new URLSearchParams(window.location.search);
+        params.set('tab', value);
+        // Clear other params when switching tabs
+        const keysToRemove: string[] = [];
+        params.forEach((_, key) => {
+            if (key !== 'tab') {
+                keysToRemove.push(key);
+            }
+        });
+        keysToRemove.forEach(key => params.delete(key));
+        router.push(`/planner?${params.toString()}`, { scroll: false });
     });
-    keysToRemove.forEach(key => params.delete(key));
-    router.push(`/planner?${params.toString()}`, { scroll: false });
   }
 
   return (
