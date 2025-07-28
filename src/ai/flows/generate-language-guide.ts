@@ -23,11 +23,15 @@ Your Task:
 1.  **Identify the Primary Language**: Determine the most common local language spoken across the majority of the selected regions. If regions have different primary languages, choose the one that would be most useful for a traveler (e.g., Twi is widely spoken).
 2.  **Generate a List of Phrases**: Create a list of 10-15 essential phrases for a traveler. The list should cover categories like Greetings, Common Questions, Market/Shopping, and Directions.
 3.  **Provide Clear Translations**: For each phrase, provide the English version, the translated version in the identified local language, and the name of that language.
-4.  **Ensure Accuracy**: The translations must be accurate and culturally appropriate.
+4.  **Ensure Accuracy**: The translations must be accurate and culturally appropriate. Use the examples below as a guide for quality.
 
 Example for Ashanti region:
 - English: "How much is this?"
 - Translation: "Yɛ sɛn?"
+- Language: "Twi"
+
+- English: "Good evening"
+- Translation: "Maadwo"
 - Language: "Twi"
 
 Generate a response that adheres to the GenerateLanguageGuideOutputSchema.`,
