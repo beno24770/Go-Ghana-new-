@@ -22,7 +22,7 @@ const estimateBudgetPrompt = ai.definePrompt({
   prompt: `You are a travel expert specializing in trips to Ghana. Based on the user's preferences, provide an estimated budget for their trip, broken down by accommodation, food, transportation, and activities. Provide only numbers in USD, do not add any extra text.
 
 Duration: {{duration}} days
-Region: {{region}}
+Regions: {{#each region}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
 Travel Style: {{travelStyle}}
 Number of Travelers: {{numTravelers}}
 

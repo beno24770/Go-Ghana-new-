@@ -21,14 +21,14 @@ const planTripPrompt = ai.definePrompt({
 
 User Preferences:
 - Duration: {{duration}} days
-- Region: {{region}}
+- Regions: {{#each region}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
 - Total Budget: \${{budget}}
 - Number of Travelers: {{numTravelers}}
 
 Your Task:
 1.  **Determine Travel Style**: Based on the budget per person per day, determine if the travel style is 'Budget', 'Mid-range', or 'Luxury'.
 2.  **Allocate Budget**: Distribute the total budget among accommodation, food, transportation, and activities. The allocation should be realistic for the determined travel style in the specified region.
-3.  **Provide Descriptions**: For each category (accommodation, food, transportation, activities), provide a description of what the user can expect. For activities, suggest a brief itinerary.
+3.  **Provide Descriptions**: For each category (accommodation, food, transportation, activities), provide a description of what the user can expect. For activities, suggest a brief itinerary covering the selected regions.
 4.  **Ensure Total Matches**: The sum of the costs for each category must equal the total budget provided by the user.
 
 Cost Guidelines (per person per day):

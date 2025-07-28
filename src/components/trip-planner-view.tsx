@@ -8,7 +8,7 @@ import BudgetForm from '@/components/budget-form';
 import BudgetResults from '@/components/budget-results';
 import TripPlanForm from '@/components/trip-plan-form';
 import TripPlanResults from '@/components/trip-plan-results';
-import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, PlanTripOutputSchema } from '@/ai/schemas';
+import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, PlanTripOutputSchema, EstimateBudgetInputSchema } from '@/ai/schemas';
 import { getBudgetEstimate, getTripPlan } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Logo } from '@/components/logo';
@@ -25,7 +25,7 @@ type TripPlanData = {
 
 const budgetDataSchema = z.object({
   duration: z.coerce.number().int().min(1),
-  region: z.string(),
+  region: z.union([z.string(), z.array(z.string())]),
   travelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']),
   numTravelers: z.coerce.number().int().min(1),
   accommodation: z.coerce.number(),
@@ -37,7 +37,7 @@ const budgetDataSchema = z.object({
 
 const planDataSchema = z.object({
     duration: z.coerce.number().int().min(1),
-    region: z.string(),
+    region: z.union([z.string(), z.array(z.string())]),
     budget: z.coerce.number().int().min(1),
     numTravelers: z.coerce.number().int().min(1),
     suggestedTravelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']),
@@ -69,47 +69,67 @@ export default function TripPlannerView() {
     setActiveTab(tab);
 
     if (tab === 'estimate') {
-        const data: { [key: string]: any } = {};
-        params.forEach((value, key) => data[key] = value);
+        const data: { [key: string]: any } = { region: params.getAll('region') };
+        params.forEach((value, key) => {
+            if (key !== 'region') {
+                data[key] = value
+            }
+        });
+        
+        if (Array.isArray(data.region) && data.region.length === 1 && data.region[0].includes(',')) {
+            data.region = data.region[0].split(',');
+        }
+
+
         const parsed = budgetDataSchema.safeParse(data);
+
         if (parsed.success) {
             const { duration, region, travelStyle, numTravelers, accommodation, food, transportation, activities, total } = parsed.data;
+            const regionArray = Array.isArray(region) ? region : [region];
+
             setBudgetData({
-                inputs: { duration, region, travelStyle, numTravelers },
+                inputs: { duration, region: regionArray, travelStyle, numTravelers },
                 outputs: { accommodation, food, transportation, activities, total },
             });
             setFormKey(Date.now()); 
         }
     } else if (tab === 'plan') {
-        const data: { [key: string]: any } = {};
-        // Manually map flat params to nested structure for parsing
-        params.forEach((value, key) => {
-            if (key.endsWith('Cost')) {
-                const newKey = key.replace('Cost', '.cost');
-                const [parent, child] = newKey.split('.');
-                if (!data[parent]) data[parent] = {};
-                data[parent][child] = value;
-            } else if (key.endsWith('Desc')) {
-                const newKey = key.replace('Desc', '.description');
-                const [parent, child] = newKey.split('.');
-                if (!data[parent]) data[parent] = {};
-                data[parent][child] = value;
-            } else {
-                data[key] = value;
+        const data: { [key: string]: any } = { region: params.getAll('region') };
+         // Manually map flat params to nested structure for parsing
+         params.forEach((value, key) => {
+            if (key !== 'region') {
+                if (key.endsWith('Cost')) {
+                    const newKey = key.replace('Cost', '.cost');
+                    const [parent, child] = newKey.split('.');
+                    if (!data[parent]) data[parent] = {};
+                    data[parent][child] = value;
+                } else if (key.endsWith('Desc')) {
+                    const newKey = key.replace('Desc', '.description');
+                    const [parent, child] = newKey.split('.');
+                    if (!data[parent]) data[parent] = {};
+                    data[parent][child] = value;
+                } else {
+                    data[key] = value;
+                }
             }
         });
 
+        if (Array.isArray(data.region) && data.region.length === 1 && data.region[0].includes(',')) {
+            data.region = data.region[0].split(',');
+        }
+
         const parsed = PlanTripOutputSchema.extend({
             duration: z.coerce.number().int().min(1),
-            region: z.string(),
+            region: z.union([z.string(), z.array(z.string())]),
             budget: z.coerce.number().int().min(1),
             numTravelers: z.coerce.number().int().min(1),
         }).safeParse(data);
 
         if (parsed.success) {
             const { duration, region, budget, numTravelers, ...outputs } = parsed.data;
+            const regionArray = Array.isArray(region) ? region : [region];
             setTripPlanData({
-                inputs: { duration, region, budget, numTravelers },
+                inputs: { duration, region: regionArray, budget, numTravelers },
                 outputs: outputs,
             });
             setFormKey(Date.now());
@@ -152,7 +172,14 @@ export default function TripPlannerView() {
   const updateUrl = (tab: string, data: any) => {
     const params = new URLSearchParams();
     params.set('tab', tab);
-    Object.entries(data.inputs).forEach(([key, value]) => params.append(key, String(value)));
+    
+    Object.entries(data.inputs).forEach(([key, value]) => {
+      if (key === 'region' && Array.isArray(value)) {
+        value.forEach(region => params.append(key, region));
+      } else {
+        params.append(key, String(value));
+      }
+    });
     
     // Flatten the outputs for the URL
     Object.entries(data.outputs).forEach(([key, value]) => {

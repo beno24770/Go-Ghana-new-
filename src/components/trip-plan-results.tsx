@@ -100,6 +100,7 @@ export default function TripPlanResults({ data, isLoading }: TripPlanResultsProp
   }
 
   const { inputs, outputs } = data;
+  const regionText = Array.isArray(inputs.region) ? inputs.region.join(', ') : inputs.region;
 
   return (
     <Card className="w-full">
@@ -108,7 +109,7 @@ export default function TripPlanResults({ data, isLoading }: TripPlanResultsProp
             <div>
                 <CardTitle className="font-headline text-3xl">Your Trip Plan for Ghana</CardTitle>
                 <CardDescription>
-                For a {inputs.duration}-day trip to {inputs.region} for {inputs.numTravelers} traveler(s).
+                For a {inputs.duration}-day trip to {regionText} for {inputs.numTravelers} traveler(s).
                 </CardDescription>
             </div>
             <Badge variant="outline" className="text-lg">

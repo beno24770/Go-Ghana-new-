@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 export const EstimateBudgetInputSchema = z.object({
   duration: z.number().describe('The duration of the trip in days.'),
-  region: z.string().describe('The region in Ghana the user will be visiting.'),
+  region: z.array(z.string()).min(1, 'Please select at least one region.').describe('The regions in Ghana the user will be visiting.'),
   travelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']).describe('The travel style of the user.'),
   numTravelers: z.number().describe('The number of travelers.'),
 });
@@ -23,7 +23,7 @@ export type EstimateBudgetOutput = z.infer<typeof EstimateBudgetOutputSchema>;
 
 export const PlanTripInputSchema = z.object({
   duration: z.number().describe('The duration of the trip in days.'),
-  region: z.string().describe('The region in Ghana the user will be visiting.'),
+  region: z.array(z.string()).min(1, 'Please select at least one region.').describe('The regions in Ghana the user will be visiting.'),
   budget: z.number().describe('The total budget for the trip in USD.'),
   numTravelers: z.number().describe('The number of travelers.'),
 });

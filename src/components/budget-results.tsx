@@ -118,13 +118,15 @@ export default function BudgetResults({ data, isLoading }: BudgetResultsProps) {
       cost: outputs[key as keyof typeof outputs],
       fill: `var(--color-${key})`,
     }));
+  
+  const regionText = Array.isArray(inputs.region) ? inputs.region.join(', ') : inputs.region;
 
   return (
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="font-headline text-3xl">Your Estimated Budget</CardTitle>
         <CardDescription>
-          For a {inputs.duration}-day trip to {inputs.region} for {inputs.numTravelers} traveler(s) ({inputs.travelStyle} style).
+          For a {inputs.duration}-day trip to {regionText} for {inputs.numTravelers} traveler(s) ({inputs.travelStyle} style).
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">

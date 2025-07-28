@@ -14,15 +14,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { type EstimateBudgetInput, EstimateBudgetInputSchema } from '@/ai/schemas';
+import { Card, CardContent } from '@/components/ui/card';
+import { ScrollArea } from './ui/scroll-area';
 
 const ghanaRegions = [
   "Ahafo", "Ashanti", "Bono", "Bono East", "Central", "Eastern",
@@ -43,7 +39,7 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
     resolver: zodResolver(EstimateBudgetInputSchema),
     defaultValues: defaultValues || {
       duration: 7,
-      region: 'Greater Accra',
+      region: ['Greater Accra'],
       travelStyle: 'Mid-range',
       numTravelers: 1,
     },
@@ -81,21 +77,45 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
         <FormField
           control={form.control}
           name="region"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
-              <FormLabel>Region</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a region to visit" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {ghanaRegions.map(region => (
-                    <SelectItem key={region} value={region}>{region}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <FormLabel>Regions</FormLabel>
+              <Card>
+                <CardContent className="p-4">
+                  <ScrollArea className="h-48">
+                    <div className="space-y-2">
+                    {ghanaRegions.map((region) => (
+                      <FormField
+                        key={region}
+                        control={form.control}
+                        name="region"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(region)}
+                                onCheckedChange={(checked) => {
+                                  return checked
+                                    ? field.onChange([...field.value, region])
+                                    : field.onChange(
+                                        field.value?.filter(
+                                          (value) => value !== region
+                                        )
+                                      )
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {region}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
               <FormMessage />
             </FormItem>
           )}
