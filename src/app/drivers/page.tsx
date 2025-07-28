@@ -6,8 +6,6 @@ import Link from 'next/link';
 const drivers = [
     {
         name: "Jerome Evame",
-        imageUrl: "https://placehold.co/400x400.png",
-        imageHint: "pixar style man",
         regions: ["Greater Accra", "Central", "Eastern"],
         bio: "With over 10 years of experience driving in Accra and the coastal regions, I know all the best spots, from historic landmarks to hidden gems. I ensure a safe, comfortable, and insightful journey.",
         vehicle: "Toyota Corolla (A/C)",
@@ -15,8 +13,6 @@ const drivers = [
     },
     {
         name: "Ama Serwaa",
-        imageUrl: "https://placehold.co/400x400.png",
-        imageHint: "pixar style woman",
         regions: ["Ashanti", "Bono", "Ahafo"],
         bio: "As a proud Ashanti native, I love sharing the rich culture of my homeland. From the bustling Kejetia market to serene craft villages, I'll guide you through the heart of Ghana with a smile.",
         vehicle: "Hyundai Tucson (SUV)",
@@ -24,8 +20,6 @@ const drivers = [
     },
     {
         name: "Yaw Asante",
-        imageUrl: "https://placehold.co/400x400.png",
-        imageHint: "man sunglasses",
         regions: ["Northern", "Savannah", "North East"],
         bio: "The northern regions are full of adventure! I specialize in wildlife tours to Mole National Park and exploring historic sites like the Larabanga Mosque. My 4x4 is ready for any road.",
         vehicle: "Ford Ranger (4x4)",
@@ -33,8 +27,6 @@ const drivers = [
     },
     {
         name: "Esi Badu",
-        imageUrl: "https://placehold.co/400x400.png",
-        imageHint: "woman headwrap",
         regions: ["Volta", "Oti"],
         bio: "Discover the natural beauty of the Volta region with me. From the Wli waterfalls to the monkey sanctuaries, I offer a peaceful and scenic travel experience away from the city hustle.",
         vehicle: "Kia Sportage (A/C)",
@@ -57,7 +49,7 @@ export default function DriversPage() {
       </div>
 
       <div className="container mx-auto max-w-5xl px-4 py-16 sm:py-24">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             {drivers.map(driver => (
                 <DriverProfileCard key={driver.name} {...driver} />
             ))}
