@@ -48,7 +48,7 @@ export default function DriverProfileCard({ name, imageUrl, imageHint, regions, 
                     <Button asChild className="w-full" size="lg">
                         <Link href={whatsAppUrl} target="_blank">
                            Contact via WhatsApp
-                        </Iframe>
+                        </Link>
                     </Button>
                 </div>
             </CardContent>
