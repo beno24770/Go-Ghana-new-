@@ -99,7 +99,7 @@ export default function BudgetResults({ data, isLoading }: BudgetResultsProps) {
           </p>
           <Image 
             src="https://placehold.co/600x400.png"
-            alt="Placeholder image of a Ghanaian market"
+            alt="Vibrant Ghanaian market scene with colorful textiles and produce"
             width={600}
             height={400}
             className="mt-6 rounded-lg object-cover"
