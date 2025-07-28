@@ -61,11 +61,34 @@ export type GenerateItineraryInput = z.infer<typeof GenerateItineraryInputSchema
 
 export const DayItinerarySchema = z.object({
     day: z.number().describe('The day number of the itinerary.'),
-    title: z.string().describe('A short, catchy title for the day\'s plan.'),
-    details: z.string().describe('A detailed description of the activities for the day.'),
+    title: z.string().describe("A short, catchy title for the day's plan."),
+    details: z.string().describe('A detailed description of the activities for the day, formatted in Markdown.'),
 });
 
 export const GenerateItineraryOutputSchema = z.object({
     itinerary: z.array(DayItinerarySchema).describe('A day-by-day itinerary for the trip.'),
 });
 export type GenerateItineraryOutput = z.infer<typeof GenerateItineraryOutputSchema>;
+
+
+export const GeneratePackingListInputSchema = z.object({
+    duration: z.number().describe('The duration of the trip in days.'),
+    region: z.array(z.string()).describe('The regions in Ghana the user will be visiting.'),
+    travelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']).describe('The travel style of the user.'),
+});
+export type GeneratePackingListInput = z.infer<typeof GeneratePackingListInputSchema>;
+
+export const PackingListItemSchema = z.object({
+    item: z.string().describe('The name of the packing item.'),
+    notes: z.string().describe('A brief, helpful note about the item.'),
+});
+
+export const GeneratePackingListOutputSchema = z.object({
+    clothing: z.array(PackingListItemSchema).describe('List of clothing items.'),
+    toiletries: z.array(PackingListItemSchema).describe('List of toiletries.'),
+    healthAndSafety: z.array(PackingListItemSchema).describe('List of health and safety items.'),
+    documents: z.array(PackingListItemSchema).describe('List of important documents.'),
+    electronics: z.array(PackingListItemSchema).describe('List of electronic items and accessories.'),
+    miscellaneous: z.array(PackingListItemSchema).describe('List of miscellaneous items.'),
+});
+export type GeneratePackingListOutput = z.infer<typeof GeneratePackingListOutputSchema>;

@@ -5,6 +5,7 @@ import {
   BookOpenCheck,
   Briefcase,
   Car,
+  Check,
   Copy,
   LoaderCircle,
   Mail,
@@ -23,15 +24,18 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import type { GenerateItineraryOutput, PlanTripInput, PlanTripOutput } from '@/ai/schemas';
+import type { GenerateItineraryOutput, GeneratePackingListOutput, PackingListItemSchema, PlanTripInput, PlanTripOutput } from '@/ai/schemas';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
-import { getItinerary } from '@/app/actions';
+import { getItinerary, getPackingList } from '@/app/actions';
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import Link from 'next/link';
 import { marked } from 'marked';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { ScrollArea } from './ui/scroll-area';
+import { z } from 'zod';
 
 
 type TripPlanData = {
@@ -53,12 +57,13 @@ const categoryIcons = {
 
 function ItineraryDialog({ planData }: { planData: TripPlanData }) {
     const [isOpen, setIsOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState({ itinerary: false, packingList: false });
     const [itinerary, setItinerary] = useState<GenerateItineraryOutput | null>(null);
+    const [packingList, setPackingList] = useState<GeneratePackingListOutput | null>(null);
     const { toast } = useToast();
 
     const handleGenerateItinerary = async () => {
-        setIsLoading(true);
+        setIsLoading(prev => ({...prev, itinerary: true}));
         setItinerary(null);
         const result = await getItinerary({
             duration: planData.inputs.duration,
@@ -72,79 +77,159 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
         } else {
             toast({ variant: 'destructive', title: 'Error', description: result.error });
         }
-        setIsLoading(false);
+        setIsLoading(prev => ({...prev, itinerary: false}));
+    }
+
+    const handleGeneratePackingList = async () => {
+        setIsLoading(prev => ({...prev, packingList: true}));
+        setPackingList(null);
+        const result = await getPackingList({
+            duration: planData.inputs.duration,
+            region: planData.inputs.region,
+            travelStyle: planData.outputs.suggestedTravelStyle,
+        });
+
+        if (result.success) {
+            setPackingList(result.data);
+        } else {
+            toast({ variant: 'destructive', title: 'Error', description: result.error });
+        }
+        setIsLoading(prev => ({...prev, packingList: false}));
+    }
+    
+    function PackingListCategory({ title, items }: { title: string; items: z.infer<typeof PackingListItemSchema>[] }) {
+        if (!items || items.length === 0) return null;
+        return (
+            <div>
+                <h4 className="font-bold text-md mb-2">{title}</h4>
+                <ul className="space-y-2">
+                    {items.map((item, index) => (
+                        <li key={index} className="flex items-start gap-3">
+                            <Check className="h-5 w-5 text-primary mt-1 shrink-0" />
+                            <div>
+                                <span className="font-semibold">{item.item}</span>
+                                <p className="text-sm text-muted-foreground">{item.notes}</p>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        )
     }
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button>
-                    <Wand2 className="mr-2 h-4 w-4" /> Generate Itinerary
+                    <Wand2 className="mr-2 h-4 w-4" /> Plan Details
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[625px]">
+            <DialogContent className="sm:max-w-2xl">
                 <DialogHeader>
-                    <DialogTitle className="font-headline text-2xl">Generated Itinerary</DialogTitle>
+                    <DialogTitle className="font-headline text-2xl">Your Trip Tools</DialogTitle>
                     <DialogDescription>
-                        Here is a sample itinerary based on your trip plan.
+                        Generate a sample itinerary and a personalized packing list for your trip.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="py-4">
-                    {!itinerary && !isLoading && (
-                         <div className="text-center p-8">
-                            <p className="mb-4 text-muted-foreground">Click the button below to generate a personalized itinerary.</p>
-                            <Button onClick={handleGenerateItinerary} disabled={isLoading}>
-                                {isLoading ? <LoaderCircle className="animate-spin" /> : <Wand2 />}
-                                <span className="ml-2">{isLoading ? 'Generating...' : 'Generate Ideas'}</span>
-                            </Button>
-                         </div>
-                    )}
-                    {isLoading && (
-                        <div className="flex h-full min-h-[300px] w-full items-center justify-center">
-                            <div className="text-center">
-                                <div className="h-12 w-12 mx-auto animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-                                <p className="mt-4 font-headline text-xl">Crafting your adventure...</p>
-                            </div>
+                <Tabs defaultValue="itinerary" className="w-full">
+                    <TabsList className="grid w-full grid-cols-2">
+                        <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
+                        <TabsTrigger value="packing-list">Packing List</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="itinerary">
+                        <div className="py-4 min-h-[400px]">
+                            {!itinerary && !isLoading.itinerary && (
+                                <div className="text-center p-8 flex flex-col items-center justify-center h-full">
+                                    <p className="mb-4 text-muted-foreground">Click the button below to generate a personalized itinerary.</p>
+                                    <Button onClick={handleGenerateItinerary} disabled={isLoading.itinerary}>
+                                        {isLoading.itinerary ? <LoaderCircle className="animate-spin" /> : <Wand2 />}
+                                        <span className="ml-2">{isLoading.itinerary ? 'Generating...' : 'Generate Itinerary'}</span>
+                                    </Button>
+                                </div>
+                            )}
+                            {isLoading.itinerary && (
+                                <div className="flex h-full min-h-[300px] w-full items-center justify-center">
+                                    <div className="text-center">
+                                        <div className="h-12 w-12 mx-auto animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+                                        <p className="mt-4 font-headline text-xl">Crafting your adventure...</p>
+                                    </div>
+                                </div>
+                            )}
+                            {itinerary && (
+                                <ScrollArea className="h-[450px] pr-4">
+                                    <Accordion type="single" collapsible className="w-full">
+                                        {itinerary.itinerary.map((dayPlan) => (
+                                            <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
+                                                <AccordionTrigger className="font-bold hover:no-underline">Day {dayPlan.day}: {dayPlan.title}</AccordionTrigger>
+                                                <AccordionContent>
+                                                <div 
+                                                    className="prose prose-sm dark:prose-invert max-w-none" 
+                                                    dangerouslySetInnerHTML={{ __html: marked(dayPlan.details) as string }} 
+                                                />
+                                                </AccordionContent>
+                                            </AccordionItem>
+                                        ))}
+                                    </Accordion>
+                                </ScrollArea>
+                            )}
                         </div>
-                    )}
-                    {itinerary && (
-                         <div>
-                            <Accordion type="single" collapsible className="w-full">
-                                {itinerary.itinerary.map((dayPlan) => (
-                                    <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
-                                        <AccordionTrigger className="font-bold hover:no-underline">Day {dayPlan.day}: {dayPlan.title}</AccordionTrigger>
-                                        <AccordionContent>
-                                          <div 
-                                            className="prose prose-sm dark:prose-invert" 
-                                            dangerouslySetInnerHTML={{ __html: marked(dayPlan.details) as string }} 
-                                          />
-                                        </AccordionContent>
-                                    </AccordionItem>
-                                ))}
-                            </Accordion>
+                         {itinerary && (
                             <div className="mt-6 space-y-3 border-t pt-6 text-center">
                                 <h4 className="font-headline text-lg">Ready for the next step?</h4>
                                 <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                                    <Button asChild variant="outline">
+                                     <Button asChild variant="outline">
                                         <Link href="https://letvisitghana.com" target="_blank">
-                                            <BookOpenCheck /> <span>Read More</span>
+                                            <BookOpenCheck /> <span className="ml-2">Read More</span>
                                         </Link>
                                     </Button>
                                     <Button asChild variant="outline">
                                         <Link href="https://wa.me/233200635250" target="_blank">
-                                            <Mail /> <span>Customize Trip</span>
+                                            <Mail /> <span className="ml-2">Customize Trip</span>
                                         </Link>
                                     </Button>
                                     <Button asChild>
                                         <Link href="https://letvisitghanatours.com" target="_blank">
-                                            <Briefcase /> <span>Book a Tour</span>
+                                            <Briefcase /> <span className="ml-2">Book a Tour</span>
                                         </Link>
                                     </Button>
                                 </div>
                             </div>
-                         </div>
-                    )}
-                </div>
+                        )}
+                    </TabsContent>
+                    <TabsContent value="packing-list">
+                    <div className="py-4 min-h-[400px]">
+                            {!packingList && !isLoading.packingList && (
+                                <div className="text-center p-8 flex flex-col items-center justify-center h-full">
+                                    <p className="mb-4 text-muted-foreground">Click the button below to generate a personalized packing list.</p>
+                                    <Button onClick={handleGeneratePackingList} disabled={isLoading.packingList}>
+                                        {isLoading.packingList ? <LoaderCircle className="animate-spin" /> : <Wand2 />}
+                                        <span className="ml-2">{isLoading.packingList ? 'Generating...' : 'Generate Packing List'}</span>
+                                    </Button>
+                                </div>
+                            )}
+                            {isLoading.packingList && (
+                                <div className="flex h-full min-h-[300px] w-full items-center justify-center">
+                                    <div className="text-center">
+                                        <div className="h-12 w-12 mx-auto animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+                                        <p className="mt-4 font-headline text-xl">Creating your list...</p>
+                                    </div>
+                                </div>
+                            )}
+                            {packingList && (
+                                 <ScrollArea className="h-[450px] pr-4">
+                                    <div className="space-y-6">
+                                        <PackingListCategory title="Clothing" items={packingList.clothing} />
+                                        <PackingListCategory title="Toiletries" items={packingList.toiletries} />
+                                        <PackingListCategory title="Health & Safety" items={packingList.healthAndSafety} />
+                                        <PackingListCategory title="Documents" items={packingList.documents} />
+                                        <PackingListCategory title="Electronics" items={packingList.electronics} />
+                                        <PackingListCategory title="Miscellaneous" items={packingList.miscellaneous} />
+                                    </div>
+                                 </ScrollArea>
+                            )}
+                        </div>
+                    </TabsContent>
+                </Tabs>
             </DialogContent>
         </Dialog>
     )
@@ -202,13 +287,13 @@ export default function TripPlanResults({ data, isLoading }: TripPlanResultsProp
           <p className="mt-2 text-muted-foreground">
             Fill out your budget details, and we'll craft a personalized itinerary for your Ghanaian adventure.
           </p>
-          <Image 
-            src="https://www.letvisitghana.com/wp-content/uploads/2019/07/Kakum-National-Park-1-1024x576.jpg"
-            alt="Scenic view of a Ghanaian canopy walk"
+          <Image
+            src="https://www.letvisitghana.com/wp-content/uploads/2024/05/Nzulezu-Stilt-Village.jpg"
+            alt="Scenic view of a Ghanaian stilt village"
             width={400}
             height={300}
             className="mt-6 rounded-lg object-cover"
-            data-ai-hint="ghana canopy walk"
+            data-ai-hint="ghana stilt village"
           />
         </div>
       </div>
