@@ -131,12 +131,12 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                                         </Link>
                                     </Button>
                                     <Button asChild variant="outline">
-                                        <Link href="mailto:letvisitghana@gmail.com">
+                                        <Link href="https://wa.me/233200635250" target="_blank">
                                             <Mail /> <span>Customize Trip</span>
                                         </Link>
                                     </Button>
                                     <Button asChild>
-                                        <Link href="https://letvisitghanatour.com" target="_blank">
+                                        <Link href="https://letvisitghanatours.com" target="_blank">
                                             <Briefcase /> <span>Book a Tour</span>
                                         </Link>
                                     </Button>
@@ -202,7 +202,7 @@ export default function TripPlanResults({ data, isLoading }: TripPlanResultsProp
           <p className="mt-2 text-muted-foreground">
             Fill out your budget details, and we'll craft a personalized itinerary for your Ghanaian adventure.
           </p>
-          <Image
+          <Image 
             src="https://www.letvisitghana.com/wp-content/uploads/2019/07/Kakum-National-Park-1-1024x576.jpg"
             alt="Scenic view of a Ghanaian canopy walk"
             width={400}
