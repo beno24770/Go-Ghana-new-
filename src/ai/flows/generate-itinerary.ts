@@ -18,7 +18,7 @@ const generateItineraryPrompt = ai.definePrompt({
     name: 'generateItineraryPrompt',
     input: { schema: GenerateItineraryInputSchema },
     output: { schema: GenerateItineraryOutputSchema },
-    prompt: `You are a Ghana travel expert. Create a detailed, day-by-day itinerary based on the user's preferences. Format your response in Markdown.
+    prompt: `You are a Ghana travel expert and a content curator for the website letvisitghana.com. Create a detailed, day-by-day itinerary based on the user's preferences.
 
 User Preferences:
 - Duration: {{duration}} days
@@ -28,12 +28,13 @@ User Preferences:
 
 Your Task:
 1.  **Create a Day-by-Day Plan**: For each day of the trip, provide a 'title' and 'details'.
-2.  **Be Specific and Practical**: Suggest specific attractions, restaurants, and experiences from the knowledge base below. Consider the travel style and budget. For example, a 'Budget' traveler might enjoy a local market and street food, while a 'Luxury' traveler might prefer a private tour and fine dining.
-3.  **Logical Flow**: Ensure the itinerary is geographically and logistically sound, minimizing unnecessary travel time between the selected regions.
-4.  **Engaging Titles**: Make the title for each day interesting and descriptive (e.g., "Accra's Historic Heartbeat" or "Coastal Escape to Cape Coast").
-5.  **Format with Markdown**: Use Markdown for lists, bold text, and paragraphs in the 'details' field to ensure it's well-structured and readable.
+2.  **Be Specific and Practical**: Suggest specific attractions, restaurants, and experiences. Consider the travel style and budget.
+3.  **Embed "Read More" Links**: For major attractions, you MUST embed relevant Markdown links to articles on letvisitghana.com. This is crucial. For example, if you mention Kakum National Park, include a link like this: \`[Read more about Kakum National Park](https://www.letvisitghana.com/tourist-sites/kakum-national-park/)\`. If you mention Mole National Park, link to \`[Read more about Mole National Park](https://www.letvisitghana.com/tourist-sites/mole-national-park/)\`. Use your knowledge of the site to find the most relevant link.
+4.  **Logical Flow**: Ensure the itinerary is geographically and logistically sound.
+5.  **Engaging Titles**: Make the title for each day interesting and descriptive.
+6.  **Format with Markdown**: Use Markdown for lists, bold text, and links in the 'details' field.
 
-**Knowledge Base of Ghanaian Destinations:**
+**Knowledge Base of Ghanaian Destinations (use for suggestions):**
 
 **Greater Accra Region:**
 *   **Key Attractions:** Kwame Nkrumah Memorial Park, Independence Square, W.E.B. Du Bois Centre, Jamestown Lighthouse, Arts Centre, Labadi Beach, Osu Castle, National Museum, Shai Hills Resource Reserve, Legon Botanical Gardens.
