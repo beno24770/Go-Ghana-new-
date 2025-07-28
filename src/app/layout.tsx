@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'GoGhana Estimator',
-  description: 'Estimate your travel budget for a trip to Ghana.',
+  title: 'GoGhana Planner',
+  description: 'Estimate your travel budget and plan your trip to Ghana.',
 };
 
 export default function RootLayout({
