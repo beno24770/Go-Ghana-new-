@@ -197,6 +197,7 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                                 </div>
                             )}
                             {itinerary && (
+                                <>
                                 <ScrollArea className="h-[450px] pr-4">
                                     <Accordion type="single" collapsible className="w-full">
                                         {itinerary.itinerary.map((dayPlan) => (
@@ -212,30 +213,32 @@ function ItineraryDialog({ planData }: { planData: TripPlanData }) {
                                         ))}
                                     </Accordion>
                                 </ScrollArea>
+                                 <div className="mt-6 space-y-3 border-t pt-6 text-center bg-muted/20 p-4 rounded-lg">
+                                    <h4 className="font-headline text-lg">Ready for the Next Step?</h4>
+                                    <p className="text-sm text-muted-foreground">
+                                        Let local experts help you refine and book your perfect Ghanaian adventure.
+                                    </p>
+                                    <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                                         <Button asChild variant="outline">
+                                            <Link href="https://letvisitghana.com" target="_blank">
+                                                <BookText /> <span className="ml-2">Read More Guides</span>
+                                            </Link>
+                                        </Button>
+                                        <Button asChild variant="secondary">
+                                            <Link href="https://wa.me/233200635250" target="_blank">
+                                                <Mail /> <span className="ml-2">Customize with an Expert</span>
+                                            </Link>
+                                        </Button>
+                                        <Button asChild>
+                                            <Link href="https://letvisitghanatours.com" target="_blank">
+                                                <Briefcase /> <span className="ml-2">Book This Tour</span>
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                </div>
+                                </>
                             )}
                         </div>
-                         {itinerary && (
-                            <div className="mt-6 space-y-3 border-t pt-6 text-center">
-                                <h4 className="font-headline text-lg">Ready for the next step?</h4>
-                                <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                                     <Button asChild variant="outline">
-                                        <Link href="https://letvisitghana.com" target="_blank">
-                                            <BookText /> <span className="ml-2">Read More</span>
-                                        </Link>
-                                    </Button>
-                                    <Button asChild variant="outline">
-                                        <Link href="https://wa.me/233200635250" target="_blank">
-                                            <Mail /> <span className="ml-2">Customize Trip</span>
-                                        </Link>
-                                    </Button>
-                                    <Button asChild>
-                                        <Link href="https://letvisitghanatours.com" target="_blank">
-                                            <Briefcase /> <span className="ml-2">Book a Tour</span>
-                                        </Link>
-                                    </Button>
-                                </div>
-                            </div>
-                        )}
                     </TabsContent>
                     <TabsContent value="packing-list">
                         <div className="py-4 min-h-[400px]">
@@ -440,5 +443,3 @@ export default function TripPlanResults({ data, isLoading }: TripPlanResultsProp
     </Card>
   );
 }
-
-    
