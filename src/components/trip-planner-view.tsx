@@ -11,7 +11,6 @@ import TripPlanResults from '@/components/trip-plan-results';
 import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, EstimateBudgetInputSchema, EstimateBudgetOutputSchema, PlanTripInputSchema, PlanTripOutputSchema } from '@/ai/schemas';
 import { getBudgetEstimate, getTripPlan } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
-import { Logo } from '@/components/logo';
 
 type BudgetData = {
   inputs: EstimateBudgetInput;
@@ -176,21 +175,17 @@ export default function TripPlannerView() {
     flattenObject(data.inputs);
     flattenObject(data.outputs);
 
-    router.push(`?${params.toString()}`, { scroll: false });
+    router.push(`/planner?${params.toString()}`, { scroll: false });
   };
   
   const onTabChange = (value: string) => {
     setActiveTab(value);
     const params = new URLSearchParams(window.location.search);
     params.set('tab', value);
-    router.push(`?${params.toString()}`, { scroll: false });
+    router.push(`/planner?${params.toString()}`, { scroll: false });
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="container mx-auto max-w-5xl px-4 py-6">
-        <Logo />
-      </header>
       <main className="container mx-auto max-w-5xl flex-1 px-4 py-8">
         <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
@@ -242,9 +237,5 @@ export default function TripPlannerView() {
         </Tabs>
 
       </main>
-      <footer className="container mx-auto max-w-5xl px-4 py-6 text-center text-sm text-muted-foreground">
-        <p>&copy; {new Date().getFullYear()} GoGhana Planner. All rights reserved.</p>
-      </footer>
-    </div>
   );
 }
