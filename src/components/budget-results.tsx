@@ -7,6 +7,7 @@ import {
   Share2,
   Ticket,
   Utensils,
+  Wand2,
 } from 'lucide-react';
 import { Pie, PieChart } from 'recharts';
 import { Button } from '@/components/ui/button';
@@ -35,6 +36,7 @@ type BudgetData = {
 interface BudgetResultsProps {
   data: BudgetData | null;
   isLoading: boolean;
+  onPlanItinerary: (inputs: EstimateBudgetInput, total: number) => void;
 }
 
 const chartConfig = {
@@ -66,7 +68,7 @@ const categoryIcons = {
   activities: <Ticket className="h-6 w-6 text-muted-foreground" />,
 };
 
-export default function BudgetResults({ data, isLoading }: BudgetResultsProps) {
+export default function BudgetResults({ data, isLoading, onPlanItinerary }: BudgetResultsProps) {
   const { toast } = useToast();
 
   const handleShare = () => {
@@ -79,6 +81,12 @@ export default function BudgetResults({ data, isLoading }: BudgetResultsProps) {
       });
     }
   };
+
+  const handlePlanClick = () => {
+    if (data) {
+        onPlanItinerary(data.inputs, data.outputs.total);
+    }
+  }
 
   if (isLoading) {
     return (
@@ -173,10 +181,16 @@ export default function BudgetResults({ data, isLoading }: BudgetResultsProps) {
             ))}
         </div>
 
-        <Button onClick={handleShare} variant="outline" className="w-full">
-          <Share2 className="mr-2 h-4 w-4" />
-          Share This Estimate
-        </Button>
+        <div className="space-y-2">
+            <Button onClick={handlePlanClick} className="w-full">
+              <Wand2 className="mr-2 h-4 w-4" />
+              Help Me Plan My Itinerary
+            </Button>
+            <Button onClick={handleShare} variant="outline" className="w-full">
+              <Share2 className="mr-2 h-4 w-4" />
+              Share This Estimate
+            </Button>
+        </div>
       </CardContent>
     </Card>
   );
