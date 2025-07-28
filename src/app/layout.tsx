@@ -21,6 +21,11 @@ export const metadata: Metadata = {
   title: 'GoGhana Planner',
   description: 'Your AI-powered guide to planning the perfect trip to Ghana. Estimate budgets, generate itineraries, and get personalized packing lists and language guides.',
   manifest: '/manifest.json',
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({
