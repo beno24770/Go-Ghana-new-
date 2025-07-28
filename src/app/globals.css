@@ -4,6 +4,23 @@
 
 body {
   font-family: 'PT Sans', sans-serif;
+  background-image: url('https://www.letvisitghana.com/wp-content/uploads/2020/07/Kente-is-a-beautiful-and-popular-fabric-that-is-won-by-Ghanaians-on-special-occasions.-1.jpg');
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: hsla(var(--background), 0.8);
+  backdrop-filter: blur(8px);
+  z-index: -1;
 }
 
 @layer base {
@@ -68,6 +85,7 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    /* The background color is now set via an overlay in the ::before pseudo-element */
+    @apply text-foreground;
   }
 }
