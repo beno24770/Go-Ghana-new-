@@ -188,7 +188,7 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
             region: planData.inputs.region,
             travelStyle: planData.outputs.suggestedTravelStyle,
             activitiesBudget: planData.outputs.activities.cost,
-            startDate: new Date().toISOString().split('T')[0], // Pass today's date
+            startDate: planData.inputs.startDate,
         });
 
         if (result.success) {
@@ -204,7 +204,7 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
         setItinerary(null);
         const result = await regenerateItinerary({ 
             notes: editedItinerary,
-            startDate: new Date().toISOString().split('T')[0], // Pass today's date
+            startDate: planData.inputs.startDate,
         });
         if (result.success) {
             setItinerary(result.data);
@@ -535,10 +535,8 @@ export default function TripPlanResults({ data, isLoading, initialTool }: TripPl
   if (!data) {
     return (
       <div className="flex h-full min-h-[500px] w-full items-center justify-center rounded-lg border border-dashed bg-muted/50 p-8">
-        <div className="text-center">
-            <div data-ai-hint="ghana travel map">
-                <Ticket className="h-16 w-16 mx-auto text-muted-foreground" />
-            </div>
+        <div className="text-center" data-ai-hint="ghana travel map">
+            <Ticket className="h-16 w-16 mx-auto text-muted-foreground" />
           <h3 className="font-headline text-2xl">Your Custom Trip Plan Awaits</h3>
           <p className="mt-2 text-muted-foreground">
             Fill out your budget details, and we'll craft a personalized itinerary for your Ghanaian adventure.
@@ -558,7 +556,7 @@ export default function TripPlanResults({ data, isLoading, initialTool }: TripPl
             <div>
                 <CardTitle className="font-headline text-3xl">Your Trip Plan for Ghana</CardTitle>
                 <CardDescription>
-                For a {inputs.duration}-day trip to {regionText} for {inputs.numTravelers} traveler(s).
+                For a {inputs.duration}-day trip to {regionText} for {inputs.numTravelers} traveler(s), starting on {new Date(inputs.startDate).toLocaleDateString(undefined, { dateStyle: 'long', timeZone: 'UTC' })}.
                 </CardDescription>
             </div>
             <Badge variant="outline" className="text-lg">

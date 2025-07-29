@@ -10,6 +10,7 @@
 import { ai } from '@/ai/genkit';
 import { GenerateItineraryOutput, GenerateItineraryOutputSchema, RegenerateItineraryInput, RegenerateItineraryInputSchema } from '@/ai/schemas';
 import { getLocalPulse } from '@/ai/tools/get-local-pulse';
+import { addDays, format } from 'date-fns';
 
 export async function regenerateItineraryFromNotes(input: RegenerateItineraryInput): Promise<GenerateItineraryOutput> {
     return regenerateItineraryFlow(input);

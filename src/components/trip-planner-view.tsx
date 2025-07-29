@@ -47,6 +47,7 @@ const planUrlSchema = PlanTripInputSchema.extend({
     budget: z.coerce.number(),
     region: z.union([z.string(), z.array(z.string())]),
     interests: z.union([z.string(), z.array(z.string())]).optional(),
+    startDate: z.string(),
 }).merge(z.object({
     "outputs.suggestedTravelStyle": z.enum(['Budget', 'Mid-range', 'Luxury']),
     "outputs.accommodation.cost": z.coerce.number(),
@@ -133,11 +134,11 @@ export default function TripPlannerView() {
     } else if (tab === 'plan' && params.get('budget')) {
         const parsed = planUrlSchema.safeParse(data);
         if (parsed.success) {
-            const { budget, duration, numTravelers, region, travelStyle, interests, ...rest } = parsed.data;
+            const { budget, duration, numTravelers, region, travelStyle, interests, startDate, ...rest } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
             const interestsArray = Array.isArray(interests) ? interests : (interests ? [interests] : []);
             setTripPlanData({
-                inputs: { duration, region: regionArray, budget, numTravelers, travelStyle, interests: interestsArray },
+                inputs: { duration, region: regionArray, budget, numTravelers, travelStyle, interests: interestsArray, startDate },
                 outputs: {
                     suggestedTravelStyle: rest['outputs.suggestedTravelStyle'],
                     accommodation: { cost: rest['outputs.accommodation.cost'], description: rest['outputs.accommodation.description'] },
@@ -226,7 +227,8 @@ export default function TripPlannerView() {
         numTravelers: budgetInputs.numTravelers,
         budget: totalBudget,
         travelStyle: budgetInputs.travelStyle,
-        interests: ['Culture', 'Heritage & History'] // Default interests
+        interests: ['Culture', 'Heritage & History'], // Default interests
+        startDate: new Date().toISOString().split('T')[0],
     };
     
     startTransition(() => {
@@ -284,7 +286,7 @@ export default function TripPlannerView() {
                     <div className="space-y-6">
                         <h2 className="font-headline text-3xl font-bold">Plan Your Trip to Ghana</h2>
                         <p className="text-muted-foreground">
-                        Enter your total budget, and we'll craft a personalized travel plan for you, complete with suggestions for your stay.
+                        Enter your total budget, travel dates, and interests, and we'll craft a personalized travel plan for you, complete with suggestions for your stay.
                         </p>
                         <TripPlanForm
                             onSubmit={handlePlan}
