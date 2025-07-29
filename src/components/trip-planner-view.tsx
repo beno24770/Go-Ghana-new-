@@ -260,33 +260,43 @@ export default function TripPlannerView() {
         startDate: budgetInputs.startDate || new Date().toISOString().split('T')[0],
     };
     
-    onTabChange('plan');
+    onTabChange('plan', { fromBudget: true });
     setTripPlanData(null); 
     setPlanTriggerData(planInputs);
-    setCameFromBudget(true);
   }, []);
 
   const handleBackToBudget = () => {
     if (budgetData) {
         onTabChange('estimate');
+        setTripPlanData(null);
+        setCameFromBudget(false);
         updateUrl('estimate', budgetData);
+    } else {
+        onTabChange('estimate');
+        setTripPlanData(null);
+        setCameFromBudget(false);
     }
   };
 
-  const onTabChange = (value: string) => {
+  const onTabChange = (value: string, options?: {fromBudget: boolean}) => {
     startTransition(() => {
         setActiveTab(value);
-        const params = new URLSearchParams();
-        params.set('tab', value);
-        router.push(`/planner?${params.toString()}`, { scroll: false });
         if (value === 'plan') {
-          // Keep budget data if we're coming from the budget tab
-          if (!planTriggerData) {
-            setBudgetData(null);
+          if (options?.fromBudget) {
+            setCameFromBudget(true);
+          } else {
+             setBudgetData(null);
+             setTripPlanData(null);
+             setCameFromBudget(false);
+             router.push('/planner?tab=plan', { scroll: false });
           }
         } else {
           setTripPlanData(null);
           setCameFromBudget(false);
+          // Only clear budget data if we are not coming from a "back" action
+          if (!budgetData) {
+            router.push('/planner?tab=estimate', { scroll: false });
+          }
         }
     });
   }

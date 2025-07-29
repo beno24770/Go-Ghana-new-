@@ -7,32 +7,35 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { LazyIcon } from "@/components/lazy-icon";
 import { Skeleton } from "@/components/ui/skeleton";
-import Image from "next/image";
 
 const features = [
     {
         icon: "Calculator",
         title: "Smart Budget Estimator",
         description: "Know what to expect. Get a detailed cost breakdown based on your travel style, trip duration, and the regions you want to explore.",
-        href: "/planner?tab=estimate"
+        href: "/planner?tab=estimate",
+        "data-ai-hint": "travel budget"
     },
     {
         icon: "Map",
         title: "Custom Itinerary Builder",
         description: "No stress, no spreadsheets. Build a full day-by-day travel plan with suggested activities that match your interests and budget.",
-        href: "/planner?tab=plan"
+        href: "/planner?tab=plan",
+        "data-ai-hint": "travel plan"
     },
     {
         icon: "Car",
         title: "Connect with a Local Driver",
         description: "Travel like a local. Connect with our vetted, trusted drivers for personalized tours and reliable transport at a fair price.",
-        href: "/drivers"
+        href: "/drivers",
+        "data-ai-hint": "local guide"
     },
     {
         icon: "Languages",
         title: "Ghanaian Language Companion",
         description: "Feel more connected. Learn key phrases in Twi, Ewe, Ga, and more—with audio guides to help you speak confidently.",
-        href: "/planner?tab=plan"
+        href: "/planner?tab=plan",
+        "data-ai-hint": "language translation"
     }
 ]
 
@@ -42,8 +45,8 @@ export default function Home() {
   return (
     <main className="flex-1">
       <div className="relative flex h-[60vh] min-h-[400px] items-center justify-center bg-muted px-4 text-center sm:min-h-[500px]">
-          <div className="relative max-w-2xl z-10">
-              <h1 className="font-headline text-3xl font-bold text-foreground drop-shadow-md sm:text-4xl md:text-6xl">
+          <div className="relative z-10 max-w-2xl">
+              <h1 className="font-headline text-4xl font-bold text-foreground drop-shadow-md sm:text-5xl md:text-6xl">
                   Go Ghana: Plan Less, Explore More
               </h1>
               <p className="mt-4 text-base text-foreground/80 drop-shadow-sm sm:text-lg md:text-xl">
@@ -60,7 +63,7 @@ export default function Home() {
 
       <div className="container mx-auto max-w-5xl px-4 py-16 sm:py-24">
         <div className="text-center">
-            <h2 className="font-headline text-3xl font-bold md:text-4xl">From Budgeting to Booking—Plan Your Ghana Trip the Easy Way</h2>
+            <h2 className="font-headline text-3xl font-bold sm:text-4xl">From Budgeting to Booking—Plan Your Ghana Trip the Easy Way</h2>
             <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
                 Our smart travel tools are crafted to make your journey to Ghana smooth, personalized, and unforgettable. Whether you're visiting for the first time or coming home, we've got you covered—from cost estimates to cultural tips.
             </p>

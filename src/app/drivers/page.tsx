@@ -4,8 +4,9 @@
 import DriverProfileCard from '@/components/driver-profile-card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { UserPlus } from 'lucide-react';
+import { ArrowLeft, UserPlus } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const drivers = [
@@ -60,6 +61,7 @@ const DriverSkeleton = () => (
 
 export default function DriversPage() {
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     // Simulate loading to show skeleton
@@ -71,18 +73,22 @@ export default function DriversPage() {
 
   return (
     <main className="flex-1">
-      <div className="bg-muted py-20">
+      <div className="bg-muted py-12 sm:py-20">
         <div className="container mx-auto max-w-3xl px-4 text-center">
-            <h1 className="font-headline text-3xl font-bold sm:text-4xl md:text-5xl">
+            <h1 className="font-headline text-3xl font-bold sm:text-4xl">
                 Connect with a Trusted Local Driver
             </h1>
-            <p className="mt-4 text-base text-muted-foreground sm:text-lg md:text-xl">
+            <p className="mt-4 text-base text-muted-foreground sm:text-lg">
               Travel with confidence. Our vetted drivers are more than just transport—they're your personal guides to experiencing the real Ghana at a fair, negotiated price.
             </p>
         </div>
       </div>
 
       <div className="container mx-auto max-w-5xl px-4 py-16 sm:py-24">
+        <Button onClick={() => router.back()} variant="outline" className="mb-8">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+        </Button>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             {isLoading ? (
                 <>
