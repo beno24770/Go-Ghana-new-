@@ -335,6 +335,7 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
             travelStyle: planData.outputs.suggestedTravelStyle,
             activitiesBudget: planData.outputs.activities.cost,
             startDate: planData.inputs.startDate,
+            interests: planData.inputs.interests,
         });
 
         if (result.success) {

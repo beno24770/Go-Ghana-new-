@@ -66,6 +66,7 @@ export const GenerateItineraryInputSchema = z.object({
     travelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']).describe('The travel style of the user.'),
     activitiesBudget: z.number().describe('The budget allocated for activities.'),
     startDate: z.string().describe("The start date of the trip in YYYY-MM-DD format."),
+    interests: z.array(z.string()).optional().describe('The interests of the user, e.g., Culture, Heritage, Adventure.'),
 });
 export type GenerateItineraryInput = z.infer<typeof GenerateItineraryInputSchema>;
 

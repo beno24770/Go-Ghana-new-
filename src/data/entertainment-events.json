@@ -1,0 +1,63 @@
+
+[
+    {
+        "id": "plus233-live-music",
+        "title": "Live Highlife & Jazz Night",
+        "description": "Experience authentic Ghanaian and international live music from some of the best bands in the country. A legendary spot for a mature and music-loving crowd.",
+        "category": ["Live Music", "Jazz", "Highlife"],
+        "region": ["Greater Accra"],
+        "location": "Accra",
+        "venue": "+233 Grill & Bar",
+        "typicalDays": ["Wednesday", "Friday", "Saturday"],
+        "cost": "GHS 50-100 cover charge",
+        "insiderTip": "Book a table in advance, especially for Friday nights as it gets very packed. Their grilled guinea fowl is a must-try."
+    },
+    {
+        "id": "bloom-bar-afrobeats",
+        "title": "Afrobeats & Cocktails",
+        "description": "One of Accra's most popular open-air bars, known for its great music, vibrant younger crowd, and delicious cocktails.",
+        "category": ["DJ Set", "Afrobeats", "Cocktails"],
+        "region": ["Greater Accra"],
+        "location": "Osu, Accra",
+        "venue": "Bloom Bar",
+        "typicalDays": ["Thursday", "Friday", "Saturday"],
+        "cost": "Free entry, pay for drinks",
+        "insiderTip": "Gets busiest after 10 PM. It's a great place to start your night in Osu before exploring other spots."
+    },
+    {
+        "id": "frontback-members-club",
+        "title": "Exclusive Music & Art Experience",
+        "description": "A unique, multi-concept space that blends music, art, and community. Features a listening bar, outdoor space, and a gallery.",
+        "category": ["Live Music", "DJ Set", "Art", "Community"],
+        "region": ["Greater Accra"],
+        "location": "Osu, Accra",
+        "venue": "Front/Back",
+        "typicalDays": ["Wednesday", "Thursday", "Friday", "Saturday"],
+        "cost": "Varies by event",
+        "insiderTip": "Check their Instagram page (@frontbackaccra) for the specific event schedule for the week. They have everything from Amapiano nights to soulful listening sessions."
+    },
+    {
+        "id": "the-republic-bar",
+        "title": "Local Vibes & Akpeteshie Cocktails",
+        "description": "A cornerstone of the Accra nightlife scene, famous for its locally-inspired cocktails (using Ghanaian akpeteshie) and laid-back, artsy vibe.",
+        "category": ["Live Music", "DJ Set", "Local Experience"],
+        "region": ["Greater Accra"],
+        "location": "Osu, Accra",
+        "venue": "The Republic Bar & Grill",
+        "typicalDays": ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        "cost": "Free entry",
+        "insiderTip": "Tuesday night is their famous karaoke night. It's a great place to meet both locals and travelers."
+    },
+    {
+        "id": "ike_s_bar_kumasi",
+        "title": "Relaxed Evening at Ike's Bar & Grill",
+        "description": "A popular spot in Kumasi for relaxing with good food, drinks, and a mix of highlife and contemporary music.",
+        "category": ["Restaurant", "Bar", "Local Experience"],
+        "region": ["Ashanti"],
+        "location": "Kumasi",
+        "venue": "Ike's Bar and Grill",
+        "typicalDays": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        "cost": "Pay for food and drinks",
+        "insiderTip": "A great place for dinner and drinks. It's a more laid-back vibe compared to Accra's intense nightlife."
+    }
+]
