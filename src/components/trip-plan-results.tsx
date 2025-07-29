@@ -357,22 +357,22 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
                     </p>
                     <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-center">
                          <Button onClick={() => setIsEditing(true)} variant="outline">
-                            <Pencil /> <span className="ml-2">Edit</span>
+                            <Pencil className="shrink-0" /> <span className="ml-2">Edit</span>
                         </Button>
                         <Dialog open={isDownloadDialogOpen} onOpenChange={setIsDownloadDialogOpen}>
                             <DialogTrigger asChild>
-                                <Button variant="outline"><Download /> <span className="ml-2">Download</span></Button>
+                                <Button variant="outline"><Download className="shrink-0" /> <span className="ml-2">Download</span></Button>
                             </DialogTrigger>
                             <DownloadDialog itineraryAsMarkdown={itineraryAsMarkdown} onOpenChange={setIsDownloadDialogOpen} />
                         </Dialog>
                         <Button asChild>
                             <Link href="/drivers">
-                                <Car /> <span className="ml-2">Go Solo</span>
+                                <Car className="shrink-0" /> <span className="ml-2">Go Solo</span>
                             </Link>
                         </Button>
                         <Button asChild variant="secondary">
                             <Link href="https://letvisitghanatours.com" target="_blank">
-                                <Briefcase /> <span className="ml-2">Book This Tour</span>
+                                <Briefcase className="shrink-0" /> <span className="ml-2">Book This Tour</span>
                             </Link>
                         </Button>
                     </div>
@@ -566,7 +566,7 @@ export default function TripPlanResults({ data, isLoading, initialTool }: TripPl
                 </CardDescription>
             </div>
             <Badge variant="outline" className="text-lg">
-                <Wallet className="mr-2 h-4 w-4" /> ${inputs.budget.toLocaleString()}
+                <Wallet className="mr-2 h-4 w-4 shrink-0" /> ${inputs.budget.toLocaleString()}
             </Badge>
         </div>
       </CardHeader>
@@ -582,7 +582,7 @@ export default function TripPlanResults({ data, isLoading, initialTool }: TripPl
             <PlanSection title="Transportation" cost={outputs.transportation.cost} description={outputs.transportation.description} icon={categoryIcons.transportation} />
             <PlanSection title="Activities" cost={outputs.activities.cost} description={outputs.activities.description} icon={categoryIcons.activities} cta={
                 <Button onClick={() => setIsDialogOpen(true)}>
-                    <Wand2 className="mr-2 h-4 w-4" /> Plan Details
+                    <Wand2 className="mr-2 h-4 w-4 shrink-0" /> Plan Details
                 </Button>
             } />
         </div>
@@ -595,7 +595,7 @@ export default function TripPlanResults({ data, isLoading, initialTool }: TripPl
         </div>
 
         <Button onClick={handleShare} variant="outline" className="w-full">
-          <Share2 className="mr-2 h-4 w-4" />
+          <Share2 className="mr-2 h-4 w-4 shrink-0" />
           Share This Plan
         </Button>
       </CardContent>

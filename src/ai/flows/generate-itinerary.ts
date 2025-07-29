@@ -13,12 +13,16 @@ import { getLocalPulse } from '@/ai/tools/get-local-pulse';
 import { addDays, format } from 'date-fns';
 
 export async function generateItinerary(input: GenerateItineraryInput): Promise<GenerateItineraryOutput> {
-    return generateItineraryFlow(input);
+    const endDate = addDays(new Date(input.startDate), input.duration);
+    const formattedEndDate = format(endDate, 'yyyy-MM-dd');
+    const fullInput = {...input, endDate: formattedEndDate};
+
+    return generateItineraryFlow(fullInput);
 }
 
 const generateItineraryPrompt = ai.definePrompt({
     name: 'generateItineraryPrompt',
-    input: { schema: GenerateItineraryInputSchema },
+    input: { schema: GenerateItineraryInputSchema.extend({endDate: z.string()}) },
     output: { schema: GenerateItineraryOutputSchema },
     tools: [getLocalPulse],
     prompt: `You are a Ghana travel expert and a content curator for the website letvisitghana.com. Create a detailed, day-by-day itinerary based on the user's preferences.
@@ -28,6 +32,7 @@ User Preferences:
 - Regions: {{#each region}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
 - Travel Style: {{travelStyle}}
 - Activities Budget: \${{activitiesBudget}}
+- Trip Dates: {{startDate}} to {{endDate}}
 
 Your Task:
 1.  **Check for Local Events**: Use the 'getLocalPulse' tool to check for any festivals or events happening in the user's selected regions during their travel dates.
@@ -73,26 +78,11 @@ Generate a response that adheres to the GenerateItineraryOutputSchema.`,
 const generateItineraryFlow = ai.defineFlow(
     {
         name: 'generateItineraryFlow',
-        inputSchema: GenerateItineraryInputSchema,
+        inputSchema: GenerateItineraryInputSchema.extend({endDate: z.string()}),
         outputSchema: GenerateItineraryOutputSchema,
     },
     async (input) => {
-        // Calculate end date
-        const startDate = new Date(input.startDate);
-        const endDate = addDays(startDate, input.duration);
-        const formattedEndDate = format(endDate, 'yyyy-MM-dd');
-
-        const { output } = await generateItineraryPrompt(input, {
-            // Provide context to the tool
-            context: {
-                // @ts-ignore
-                'tools/getLocalPulse': {
-                    regions: input.region,
-                    startDate: input.startDate,
-                    endDate: formattedEndDate,
-                }
-            }
-        });
+        const { output } = await generateItineraryPrompt(input);
         return output!;
     }
 );

@@ -242,9 +242,9 @@ export default function TripPlannerView() {
         params.set('tab', value);
         router.push(`/planner?${params.toString()}`, { scroll: false });
         if (value === 'plan') {
-          setBudgetData(null);
+          setBudgetData(null); // Clear old data when switching tabs
         } else {
-          setTripPlanData(null);
+          setTripPlanData(null); // Clear old data when switching tabs
         }
     });
   }

@@ -105,7 +105,7 @@ export default function DriversPage() {
             </p>
             <Button asChild size="lg" className="mt-6">
               <Link href="https://wa.me/233200635250" target="_blank">
-                <UserPlus />
+                <UserPlus className="shrink-0" />
                 Apply to Join
               </Link>
             </Button>

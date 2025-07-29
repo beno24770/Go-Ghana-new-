@@ -20,7 +20,7 @@ export default function DriverProfileCard({ name, regions, bio, vehicle, whatsAp
                 <CardTitle className="font-headline text-2xl">{name}</CardTitle>
                 <div className="flex flex-wrap gap-2 pt-2">
                     {regions.map(region => (
-                        <Badge key={region} variant="secondary">{region}</Badge>
+                        <Badge key={`${name}-${region}`} variant="secondary">{region}</Badge>
                     ))}
                 </div>
             </CardHeader>
@@ -29,13 +29,13 @@ export default function DriverProfileCard({ name, regions, bio, vehicle, whatsAp
                 
                 <div className="space-y-4 pt-4">
                     <div className="flex items-center gap-2 text-sm">
-                        <Car className="h-5 w-5 text-primary" />
+                        <Car className="h-5 w-5 text-primary shrink-0" />
                         <span className="font-semibold">{vehicle}</span>
                     </div>
 
                     <Button asChild className="w-full" size="lg">
                         <Link href={whatsAppUrl} target="_blank">
-                           <MessageSquare /> Contact via WhatsApp
+                           <MessageSquare className="shrink-0" /> Contact via WhatsApp
                         </Link>
                     </Button>
                 </div>
