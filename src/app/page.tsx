@@ -38,7 +38,7 @@ export default function Home() {
     <main className="flex-1">
       <div className="relative flex h-[60vh] min-h-[400px] items-center justify-center px-4 text-center sm:min-h-[500px]">
           <Image 
-              src="https://www.letvisitghana.com/wp-content/uploads/2024/05/Nzulezu-Stilt-Village.jpg"
+              src="https://placehold.co/1200x800.png"
               alt="Beautiful landscape of Ghana"
               fill
               className="object-cover -z-10 brightness-50"
