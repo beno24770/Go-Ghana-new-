@@ -193,24 +193,23 @@ const ItineraryContent = ({
             });
 
             const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = pdf.internal.pageSize.getHeight();
             const canvasWidth = canvas.width;
             const canvasHeight = canvas.height;
             const ratio = canvasWidth / canvasHeight;
-            const imgHeight = pdfWidth / ratio;
+            const pdfHeight = pdfWidth / ratio;
 
             let heightLeft = canvasHeight;
             let position = 0;
             
-            // Use the raw image data instead of converting to PNG first for better performance
-            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-            heightLeft -= canvasHeight;
+            // Use the raw canvas data instead of converting to PNG first for better performance
+            pdf.addImage(canvas, 'PNG', 0, position, pdfWidth, pdfHeight);
+            heightLeft -= pdf.internal.pageSize.getHeight() * (canvasWidth / pdfWidth);
 
             while (heightLeft > 0) {
-                position = heightLeft - canvasHeight;
+                position -= pdf.internal.pageSize.getHeight() * (canvasWidth / pdfWidth);
                 pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-                heightLeft -= canvasHeight;
+                pdf.addImage(canvas, 'PNG', 0, position, pdfWidth, pdfHeight);
+                heightLeft -= pdf.internal.pageSize.getHeight() * (canvasWidth / pdfWidth);
             }
             
             pdf.save('goghana-itinerary.pdf');
@@ -620,7 +619,7 @@ export default function TripPlanResults({ data, isLoading, initialTool, onBack, 
             <Ticket className="h-16 w-16 mx-auto text-muted-foreground" />
           <h3 className="font-headline text-2xl">Your Custom Trip Plan Awaits</h3>
           <p className="mt-2 text-muted-foreground">
-            Fill out your budget details, and we'll craft a personalized itinerary for your Ghanaian adventure.
+            Fill out your budget details, and we'll craft a personalized travel plan for your Ghanaian adventure.
           </p>
         </div>
       </div>

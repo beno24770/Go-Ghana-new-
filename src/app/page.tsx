@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { LazyIcon } from "@/components/lazy-icon";
 import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
 
 const features = [
     {
@@ -41,11 +42,20 @@ export default function Home() {
   return (
     <main className="flex-1">
       <div className="relative flex h-[60vh] min-h-[400px] items-center justify-center bg-muted px-4 text-center sm:min-h-[500px]">
-          <div className="max-w-2xl">
-              <h1 className="font-headline text-3xl font-bold text-foreground shadow-lg sm:text-4xl md:text-6xl">
+          <Image
+            src="https://placehold.co/1200x500.png"
+            alt="Hero image of a scenic view in Ghana"
+            layout="fill"
+            objectFit="cover"
+            className="opacity-20"
+            priority
+            data-ai-hint="ghana landscape"
+          />
+          <div className="relative max-w-2xl z-10">
+              <h1 className="font-headline text-3xl font-bold text-foreground drop-shadow-md sm:text-4xl md:text-6xl">
                   Go Ghana: Plan Less, Explore More
               </h1>
-              <p className="mt-4 text-base text-muted-foreground sm:text-lg md:text-xl">
+              <p className="mt-4 text-base text-foreground/80 drop-shadow-sm sm:text-lg md:text-xl">
                   Let Ghana welcome you. Build your dream trip with personalized budgets, custom itineraries, and travel tips—everything crafted to help you experience the real Ghana.
               </p>
               <Button asChild size="lg" className="mt-8">
