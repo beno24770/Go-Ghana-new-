@@ -85,6 +85,7 @@ export default function TripPlannerView() {
   const [isLoading, setIsLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [initialTool, setInitialTool] = useState<string | null>(null);
+  const [planTriggerData, setPlanTriggerData] = useState<PlanTripInput | null>(null);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -211,8 +212,15 @@ export default function TripPlannerView() {
     setIsLoading(false);
   }, [toast, updateUrl]);
 
+  useEffect(() => {
+    if (planTriggerData) {
+      handlePlan(planTriggerData);
+      setPlanTriggerData(null);
+    }
+  }, [planTriggerData, handlePlan]);
+
   const handlePlanFromBudget = useCallback((budgetInputs: EstimateBudgetInput, totalBudget: number) => {
-    const planInputs: Partial<PlanTripInput> = {
+    const planInputs: PlanTripInput = {
         duration: budgetInputs.duration,
         region: budgetInputs.region,
         numTravelers: budgetInputs.numTravelers,
@@ -224,11 +232,9 @@ export default function TripPlannerView() {
     startTransition(() => {
         onTabChange('plan');
         setTripPlanData(null); 
-        setTimeout(() => { 
-            handlePlan(planInputs as PlanTripInput);
-        }, 0);
+        setPlanTriggerData(planInputs);
     });
-  }, [handlePlan]);
+  }, []);
 
   const onTabChange = (value: string) => {
     startTransition(() => {
@@ -283,7 +289,7 @@ export default function TripPlannerView() {
                         <TripPlanForm
                             onSubmit={handlePlan}
                             isSubmitting={isLoading && activeTab === 'plan'}
-                            defaultValues={tripPlanData?.inputs}
+                            defaultValues={tripPlanData?.inputs || planTriggerData || undefined}
                         />
                     </div>
                     <div className="relative">
@@ -296,3 +302,5 @@ export default function TripPlannerView() {
       </main>
   );
 }
+
+    
