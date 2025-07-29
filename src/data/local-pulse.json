@@ -39,14 +39,14 @@
     {
         "id": "chale-wote-street-art-festival",
         "title": "Chale Wote Street Art Festival",
-        "description": "Ghana's most vibrant street art festival, celebrating art, music, dance, and performance in the historic Jamestown neighborhood of Accra.",
-        "category": ["Festival", "Art", "Community"],
+        "description": "A vibrant street art festival transforming the streets of James Town with graffiti, installations, music, dance, and cultural exhibitions.",
+        "category": ["Festival", "Art", "Culture"],
         "region": ["Greater Accra"],
-        "location": "Jamestown, Accra",
-        "startDate": "2024-08-19",
-        "endDate": "2024-08-25",
+        "location": "James Town, Accra",
+        "startDate": "2025-08-15",
+        "endDate": "2025-08-25",
         "cost": "Mostly Free",
-        "insiderTip": "The festival gets very crowded, especially on the weekend. Visit on a weekday for a more relaxed experience."
+        "insiderTip": "Arrive on the main weekend for the most vibrant street parades, live performances, and mural art battles. Bring cash for art markets and food vendors."
     },
     {
         "id": "homowo-festival",
