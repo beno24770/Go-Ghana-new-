@@ -103,7 +103,6 @@ export default function TripPlannerView() {
         data[key] = value;
     }
 
-    // Since getAll can return an empty array, we check for presence
     if (params.has('region')) {
         data.region = params.getAll('region');
     }
@@ -162,7 +161,6 @@ export default function TripPlannerView() {
     
     const flatData = flattenObject(data);
     
-    // Clear array keys before appending
     params.delete('region');
     params.delete('interests');
 
@@ -214,11 +212,11 @@ export default function TripPlannerView() {
   }, [toast, updateUrl]);
 
   useEffect(() => {
-    if (planTriggerData) {
+    if (planTriggerData && activeTab === 'plan') {
       handlePlan(planTriggerData);
       setPlanTriggerData(null);
     }
-  }, [planTriggerData, handlePlan]);
+  }, [planTriggerData, activeTab, handlePlan]);
 
   const handlePlanFromBudget = useCallback((budgetInputs: EstimateBudgetInput, totalBudget: number) => {
     const planInputs: PlanTripInput = {
@@ -227,28 +225,26 @@ export default function TripPlannerView() {
         numTravelers: budgetInputs.numTravelers,
         budget: totalBudget,
         travelStyle: budgetInputs.travelStyle,
-        interests: ['Culture', 'Heritage & History'], // Default interests
+        interests: ['Culture', 'Heritage & History'],
         startDate: new Date().toISOString().split('T')[0],
     };
     
-    startTransition(() => {
-        onTabChange('plan');
-        setTripPlanData(null); 
-        setPlanTriggerData(planInputs);
-    });
+    onTabChange('plan');
+    setTripPlanData(null); 
+    setPlanTriggerData(planInputs);
   }, []);
 
   const onTabChange = (value: string) => {
     startTransition(() => {
         setActiveTab(value);
+        const params = new URLSearchParams();
+        params.set('tab', value);
+        router.push(`/planner?${params.toString()}`, { scroll: false });
         if (value === 'plan') {
           setBudgetData(null);
         } else {
           setTripPlanData(null);
         }
-        const params = new URLSearchParams();
-        params.set('tab', value);
-        router.push(`/planner?${params.toString()}`, { scroll: false });
     });
   }
 

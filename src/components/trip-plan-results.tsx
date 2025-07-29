@@ -94,8 +94,6 @@ function DownloadDialog({ itineraryAsMarkdown, onOpenChange }: { itineraryAsMark
             return;
         }
         
-        // At this point, you would typically send the lead (formData.name, formData.email) to your backend.
-        // For this prototype, we'll just log it and proceed with the download.
         console.log("Lead captured:", { name: formData.name, email: formData.email });
         toast({ title: "Success!", description: "Your itinerary is downloading." });
 
@@ -115,7 +113,6 @@ function DownloadDialog({ itineraryAsMarkdown, onOpenChange }: { itineraryAsMark
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
         setFormData(prev => ({ ...prev, [id]: value }));
-        // Clear errors on change
         if (errors[id as keyof typeof errors]) {
             setErrors(prev => ({ ...prev, [id]: undefined }));
         }
@@ -150,7 +147,7 @@ function DownloadDialog({ itineraryAsMarkdown, onOpenChange }: { itineraryAsMark
 
 
 function ItineraryDialog({ planData, initialTool, open, onOpenChange }: ItineraryDialogProps) {
-    const [isLoading, setIsLoading] = useState({ itinerary: false, packingList: false, languageGuide: false, audio: '' });
+    const [isLoading, setIsLoading] = useState({ itinerary: true, packingList: false, languageGuide: false, audio: '' });
     const [itinerary, setItinerary] = useState<GenerateItineraryOutput | null>(null);
     const [packingList, setPackingList] = useState<GeneratePackingListOutput | null>(null);
     const [languageGuide, setLanguageGuide] = useState<GenerateLanguageGuideOutput | null>(null);
@@ -172,6 +169,13 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
             setActiveTab(initialTool);
         }
     }, [open, initialTool]);
+
+    useEffect(() => {
+        if (open && !itinerary) {
+            handleGenerateItinerary();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [open]);
 
     useEffect(() => {
         if (itineraryAsMarkdown) {
@@ -300,7 +304,7 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
         if (!itinerary) {
              return (
                 <div className="text-center p-8 flex flex-col items-center justify-center h-full min-h-[400px]">
-                    <p className="mb-4 text-muted-foreground">Click the button below to generate a personalized itinerary.</p>
+                    <p className="mb-4 text-muted-foreground">Something went wrong. Please try generating the itinerary again.</p>
                     <Button onClick={handleGenerateItinerary} disabled={isLoading.itinerary}>
                         {isLoading.itinerary ? <LoaderCircle className="animate-spin" /> : <Wand2 />}
                         <span className="ml-2">{isLoading.itinerary ? 'Generating...' : 'Generate Itinerary'}</span>
@@ -575,9 +579,11 @@ export default function TripPlanResults({ data, isLoading, initialTool }: TripPl
             <PlanSection title="Food" cost={outputs.food.cost} description={outputs.food.description} icon={categoryIcons.food} />
             <PlanSection title="Transportation" cost={outputs.transportation.cost} description={outputs.transportation.description} icon={categoryIcons.transportation} />
             <PlanSection title="Activities" cost={outputs.activities.cost} description={outputs.activities.description} icon={categoryIcons.activities} cta={
-                <Button onClick={() => setIsDialogOpen(true)}>
-                    <Wand2 className="mr-2 h-4 w-4" /> Plan Details
-                </Button>
+                data && (
+                    <Button onClick={() => setIsDialogOpen(true)}>
+                        <Wand2 className="mr-2 h-4 w-4" /> Plan Details
+                    </Button>
+                )
             } />
         </div>
         
