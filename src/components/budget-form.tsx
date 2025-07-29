@@ -3,7 +3,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Wand2, LoaderCircle } from 'lucide-react';
+import { Wand2, LoaderCircle, CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -20,6 +20,10 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { type EstimateBudgetInput, EstimateBudgetInputSchema } from '@/ai/schemas';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from './ui/scroll-area';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { Calendar } from './ui/calendar';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
 
 const ghanaRegions = [
   "Ahafo", "Ashanti", "Bono", "Bono East", "Central", "Eastern",
@@ -47,6 +51,7 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
       region: ['Greater Accra'],
       travelStyle: 'Mid-range',
       numTravelers: 1,
+      startDate: new Date().toISOString().split('T')[0],
       ...defaultValues
     },
   });
@@ -54,31 +59,72 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="duration"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Trip Duration (days)</FormLabel>
-              <FormControl>
-                <Input type="number" placeholder="e.g., 10" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10) || 0)} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="numTravelers"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Number of Travelers</FormLabel>
-              <FormControl>
-                <Input type="number" placeholder="e.g., 2" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10) || 0)} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <FormField
+            control={form.control}
+            name="duration"
+            render={({ field }) => (
+                <FormItem>
+                <FormLabel>Trip Duration (days)</FormLabel>
+                <FormControl>
+                    <Input type="number" placeholder="e.g., 10" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10) || 0)} />
+                </FormControl>
+                <FormMessage />
+                </FormItem>
+            )}
+            />
+            <FormField
+            control={form.control}
+            name="numTravelers"
+            render={({ field }) => (
+                <FormItem>
+                <FormLabel>Number of Travelers</FormLabel>
+                <FormControl>
+                    <Input type="number" placeholder="e.g., 2" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10) || 0)} />
+                </FormControl>
+                <FormMessage />
+                </FormItem>
+            )}
+            />
+        </div>
+         <FormField
+            control={form.control}
+            name="startDate"
+            render={({ field }) => (
+                <FormItem className="flex flex-col">
+                <FormLabel>Trip Start Date</FormLabel>
+                <Popover>
+                    <PopoverTrigger asChild>
+                    <FormControl>
+                        <Button
+                        variant={"outline"}
+                        className={cn(
+                            "w-full pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                        )}
+                        >
+                        {field.value ? (
+                            format(new Date(field.value), "PPP")
+                        ) : (
+                            <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                    </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                        mode="single"
+                        selected={field.value ? new Date(field.value) : undefined}
+                        onSelect={(date) => field.onChange(date?.toISOString().split('T')[0])}
+                        disabled={(date) => date < new Date(new Date().setHours(0,0,0,0))}
+                        initialFocus
+                    />
+                    </PopoverContent>
+                </Popover>
+                <FormMessage />
+                </FormItem>
+            )}
         />
         <FormField
           control={form.control}

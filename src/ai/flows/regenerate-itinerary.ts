@@ -50,9 +50,22 @@ const regenerateItineraryFlow = ai.defineFlow(
         outputSchema: GenerateItineraryOutputSchema,
     },
     async (input) => {
-        const { output } = await regenerateItineraryPrompt(input);
+        // Calculate end date
+        const startDate = new Date(input.startDate);
+        const endDate = addDays(startDate, input.duration);
+        const formattedEndDate = format(endDate, 'yyyy-MM-dd');
+
+        const { output } = await regenerateItineraryPrompt(input, {
+             // Provide context to the tool
+            context: {
+                // @ts-ignore
+                'tools/getLocalPulse': {
+                    regions: input.region,
+                    startDate: input.startDate,
+                    endDate: formattedEndDate,
+                }
+            }
+        });
         return output!;
     }
 );
-
-    

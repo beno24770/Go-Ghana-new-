@@ -14,6 +14,7 @@ export const EstimateBudgetInputSchema = z.object({
   region: z.array(z.string()).min(1, 'Please select at least one region.').describe('The regions in Ghana the user will be visiting.'),
   travelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']).describe('The travel style of the user.'),
   numTravelers: z.number().describe('The number of travelers.'),
+  startDate: z.string().optional().describe("The start date of the trip in YYYY-MM-DD format."),
 });
 export type EstimateBudgetInput = z.infer<typeof EstimateBudgetInputSchema>;
 
@@ -82,6 +83,8 @@ export type GenerateItineraryOutput = z.infer<typeof GenerateItineraryOutputSche
 export const RegenerateItineraryInputSchema = z.object({
     notes: z.string().describe('The user\'s edited itinerary notes in Markdown format.'),
     startDate: z.string().describe("The start date of the trip in YYYY-MM-DD format."),
+    duration: z.number().describe('The duration of the trip in days.'),
+    region: z.array(z.string()).describe('The regions the user will be visiting.'),
 });
 export type RegenerateItineraryInput = z.infer<typeof RegenerateItineraryInputSchema>;
 
@@ -133,5 +136,3 @@ export const GenerateAudioOutputSchema = z.object({
     media: z.string().describe("The generated audio as a data URI. Expected format: 'data:audio/wav;base64,<encoded_data>'."),
 });
 export type GenerateAudioOutput = z.infer<typeof GenerateAudioOutputSchema>;
-
-    

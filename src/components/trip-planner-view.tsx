@@ -28,6 +28,7 @@ const budgetUrlSchema = EstimateBudgetInputSchema.extend({
     duration: z.coerce.number(),
     numTravelers: z.coerce.number(),
     region: z.union([z.string(), z.array(z.string())]),
+    startDate: z.string().optional(),
 }).merge(z.object({
     "outputs.accommodation.perDay": z.coerce.number(),
     "outputs.accommodation.total": z.coerce.number(),
@@ -116,11 +117,11 @@ export default function TripPlannerView() {
     if (tab === 'estimate' && params.get('duration')) {
         const parsed = budgetUrlSchema.safeParse(data);
         if (parsed.success) {
-            const { duration, region, travelStyle, numTravelers, ...rest } = parsed.data;
+            const { duration, region, travelStyle, numTravelers, startDate, ...rest } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
 
             setBudgetData({
-                inputs: { duration, region: regionArray, travelStyle, numTravelers },
+                inputs: { duration, region: regionArray, travelStyle, numTravelers, startDate },
                 outputs: {
                     accommodation: { perDay: rest['outputs.accommodation.perDay'], total: rest['outputs.accommodation.total'] },
                     food: { perDay: rest['outputs.food.perDay'], total: rest['outputs.food.total'] },
@@ -226,7 +227,7 @@ export default function TripPlannerView() {
         budget: totalBudget,
         travelStyle: budgetInputs.travelStyle,
         interests: ['Culture', 'Heritage & History'],
-        startDate: new Date().toISOString().split('T')[0],
+        startDate: budgetInputs.startDate || new Date().toISOString().split('T')[0],
     };
     
     onTabChange('plan');
@@ -260,7 +261,7 @@ export default function TripPlannerView() {
                 <div className="space-y-6">
                     <h2 className="font-headline text-3xl font-bold">Estimate Your Ghana Trip Cost</h2>
                     <p className="text-muted-foreground">
-                    Select your travel style to get a personalized budget estimate for your adventure in the heart of West Africa.
+                    Select your travel style and dates to get a personalized budget estimate for your adventure in the heart of West Africa.
                     </p>
                     <BudgetForm
                     onSubmit={handleEstimate}
@@ -300,5 +301,3 @@ export default function TripPlannerView() {
       </main>
   );
 }
-
-    

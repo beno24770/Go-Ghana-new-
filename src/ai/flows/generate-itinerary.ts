@@ -10,6 +10,7 @@
 import { ai } from '@/ai/genkit';
 import { GenerateItineraryInput, GenerateItineraryInputSchema, GenerateItineraryOutput, GenerateItineraryOutputSchema } from '@/ai/schemas';
 import { getLocalPulse } from '@/ai/tools/get-local-pulse';
+import { addDays, format } from 'date-fns';
 
 export async function generateItinerary(input: GenerateItineraryInput): Promise<GenerateItineraryOutput> {
     return generateItineraryFlow(input);
@@ -76,9 +77,22 @@ const generateItineraryFlow = ai.defineFlow(
         outputSchema: GenerateItineraryOutputSchema,
     },
     async (input) => {
-        const { output } = await generateItineraryPrompt(input);
+        // Calculate end date
+        const startDate = new Date(input.startDate);
+        const endDate = addDays(startDate, input.duration);
+        const formattedEndDate = format(endDate, 'yyyy-MM-dd');
+
+        const { output } = await generateItineraryPrompt(input, {
+            // Provide context to the tool
+            context: {
+                // @ts-ignore
+                'tools/getLocalPulse': {
+                    regions: input.region,
+                    startDate: input.startDate,
+                    endDate: formattedEndDate,
+                }
+            }
+        });
         return output!;
     }
 );
-
-    

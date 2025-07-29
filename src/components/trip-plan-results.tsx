@@ -170,19 +170,6 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
         }
     }, [open, initialTool]);
 
-    useEffect(() => {
-        if (open && !itinerary) {
-            handleGenerateItinerary();
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [open]);
-
-    useEffect(() => {
-        if (itineraryAsMarkdown) {
-            setEditedItinerary(itineraryAsMarkdown);
-        }
-    }, [itineraryAsMarkdown]);
-
     const handleGenerateItinerary = async () => {
         setIsLoading(prev => ({...prev, itinerary: true}));
         setItinerary(null);
@@ -203,12 +190,27 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
         setIsLoading(prev => ({...prev, itinerary: false}));
     }
 
+    useEffect(() => {
+        if (open) {
+            handleGenerateItinerary();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [open]);
+
+    useEffect(() => {
+        if (itineraryAsMarkdown) {
+            setEditedItinerary(itineraryAsMarkdown);
+        }
+    }, [itineraryAsMarkdown]);
+
     const handleRegenerateItinerary = async () => {
         setIsLoading(prev => ({ ...prev, itinerary: true }));
         setItinerary(null);
         const result = await regenerateItinerary({ 
             notes: editedItinerary,
             startDate: planData.inputs.startDate,
+            duration: planData.inputs.duration,
+            region: planData.inputs.region
         });
         if (result.success) {
             setItinerary(result.data);
@@ -539,7 +541,7 @@ export default function TripPlanResults({ data, isLoading, initialTool }: TripPl
   if (!data) {
     return (
       <div className="flex h-full min-h-[500px] w-full items-center justify-center rounded-lg border border-dashed bg-muted/50 p-8">
-        <div className="text-center" data-ai-hint="ghana travel map">
+        <div className="text-center">
             <Ticket className="h-16 w-16 mx-auto text-muted-foreground" />
           <h3 className="font-headline text-2xl">Your Custom Trip Plan Awaits</h3>
           <p className="mt-2 text-muted-foreground">
@@ -579,11 +581,9 @@ export default function TripPlanResults({ data, isLoading, initialTool }: TripPl
             <PlanSection title="Food" cost={outputs.food.cost} description={outputs.food.description} icon={categoryIcons.food} />
             <PlanSection title="Transportation" cost={outputs.transportation.cost} description={outputs.transportation.description} icon={categoryIcons.transportation} />
             <PlanSection title="Activities" cost={outputs.activities.cost} description={outputs.activities.description} icon={categoryIcons.activities} cta={
-                data && (
-                    <Button onClick={() => setIsDialogOpen(true)}>
-                        <Wand2 className="mr-2 h-4 w-4" /> Plan Details
-                    </Button>
-                )
+                <Button onClick={() => setIsDialogOpen(true)}>
+                    <Wand2 className="mr-2 h-4 w-4" /> Plan Details
+                </Button>
             } />
         </div>
         
@@ -599,14 +599,14 @@ export default function TripPlanResults({ data, isLoading, initialTool }: TripPl
           Share This Plan
         </Button>
       </CardContent>
-      <ItineraryDialog 
-        planData={data} 
-        initialTool={initialTool} 
-        open={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-      />
+      {data && (
+        <ItineraryDialog 
+            planData={data} 
+            initialTool={initialTool} 
+            open={isDialogOpen}
+            onOpenChange={setIsDialogOpen}
+        />
+      )}
     </Card>
   );
 }
-
-    
