@@ -12,6 +12,7 @@ import TripPlanResults from '@/components/trip-plan-results';
 import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, EstimateBudgetInputSchema, PlanTripInputSchema } from '@/ai/schemas';
 import { getBudgetEstimate, getTripPlan } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
+import { add, toDate } from 'date-fns';
 
 type BudgetData = {
   inputs: EstimateBudgetInput;
@@ -22,6 +23,18 @@ type TripPlanData = {
     inputs: PlanTripInput;
     outputs: PlanTripOutput;
 }
+
+const parseDateSafe = (dateString: string | undefined): Date | undefined => {
+    if (!dateString) return undefined;
+    const date = toDate(dateString);
+    // Check if the date is valid
+    if (isNaN(date.getTime())) {
+        return undefined;
+    }
+    // Adjust for timezone offset to prevent off-by-one day errors
+    return add(date, { minutes: date.getTimezoneOffset() });
+};
+
 
 // Zod schema for parsing budget data from URL search params
 const budgetUrlSchema = EstimateBudgetInputSchema.extend({
@@ -119,9 +132,10 @@ export default function TripPlannerView() {
         if (parsed.success) {
             const { duration, region, travelStyle, numTravelers, startDate, ...rest } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
+            const safeStartDate = parseDateSafe(startDate)?.toISOString().split('T')[0];
 
             setBudgetData({
-                inputs: { duration, region: regionArray, travelStyle, numTravelers, startDate },
+                inputs: { duration, region: regionArray, travelStyle, numTravelers, startDate: safeStartDate },
                 outputs: {
                     accommodation: { perDay: rest['outputs.accommodation.perDay'], total: rest['outputs.accommodation.total'] },
                     food: { perDay: rest['outputs.food.perDay'], total: rest['outputs.food.total'] },
@@ -137,17 +151,20 @@ export default function TripPlannerView() {
             const { budget, duration, numTravelers, region, travelStyle, interests, startDate, ...rest } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
             const interestsArray = Array.isArray(interests) ? interests : (interests ? [interests] : []);
-            setTripPlanData({
-                inputs: { duration, region: regionArray, budget, numTravelers, travelStyle, interests: interestsArray, startDate },
-                outputs: {
-                    suggestedTravelStyle: rest['outputs.suggestedTravelStyle'],
-                    accommodation: { cost: rest['outputs.accommodation.cost'], description: rest['outputs.accommodation.description'] },
-                    food: { cost: rest['outputs.food.cost'], description: rest['outputs.food.description'] },
-                    transportation: { cost: rest['outputs.transportation.cost'], description: rest['outputs.transportation.description'] },
-                    activities: { cost: rest['outputs.activities.cost'], description: rest['outputs.activities.description'] },
-                    total: rest['outputs.total'],
-                },
-            });
+            const safeStartDate = parseDateSafe(startDate)?.toISOString().split('T')[0];
+            if(safeStartDate) {
+                setTripPlanData({
+                    inputs: { duration, region: regionArray, budget, numTravelers, travelStyle, interests: interestsArray, startDate: safeStartDate },
+                    outputs: {
+                        suggestedTravelStyle: rest['outputs.suggestedTravelStyle'],
+                        accommodation: { cost: rest['outputs.accommodation.cost'], description: rest['outputs.accommodation.description'] },
+                        food: { cost: rest['outputs.food.cost'], description: rest['outputs.food.description'] },
+                        transportation: { cost: rest['outputs.transportation.cost'], description: rest['outputs.transportation.description'] },
+                        activities: { cost: rest['outputs.activities.cost'], description: rest['outputs.activities.description'] },
+                        total: rest['outputs.total'],
+                    },
+                });
+            }
         }
     }
   }, [searchParams]);

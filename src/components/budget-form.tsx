@@ -23,7 +23,7 @@ import { ScrollArea } from './ui/scroll-area';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Calendar } from './ui/calendar';
 import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
+import { format, toDate } from 'date-fns';
 
 const ghanaRegions = [
   "Ahafo", "Ashanti", "Bono", "Bono East", "Central", "Eastern",
@@ -104,7 +104,7 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
                         )}
                         >
                         {field.value ? (
-                            format(new Date(field.value), "PPP")
+                            format(toDate(field.value), "PPP")
                         ) : (
                             <span>Pick a date</span>
                         )}
@@ -115,7 +115,7 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
                     <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                         mode="single"
-                        selected={field.value ? new Date(field.value) : undefined}
+                        selected={field.value ? toDate(field.value) : undefined}
                         onSelect={(date) => field.onChange(date?.toISOString().split('T')[0])}
                         disabled={(date) => date < new Date(new Date().setHours(0,0,0,0))}
                         initialFocus

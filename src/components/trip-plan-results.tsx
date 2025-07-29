@@ -43,6 +43,7 @@ import { z } from 'zod';
 import { Textarea } from './ui/textarea';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
+import { toDate } from 'date-fns';
 
 
 type TripPlanData = {
@@ -562,7 +563,7 @@ export default function TripPlanResults({ data, isLoading, initialTool }: TripPl
             <div>
                 <CardTitle className="font-headline text-3xl">Your Trip Plan for Ghana</CardTitle>
                 <CardDescription>
-                For a {inputs.duration}-day trip to {regionText} for {inputs.numTravelers} traveler(s), starting on {new Date(inputs.startDate).toLocaleDateString(undefined, { dateStyle: 'long', timeZone: 'UTC' })}.
+                For a {inputs.duration}-day trip to {regionText} for {inputs.numTravelers} traveler(s), starting on {toDate(inputs.startDate).toLocaleDateString(undefined, { dateStyle: 'long', timeZone: 'UTC' })}.
                 </CardDescription>
             </div>
             <Badge variant="outline" className="text-lg">
