@@ -74,6 +74,7 @@ const planUrlSchema = PlanTripInputSchema.extend({
     "outputs.activities.cost": z.coerce.number(),
     "outputs.activities.description": z.string(),
     "outputs.total": z.coerce.number(),
+    "fromBudget": z.string().optional(),
 }));
 
 // Helper to flatten object for URL params
@@ -102,6 +103,8 @@ export default function TripPlannerView() {
   const [isPending, startTransition] = useTransition();
   const [initialTool, setInitialTool] = useState<string | null>(null);
   const [planTriggerData, setPlanTriggerData] = useState<PlanTripInput | null>(null);
+  const [cameFromBudget, setCameFromBudget] = useState(false);
+
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -149,10 +152,15 @@ export default function TripPlannerView() {
     } else if (tab === 'plan' && params.get('budget')) {
         const parsed = planUrlSchema.safeParse(data);
         if (parsed.success) {
-            const { budget, duration, numTravelers, region, travelStyle, interests, startDate, ...rest } = parsed.data;
+            const { budget, duration, numTravelers, region, travelStyle, interests, startDate, fromBudget, ...rest } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
             const interestsArray = Array.isArray(interests) ? interests : (interests ? [interests] : []);
             const safeStartDate = parseDateSafe(startDate)?.toISOString().split('T')[0];
+
+            if (fromBudget) {
+              setCameFromBudget(true);
+            }
+
             if(safeStartDate) {
                 setTripPlanData({
                     inputs: { duration, region: regionArray, budget, numTravelers, travelStyle, interests: interestsArray, startDate: safeStartDate },
@@ -174,7 +182,7 @@ export default function TripPlannerView() {
     parseUrlParams();
   }, [parseUrlParams]);
 
-  const updateUrl = useCallback((tab: string, data: any) => {
+  const updateUrl = useCallback((tab: string, data: any, options?: { fromBudget?: boolean }) => {
     const params = new URLSearchParams();
     params.set('tab', tab);
     
@@ -195,6 +203,10 @@ export default function TripPlannerView() {
         } else if (flatData[key] !== undefined) {
              params.set(key.replace('inputs.', '').replace('outputs.', 'outputs.'), flatData[key]);
         }
+    }
+
+    if (options?.fromBudget) {
+        params.set('fromBudget', 'true');
     }
 
     startTransition(() => {
@@ -223,12 +235,12 @@ export default function TripPlannerView() {
     if (result.success) {
         const newTripPlanData = { inputs, outputs: result.data };
         setTripPlanData(newTripPlanData);
-        updateUrl('plan', newTripPlanData);
+        updateUrl('plan', newTripPlanData, { fromBudget: cameFromBudget });
     } else {
         toast({ variant: 'destructive', title: 'Error', description: result.error });
     }
     setIsLoading(false);
-  }, [toast, updateUrl]);
+  }, [toast, updateUrl, cameFromBudget]);
 
   useEffect(() => {
     if (planTriggerData && activeTab === 'plan') {
@@ -251,7 +263,15 @@ export default function TripPlannerView() {
     onTabChange('plan');
     setTripPlanData(null); 
     setPlanTriggerData(planInputs);
+    setCameFromBudget(true);
   }, []);
+
+  const handleBackToBudget = () => {
+    if (budgetData) {
+        onTabChange('estimate');
+        updateUrl('estimate', budgetData);
+    }
+  };
 
   const onTabChange = (value: string) => {
     startTransition(() => {
@@ -260,9 +280,13 @@ export default function TripPlannerView() {
         params.set('tab', value);
         router.push(`/planner?${params.toString()}`, { scroll: false });
         if (value === 'plan') {
-          setBudgetData(null); // Clear old data when switching tabs
+          // Keep budget data if we're coming from the budget tab
+          if (!planTriggerData) {
+            setBudgetData(null);
+          }
         } else {
-          setTripPlanData(null); // Clear old data when switching tabs
+          setTripPlanData(null);
+          setCameFromBudget(false);
         }
     });
   }
@@ -310,7 +334,13 @@ export default function TripPlannerView() {
                         />
                     </div>
                     <div className="relative">
-                        <TripPlanResults data={tripPlanData} isLoading={(isLoading || isPending) && activeTab === 'plan'} initialTool={initialTool} />
+                        <TripPlanResults 
+                            data={tripPlanData} 
+                            isLoading={(isLoading || isPending) && activeTab === 'plan'} 
+                            initialTool={initialTool}
+                            onBack={handleBackToBudget}
+                            showBackButton={cameFromBudget}
+                        />
                     </div>
                 </div>
             </TabsContent>

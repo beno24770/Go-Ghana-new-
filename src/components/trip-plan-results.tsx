@@ -2,6 +2,7 @@
 'use client';
 
 import {
+  ArrowLeft,
   BedDouble,
   Briefcase,
   Car,
@@ -55,6 +56,8 @@ interface TripPlanResultsProps {
   data: TripPlanData | null;
   isLoading: boolean;
   initialTool?: string | null;
+  onBack?: () => void;
+  showBackButton?: boolean;
 }
 
 const categoryIcons = {
@@ -504,7 +507,7 @@ function PlanSection({ title, cost, description, icon, cta }: { title: string; c
 }
 
 
-export default function TripPlanResults({ data, isLoading, initialTool }: TripPlanResultsProps) {
+export default function TripPlanResults({ data, isLoading, initialTool, onBack, showBackButton }: TripPlanResultsProps) {
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -592,10 +595,19 @@ export default function TripPlanResults({ data, isLoading, initialTool }: TripPl
           </p>
         </div>
 
-        <Button onClick={handleShare} variant="outline" className="w-full">
-          <Share2 className="mr-2 h-4 w-4 shrink-0" />
-          Share This Plan
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-2">
+            {showBackButton && onBack && (
+                <Button onClick={onBack} variant="outline" className="w-full">
+                    <ArrowLeft className="mr-2 h-4 w-4 shrink-0" />
+                    Back to Budget
+                </Button>
+            )}
+            <Button onClick={handleShare} variant="outline" className="w-full">
+                <Share2 className="mr-2 h-4 w-4 shrink-0" />
+                Share This Plan
+            </Button>
+        </div>
+
       </CardContent>
       {data && (
         <ItineraryDialog 

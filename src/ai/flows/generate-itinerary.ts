@@ -15,16 +15,22 @@ import format from 'date-fns/format';
 import { z } from 'zod';
 
 export async function generateItinerary(input: GenerateItineraryInput): Promise<GenerateItineraryOutput> {
-    const endDate = addDays(new Date(input.startDate), input.duration);
+    const endDate = addDays(new Date(input.startDate), input.duration -1);
     const formattedEndDate = format(endDate, 'yyyy-MM-dd');
-    const fullInput = {...input, endDate: formattedEndDate};
+
+    const dayDates = Array.from({ length: input.duration }, (_, i) => {
+        const date = addDays(new Date(input.startDate), i);
+        return format(date, 'yyyy-MM-dd');
+    });
+
+    const fullInput = {...input, endDate: formattedEndDate, dayDates};
 
     return generateItineraryFlow(fullInput);
 }
 
 const generateItineraryPrompt = ai.definePrompt({
     name: 'generateItineraryPrompt',
-    input: { schema: GenerateItineraryInputSchema.extend({endDate: z.string()}) },
+    input: { schema: GenerateItineraryInputSchema.extend({endDate: z.string(), dayDates: z.array(z.string())}) },
     output: { schema: GenerateItineraryOutputSchema },
     tools: [getLocalPulse],
     prompt: `You are a Ghana travel expert and a content curator for the website letvisitghana.com. Create a detailed, day-by-day itinerary based on the user's preferences.
@@ -41,11 +47,12 @@ Your Task:
 2.  **Incorporate Local Events**: If there are relevant events from the 'Local Pulse', you MUST integrate them into the itinerary. This is a critical step.
 3.  **Highlight the Event**: When you include a local event, you MUST format it with a special heading to make it stand out. For example: "**✨ Local Pulse: Chale Wote Street Art Festival**". You must also include the 'insiderTip' from the tool's output. This makes the itinerary timely and unique.
 4.  **Create a Day-by-Day Plan**: For each day of the trip, provide a 'title' and 'details'.
-5.  **Be Specific and Practical**: Suggest specific attractions, restaurants, and experiences. Consider the travel style and budget.
-6.  **Embed "Read More" Links**: For major attractions, you MUST embed relevant Markdown links to articles on letvisitghana.com. This is crucial. For example, if you mention Kakum National Park, include a link like this: \`[Read more about Kakum National Park](https://www.letvisitghana.com/tourist-sites/kakum-national-park/)\`. If you mention Mole National Park, link to \`[Read more about Mole National Park](https://www.letvisitghana.com/tourist-sites/mole-national-park/)\`. Use your knowledge of the site to find the most relevant link.
-7.  **Logical Flow**: Ensure the itinerary is geographically and logistically sound.
-8.  **Engaging Titles**: Make the title for each day interesting and descriptive.
-9.  **Format with Markdown**: Use Markdown for lists, bold text, and links in the 'details' field.
+5.  **Add Specific Dates to Title**: For each day's title, you MUST include the specific date. Use the provided 'dayDates' array. The format should be "Day [Number] - [Date]: [Your Title]". For example: "Day 1 - May 25, 2024: Arrival in Accra".
+6.  **Be Specific and Practical**: Suggest specific attractions, restaurants, and experiences. Consider the travel style and budget.
+7.  **Embed "Read More" Links**: For major attractions, you MUST embed relevant Markdown links to articles on letvisitghana.com. This is crucial. For example, if you mention Kakum National Park, include a link like this: \`[Read more about Kakum National Park](https://www.letvisitghana.com/tourist-sites/kakum-national-park/)\`. If you mention Mole National Park, link to \`[Read more about Mole National Park](https://www.letvisitghana.com/tourist-sites/mole-national-park/)\`. Use your knowledge of the site to find the most relevant link.
+8.  **Logical Flow**: Ensure the itinerary is geographically and logistically sound.
+9.  **Engaging Titles**: Make the title for each day interesting and descriptive.
+10. **Format with Markdown**: Use Markdown for lists, bold text, and links in the 'details' field.
 
 **Knowledge Base of Ghanaian Destinations (use for suggestions):**
 
@@ -80,7 +87,7 @@ Generate a response that adheres to the GenerateItineraryOutputSchema.`,
 const generateItineraryFlow = ai.defineFlow(
     {
         name: 'generateItineraryFlow',
-        inputSchema: GenerateItineraryInputSchema.extend({endDate: z.string()}),
+        inputSchema: GenerateItineraryInputSchema.extend({endDate: z.string(), dayDates: z.array(z.string())}),
         outputSchema: GenerateItineraryOutputSchema,
     },
     async (input) => {
