@@ -24,6 +24,7 @@ Using a specified budget, the app generates a comprehensive travel plan. It inte
 This is the app's standout feature, providing a dynamic and customizable planning experience. Once a trip plan is created, users can generate a detailed, day-by-day itinerary and access a suite of travel tools.
 
 **Unique Features:**
+- **Local Pulse Integration**: The itinerary is automatically enhanced with real-time information about local festivals and events from our proprietary database, complete with insider tips. This makes every plan timely and culturally relevant.
 - **AI-Powered Itinerary Creation**: Generates a logistically sound and engaging daily plan with specific attractions and experiences.
 - **"Read More" Integration**: Seamlessly embeds contextual links to relevant articles on the `letvisitghana.com` website, allowing users to dive deeper into suggested attractions.
 - **Download & Edit**: Users can download their itinerary as a Markdown file. To capture leads, the download is initiated after the user provides their name and email. They can also edit the itinerary directly in the app.
@@ -45,10 +46,10 @@ A dedicated page showcases a curated list of vetted, professional local drivers.
 
 ## Future Roadmap: The Ghana Travel Graph
 
-Our long-term vision is to create a proprietary, real-time "Ghana Travel Graph"—a comprehensive database of destinations, accommodations, transportation options, and activities, all curated and maintained by our on-the-ground team in Ghana. This unique, defensible asset will allow us to:
+Our long-term vision is to create a proprietary, real-time "Ghana Travel Graph"—a comprehensive database of destinations, accommodations, transportation options, and activities, all curated and maintained by our on-the-ground team in Ghana. The **"Local Pulse"** feature is the first, powerful implementation of this vision. This unique, defensible asset will allow us to:
 
 - **Deliver Hyper-Personalized & Authentic Recommendations**: Leverage deep local knowledge to suggest hidden gems and experiences that generic AI models don't know about.
-- **Provide Real-Time "Insider" Information**: Offer features like a "Local Pulse" to inform travelers about current events, festivals, and conditions.
+- **Provide Real-Time "Insider" Information**: Expand the "Local Pulse" to inform travelers about current events, pop-up markets, road conditions, and more.
 - **Power Advanced Planning Tools**: Build features like an interactive map-based itinerary planner and themed "trip blueprints" for different travel styles (e.g., "Heritage Tour," "Adventure Seeker").
 
 By combining our unique data with powerful AI, we will create the most intelligent, trustworthy, and personalized tool for planning travel to Ghana.
