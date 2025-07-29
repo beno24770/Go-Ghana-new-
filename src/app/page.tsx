@@ -36,20 +36,12 @@ const features = [
 export default function Home() {
   return (
     <main className="flex-1">
-      <div className="relative flex h-[60vh] min-h-[400px] items-center justify-center px-4 text-center sm:min-h-[500px]">
-          <Image 
-              src="https://placehold.co/1200x800.png"
-              alt="Beautiful landscape of Ghana"
-              fill
-              className="object-cover -z-10 brightness-50"
-              priority={false}
-              data-ai-hint="ghana landscape"
-          />
+      <div className="relative flex h-[60vh] min-h-[400px] items-center justify-center bg-muted px-4 text-center sm:min-h-[500px]">
           <div className="max-w-2xl">
-              <h1 className="font-headline text-3xl font-bold text-white shadow-lg sm:text-4xl md:text-6xl">
+              <h1 className="font-headline text-3xl font-bold text-foreground shadow-lg sm:text-4xl md:text-6xl">
                   Go Ghana: Plan Less, Explore More
               </h1>
-              <p className="mt-4 text-base text-white/90 sm:text-lg md:text-xl">
+              <p className="mt-4 text-base text-muted-foreground sm:text-lg md:text-xl">
                   Let Ghana welcome you. Build your dream trip with personalized budgets, custom itineraries, and travel tips—everything crafted to help you experience the real Ghana.
               </p>
               <Button asChild size="lg" className="mt-8">
