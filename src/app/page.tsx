@@ -1,37 +1,41 @@
 
 import { InstallPwaButton } from "@/components/install-pwa-button";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calculator, Car, Languages, ListChecks, Map, Wand2 } from "lucide-react";
-import Image from "next/image";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Wand2 } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
+import { LazyIcon } from "@/components/lazy-icon";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const features = [
     {
-        icon: <Calculator className="h-10 w-10" />,
+        icon: "Calculator",
         title: "Smart Budget Estimator",
         description: "Know what to expect. Get a detailed cost breakdown based on your travel style, trip duration, and the regions you want to explore.",
         href: "/planner?tab=estimate"
     },
     {
-        icon: <Map className="h-10 w-10" />,
+        icon: "Map",
         title: "Custom Itinerary Builder",
         description: "No stress, no spreadsheets. Build a full day-by-day travel plan with suggested activities that match your interests and budget.",
         href: "/planner?tab=plan"
     },
     {
-        icon: <Car className="h-10 w-10" />,
+        icon: "Car",
         title: "Connect with a Local Driver",
         description: "Travel like a local. Connect with our vetted, trusted drivers for personalized tours and reliable transport at a fair price.",
         href: "/drivers"
     },
     {
-        icon: <Languages className="h-10 w-10" />,
+        icon: "Languages",
         title: "Ghanaian Language Companion",
         description: "Feel more connected. Learn key phrases in Twi, Ewe, Ga, and more—with audio guides to help you speak confidently.",
         href: "/planner?tab=plan"
     }
 ]
+
+const IconSkeleton = () => <Skeleton className="h-20 w-20 rounded-full" />;
 
 export default function Home() {
   return (
@@ -67,7 +71,9 @@ export default function Home() {
                 <Card className="flex h-full flex-col text-left sm:flex-row">
                     <div className="flex items-center justify-center p-6 sm:p-4">
                         <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 p-4 text-4xl">
-                            {feature.icon}
+                            <Suspense fallback={<IconSkeleton />}>
+                                <LazyIcon name={feature.icon as any} className="h-10 w-10" />
+                            </Suspense>
                         </div>
                     </div>
                     <div className="flex-1 p-6 pt-0 sm:pt-6">

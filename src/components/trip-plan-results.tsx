@@ -3,7 +3,6 @@
 
 import {
   BedDouble,
-  BookText,
   Briefcase,
   Car,
   Check,
@@ -44,6 +43,7 @@ import { Textarea } from './ui/textarea';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { toDate } from 'date-fns';
+import { ItineraryLoader } from './itinerary-loader';
 
 
 type TripPlanData = {
@@ -297,10 +297,7 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
         if (isLoading.itinerary) {
             return (
                 <div className="flex h-full min-h-[300px] w-full items-center justify-center">
-                    <div className="text-center">
-                        <div className="h-12 w-12 mx-auto animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-                        <p className="mt-4 font-headline text-xl">Crafting your adventure...</p>
-                    </div>
+                    <ItineraryLoader />
                 </div>
             )
         }
