@@ -1,0 +1,39 @@
+
+[
+    {
+        "id": "evt_cw_2024",
+        "title": "Chale Wote Street Art Festival",
+        "description": "Ghana's most vibrant street art festival, celebrating art, music, dance, and performance in the historic Jamestown neighborhood of Accra. A must-see for lovers of contemporary African culture.",
+        "category": ["Festival", "Art", "Community"],
+        "region": ["Greater Accra"],
+        "location": "Jamestown, Accra",
+        "startDate": "2024-08-19",
+        "endDate": "2024-08-25",
+        "cost": "Mostly Free, some events may require tickets.",
+        "insiderTip": "The festival gets very crowded, especially on the weekend. Visit on a weekday for a more relaxed experience. Wear comfortable shoes and stay hydrated."
+    },
+    {
+        "id": "evt_homowo_2024",
+        "title": "Homowo Festival",
+        "description": "The annual festival of the Ga people, celebrated to 'hoot at hunger.' It involves traditional rituals, processions, and the sprinkling of the special meal 'Kpokpoi.'",
+        "category": ["Festival", "Cultural", "Traditional"],
+        "region": ["Greater Accra"],
+        "location": "Accra and surrounding Ga communities",
+        "startDate": "2024-08-01",
+        "endDate": "2024-08-31",
+        "cost": "Free to observe, but be respectful of rituals.",
+        "insiderTip": "The main celebrations and processions typically happen on Saturdays. Ask for permission before taking photos of chiefs or traditional ceremonies."
+    },
+    {
+        "id": "evt_asabaako_2025",
+        "title": "Asa Baako - One Dance",
+        "description": "An eco-friendly music and arts festival held in Busua, Western Region. It features a mix of Afro-house, funk, soul, and local Ghanaian music on the beach.",
+        "category": ["Festival", "Music"],
+        "region": ["Western"],
+        "location": "Busua Beach",
+        "startDate": "2025-03-05",
+        "endDate": "2025-03-07",
+        "cost": "Ticketed event, prices vary.",
+        "insiderTip": "Book accommodation in Busua or the nearby town of Dixcove well in advance, as places fill up quickly. It's a great opportunity to take surfing lessons."
+    }
+]
