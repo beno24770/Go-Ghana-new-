@@ -33,7 +33,7 @@ import { useToast } from '@/hooks/use-toast';
 import type { GenerateItineraryOutput, GenerateLanguageGuideOutput, GeneratePackingListOutput, PackingListItemSchema, PhraseSchema, PlanTripInput, PlanTripOutput } from '@/ai/schemas';
 import { Badge } from '@/components/ui/badge';
 import { getAudio, getItinerary, getLanguageGuide, getPackingList, regenerateItinerary } from '@/app/actions';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import Link from 'next/link';
@@ -43,8 +43,9 @@ import { z } from 'zod';
 import { Textarea } from './ui/textarea';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import toDate from 'date-fns/toDate';
 import { ItineraryLoader } from './itinerary-loader';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 
 type TripPlanData = {
@@ -80,12 +81,13 @@ const downloadFormSchema = z.object({
 });
 
 
-function DownloadDialog({ itineraryAsMarkdown, onOpenChange }: { itineraryAsMarkdown: string; onOpenChange: (open: boolean) => void }) {
+function DownloadDialog({ onDownload, onOpenChange }: { onDownload: () => Promise<void>; onOpenChange: (open: boolean) => void }) {
     const [formData, setFormData] = useState({ name: '', email: '' });
     const [errors, setErrors] = useState<{ name?: string; email?: string }>({});
+    const [isDownloading, setIsDownloading] = useState(false);
     const { toast } = useToast();
 
-    const handleDownload = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const result = downloadFormSchema.safeParse(formData);
         if (!result.success) {
@@ -99,18 +101,12 @@ function DownloadDialog({ itineraryAsMarkdown, onOpenChange }: { itineraryAsMark
         }
         
         console.log("Lead captured:", { name: formData.name, email: formData.email });
-        toast({ title: "Success!", description: "Your itinerary is downloading." });
+        setIsDownloading(true);
+        toast({ title: "Generating PDF...", description: "Your itinerary is being prepared for download." });
 
+        await onDownload();
 
-        const blob = new Blob([itineraryAsMarkdown], { type: 'text/markdown;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'goghana-itinerary.md';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
+        setIsDownloading(false);
         onOpenChange(false);
     };
 
@@ -127,22 +123,31 @@ function DownloadDialog({ itineraryAsMarkdown, onOpenChange }: { itineraryAsMark
             <DialogHeader>
                 <DialogTitle className="font-headline">Download Your Itinerary</DialogTitle>
                 <DialogDescription>
-                    Enter your details below to get your personalized itinerary.
+                    Enter your details below to get your personalized itinerary as a PDF.
                 </DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleDownload} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="name">Name</Label>
-                    <Input id="name" value={formData.name} onChange={handleInputChange} />
+                    <Input id="name" value={formData.name} onChange={handleInputChange} disabled={isDownloading} />
                     {errors.name && <p className="text-sm text-destructive">{errors.name}</p>}
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" value={formData.email} onChange={handleInputChange} />
+                    <Input id="email" type="email" value={formData.email} onChange={handleInputChange} disabled={isDownloading} />
                      {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
                 </div>
                 <DialogFooter>
-                    <Button type="submit">Download Now</Button>
+                    <Button type="submit" disabled={isDownloading}>
+                        {isDownloading ? (
+                            <>
+                                <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                                Downloading...
+                            </>
+                        ) : (
+                            'Download Now'
+                        )}
+                    </Button>
                 </DialogFooter>
             </form>
         </DialogContent>
@@ -154,23 +159,68 @@ const ItineraryContent = ({
   itinerary,
   isEditing,
   editedItinerary,
-  onGenerateItinerary,
   onRegenerateItinerary,
   onSetIsEditing,
   onSetEditedItinerary,
-  itineraryAsMarkdown
 }: {
   isLoading: boolean;
   itinerary: GenerateItineraryOutput | null;
   isEditing: boolean;
   editedItinerary: string;
-  onGenerateItinerary: () => void;
   onRegenerateItinerary: () => void;
   onSetIsEditing: (isEditing: boolean) => void;
   onSetEditedItinerary: (value: string) => void;
-  itineraryAsMarkdown: string;
 }) => {
     const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false);
+    const itineraryRef = useRef<HTMLDivElement>(null);
+    const { toast } = useToast();
+
+    const handleDownloadPdf = async () => {
+        const content = itineraryRef.current;
+        if (!content) {
+            toast({ variant: 'destructive', title: 'Error', description: "Could not find itinerary content to download."});
+            return;
+        }
+
+        try {
+            const canvas = await html2canvas(content, { scale: 2 });
+            const imgData = canvas.toDataURL('image/png');
+            
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'px',
+                format: 'a4'
+            });
+
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const canvasWidth = canvas.width;
+            const canvasHeight = canvas.height;
+            const ratio = canvasWidth / canvasHeight;
+            const imgHeight = pdfWidth / ratio;
+
+            let heightLeft = canvasHeight;
+            let position = 0;
+            
+            // Use the raw image data instead of converting to PNG first for better performance
+            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+            heightLeft -= canvasHeight;
+
+            while (heightLeft > 0) {
+                position = heightLeft - canvasHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+                heightLeft -= canvasHeight;
+            }
+            
+            pdf.save('goghana-itinerary.pdf');
+            toast({ title: "Success!", description: "Your itinerary has been downloaded." });
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+            toast({ variant: 'destructive', title: 'Error', description: "Failed to generate PDF. Please try again." });
+        }
+    };
+
 
     if (isLoading) {
         return (
@@ -182,11 +232,7 @@ const ItineraryContent = ({
     if (!itinerary) {
          return (
             <div className="text-center p-8 flex flex-col items-center justify-center h-full min-h-[400px]">
-                <p className="mb-4 text-muted-foreground">Something went wrong. Please try generating the itinerary again.</p>
-                <Button onClick={onGenerateItinerary} disabled={isLoading}>
-                    {isLoading ? <LoaderCircle className="animate-spin" /> : <Wand2 />}
-                    <span className="ml-2">{isLoading ? 'Generating...' : 'Generate Itinerary'}</span>
-                </Button>
+                <p className="mb-4 text-muted-foreground">Click the button to generate an itinerary for your trip.</p>
             </div>
         )
     }
@@ -211,7 +257,7 @@ const ItineraryContent = ({
     }
     return (
         <div className="flex flex-col h-full">
-            <div className="flex-grow overflow-y-auto pr-4 -mr-4">
+            <div ref={itineraryRef} className="flex-grow overflow-y-auto pr-4 -mr-4">
                 <Accordion type="single" collapsible className="w-full" defaultValue="day-1">
                     {itinerary.itinerary.map((dayPlan) => (
                         <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
@@ -239,7 +285,7 @@ const ItineraryContent = ({
                         <DialogTrigger asChild>
                             <Button variant="outline"><Download className="shrink-0" /> <span className="ml-2">Download</span></Button>
                         </DialogTrigger>
-                        <DownloadDialog itineraryAsMarkdown={itineraryAsMarkdown} onOpenChange={setIsDownloadDialogOpen} />
+                        <DownloadDialog onDownload={handleDownloadPdf} onOpenChange={setIsDownloadDialogOpen} />
                     </Dialog>
                     <Button asChild>
                         <Link href="/drivers">
@@ -424,11 +470,9 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
                              itinerary={itinerary}
                              isEditing={isEditing}
                              editedItinerary={editedItinerary}
-                             onGenerateItinerary={handleGenerateItinerary}
                              onRegenerateItinerary={handleRegenerateItinerary}
                              onSetIsEditing={setIsEditing}
                              onSetEditedItinerary={setEditedItinerary}
-                             itineraryAsMarkdown={itineraryAsMarkdown}
                            />
                         </TabsContent>
                         <TabsContent value="packing-list" className="pr-4 mt-0">
@@ -593,7 +637,7 @@ export default function TripPlanResults({ data, isLoading, initialTool, onBack, 
             <div>
                 <CardTitle className="font-headline text-3xl">Your Trip Plan for Ghana</CardTitle>
                 <CardDescription>
-                For a {inputs.duration}-day trip to {regionText} for {inputs.numTravelers} traveler(s), starting on {toDate(inputs.startDate).toLocaleDateString(undefined, { dateStyle: 'long', timeZone: 'UTC' })}.
+                For a {inputs.duration}-day trip to {regionText} for {inputs.numTravelers} traveler(s), starting on {new Date(inputs.startDate).toLocaleDateString(undefined, { dateStyle: 'long', timeZone: 'UTC' })}.
                 </CardDescription>
             </div>
             <Badge variant="outline" className="text-lg">
