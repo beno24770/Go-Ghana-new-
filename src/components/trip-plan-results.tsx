@@ -149,6 +149,113 @@ function DownloadDialog({ itineraryAsMarkdown, onOpenChange }: { itineraryAsMark
     );
 }
 
+const ItineraryContent = ({
+  isLoading,
+  itinerary,
+  isEditing,
+  editedItinerary,
+  onGenerateItinerary,
+  onRegenerateItinerary,
+  onSetIsEditing,
+  onSetEditedItinerary,
+  itineraryAsMarkdown
+}: {
+  isLoading: boolean;
+  itinerary: GenerateItineraryOutput | null;
+  isEditing: boolean;
+  editedItinerary: string;
+  onGenerateItinerary: () => void;
+  onRegenerateItinerary: () => void;
+  onSetIsEditing: (isEditing: boolean) => void;
+  onSetEditedItinerary: (value: string) => void;
+  itineraryAsMarkdown: string;
+}) => {
+    const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false);
+
+    if (isLoading) {
+        return (
+            <div className="flex h-full min-h-[300px] w-full items-center justify-center">
+                <ItineraryLoader />
+            </div>
+        )
+    }
+    if (!itinerary) {
+         return (
+            <div className="text-center p-8 flex flex-col items-center justify-center h-full min-h-[400px]">
+                <p className="mb-4 text-muted-foreground">Something went wrong. Please try generating the itinerary again.</p>
+                <Button onClick={onGenerateItinerary} disabled={isLoading}>
+                    {isLoading ? <LoaderCircle className="animate-spin" /> : <Wand2 />}
+                    <span className="ml-2">{isLoading ? 'Generating...' : 'Generate Itinerary'}</span>
+                </Button>
+            </div>
+        )
+    }
+    if (isEditing) {
+        return (
+            <div className="flex flex-col h-full">
+                <Textarea 
+                    value={editedItinerary}
+                    onChange={(e) => onSetEditedItinerary(e.target.value)}
+                    className="flex-grow min-h-[300px] text-sm"
+                    placeholder="Add your desired destinations or make changes here..."
+                />
+                <div className="mt-4 flex justify-end gap-2">
+                    <Button variant="ghost" onClick={() => onSetIsEditing(false)}>Cancel</Button>
+                    <Button onClick={onRegenerateItinerary} disabled={isLoading}>
+                        {isLoading ? <LoaderCircle className="animate-spin" /> : <Wand2 />}
+                        <span className="ml-2">Regenerate Itinerary</span>
+                    </Button>
+                </div>
+            </div>
+        );
+    }
+    return (
+        <div className="flex flex-col h-full">
+            <div className="flex-grow overflow-y-auto pr-4 -mr-4">
+                <Accordion type="single" collapsible className="w-full" defaultValue="day-1">
+                    {itinerary.itinerary.map((dayPlan) => (
+                        <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
+                            <AccordionTrigger className="font-bold hover:no-underline text-left">{dayPlan.title}</AccordionTrigger>
+                            <AccordionContent>
+                            <div 
+                                className="prose dark:prose-invert max-w-none" 
+                                dangerouslySetInnerHTML={{ __html: marked.parse(dayPlan.details) as string }} 
+                            />
+                            </AccordionContent>
+                        </AccordionItem>
+                    ))}
+                </Accordion>
+            </div>
+            <div className="mt-6 space-y-3 border-t pt-6 text-center bg-muted/20 p-4 rounded-lg -mx-6 -mb-6">
+                <h4 className="font-headline text-lg">Ready for the Next Step?</h4>
+                <p className="text-sm text-muted-foreground">
+                    Let local experts help you refine and book your perfect Ghanaian adventure.
+                </p>
+                <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-center">
+                     <Button onClick={() => onSetIsEditing(true)} variant="outline">
+                        <Pencil className="shrink-0" /> <span className="ml-2">Edit</span>
+                    </Button>
+                    <Dialog open={isDownloadDialogOpen} onOpenChange={setIsDownloadDialogOpen}>
+                        <DialogTrigger asChild>
+                            <Button variant="outline"><Download className="shrink-0" /> <span className="ml-2">Download</span></Button>
+                        </DialogTrigger>
+                        <DownloadDialog itineraryAsMarkdown={itineraryAsMarkdown} onOpenChange={setIsDownloadDialogOpen} />
+                    </Dialog>
+                    <Button asChild>
+                        <Link href="/drivers">
+                            <Car className="shrink-0" /> <span className="ml-2">Go Solo</span>
+                        </Link>
+                    </Button>
+                    <Button asChild variant="secondary">
+                        <Link href="https://letvisitghanatours.com" target="_blank">
+                            <Briefcase className="shrink-0" /> <span className="ml-2">Book This Tour</span>
+                        </Link>
+                    </Button>
+                </div>
+            </div>
+        </div>
+    )
+}
 
 function ItineraryDialog({ planData, initialTool, open, onOpenChange }: ItineraryDialogProps) {
     const [isLoading, setIsLoading] = useState({ itinerary: true, packingList: false, languageGuide: false, audio: '' });
@@ -159,13 +266,12 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
     const [activeTab, setActiveTab] = useState('itinerary');
     const [isEditing, setIsEditing] = useState(false);
     const [editedItinerary, setEditedItinerary] = useState('');
-    const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false);
 
     const { toast } = useToast();
 
     const itineraryAsMarkdown = useMemo(() => {
         if (!itinerary) return '';
-        return itinerary.itinerary.map(day => `### Day ${day.day}: ${day.title}\n\n${day.details}`).join('\n\n');
+        return itinerary.itinerary.map(day => `### ${day.title}\n\n${day.details}`).join('\n\n');
     }, [itinerary]);
     
     useEffect(() => {
@@ -296,92 +402,6 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
         )
     }
     
-    const ItineraryContent = () => {
-        if (isLoading.itinerary) {
-            return (
-                <div className="flex h-full min-h-[300px] w-full items-center justify-center">
-                    <ItineraryLoader />
-                </div>
-            )
-        }
-        if (!itinerary) {
-             return (
-                <div className="text-center p-8 flex flex-col items-center justify-center h-full min-h-[400px]">
-                    <p className="mb-4 text-muted-foreground">Something went wrong. Please try generating the itinerary again.</p>
-                    <Button onClick={handleGenerateItinerary} disabled={isLoading.itinerary}>
-                        {isLoading.itinerary ? <LoaderCircle className="animate-spin" /> : <Wand2 />}
-                        <span className="ml-2">{isLoading.itinerary ? 'Generating...' : 'Generate Itinerary'}</span>
-                    </Button>
-                </div>
-            )
-        }
-        if (isEditing) {
-            return (
-                <div className="flex flex-col h-full">
-                    <Textarea 
-                        value={editedItinerary}
-                        onChange={(e) => setEditedItinerary(e.target.value)}
-                        className="flex-grow min-h-[300px] text-sm"
-                        placeholder="Add your desired destinations or make changes here..."
-                    />
-                    <div className="mt-4 flex justify-end gap-2">
-                        <Button variant="ghost" onClick={() => setIsEditing(false)}>Cancel</Button>
-                        <Button onClick={handleRegenerateItinerary} disabled={isLoading.itinerary}>
-                            {isLoading.itinerary ? <LoaderCircle className="animate-spin" /> : <Wand2 />}
-                            <span className="ml-2">Regenerate Itinerary</span>
-                        </Button>
-                    </div>
-                </div>
-            );
-        }
-        return (
-            <div className="flex flex-col h-full">
-                <div className="flex-grow overflow-y-auto pr-4 -mr-4">
-                    <Accordion type="single" collapsible className="w-full" defaultValue="day-1">
-                        {itinerary.itinerary.map((dayPlan) => (
-                            <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
-                                <AccordionTrigger className="font-bold hover:no-underline text-left">Day {dayPlan.day}: {dayPlan.title}</AccordionTrigger>
-                                <AccordionContent>
-                                <div 
-                                    className="prose dark:prose-invert max-w-none" 
-                                    dangerouslySetInnerHTML={{ __html: marked.parse(dayPlan.details) as string }} 
-                                />
-                                </AccordionContent>
-                            </AccordionItem>
-                        ))}
-                    </Accordion>
-                </div>
-                <div className="mt-6 space-y-3 border-t pt-6 text-center bg-muted/20 p-4 rounded-lg -mx-6 -mb-6">
-                    <h4 className="font-headline text-lg">Ready for the Next Step?</h4>
-                    <p className="text-sm text-muted-foreground">
-                        Let local experts help you refine and book your perfect Ghanaian adventure.
-                    </p>
-                    <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-center">
-                         <Button onClick={() => setIsEditing(true)} variant="outline">
-                            <Pencil className="shrink-0" /> <span className="ml-2">Edit</span>
-                        </Button>
-                        <Dialog open={isDownloadDialogOpen} onOpenChange={setIsDownloadDialogOpen}>
-                            <DialogTrigger asChild>
-                                <Button variant="outline"><Download className="shrink-0" /> <span className="ml-2">Download</span></Button>
-                            </DialogTrigger>
-                            <DownloadDialog itineraryAsMarkdown={itineraryAsMarkdown} onOpenChange={setIsDownloadDialogOpen} />
-                        </Dialog>
-                        <Button asChild>
-                            <Link href="/drivers">
-                                <Car className="shrink-0" /> <span className="ml-2">Go Solo</span>
-                            </Link>
-                        </Button>
-                        <Button asChild variant="secondary">
-                            <Link href="https://letvisitghanatours.com" target="_blank">
-                                <Briefcase className="shrink-0" /> <span className="ml-2">Book This Tour</span>
-                            </Link>
-                        </Button>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-4xl max-h-[90svh] flex flex-col p-6">
@@ -399,7 +419,17 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
                     </TabsList>
                     <div className="flex-grow overflow-y-auto">
                         <TabsContent value="itinerary" className="mt-4 h-full">
-                           <ItineraryContent />
+                           <ItineraryContent
+                             isLoading={isLoading.itinerary}
+                             itinerary={itinerary}
+                             isEditing={isEditing}
+                             editedItinerary={editedItinerary}
+                             onGenerateItinerary={handleGenerateItinerary}
+                             onRegenerateItinerary={handleRegenerateItinerary}
+                             onSetIsEditing={setIsEditing}
+                             onSetEditedItinerary={setEditedItinerary}
+                             itineraryAsMarkdown={itineraryAsMarkdown}
+                           />
                         </TabsContent>
                         <TabsContent value="packing-list" className="pr-4 mt-0">
                             <div className="py-4 min-h-[400px]">
