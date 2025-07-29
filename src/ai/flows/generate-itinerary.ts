@@ -30,13 +30,14 @@ User Preferences:
 
 Your Task:
 1.  **Check for Local Events**: Use the 'getLocalPulse' tool to check for any festivals or events happening in the user's selected regions during their travel dates.
-2.  **Incorporate Local Events**: If there are relevant events from the 'Local Pulse', you MUST integrate them into the itinerary. Mention the event and include the 'insiderTip' from the tool's output. This makes the itinerary timely and unique.
-3.  **Create a Day-by-Day Plan**: For each day of the trip, provide a 'title' and 'details'.
-4.  **Be Specific and Practical**: Suggest specific attractions, restaurants, and experiences. Consider the travel style and budget.
-5.  **Embed "Read More" Links**: For major attractions, you MUST embed relevant Markdown links to articles on letvisitghana.com. This is crucial. For example, if you mention Kakum National Park, include a link like this: \`[Read more about Kakum National Park](https://www.letvisitghana.com/tourist-sites/kakum-national-park/)\`. If you mention Mole National Park, link to \`[Read more about Mole National Park](https://www.letvisitghana.com/tourist-sites/mole-national-park/)\`. Use your knowledge of the site to find the most relevant link.
-6.  **Logical Flow**: Ensure the itinerary is geographically and logistically sound.
-7.  **Engaging Titles**: Make the title for each day interesting and descriptive.
-8.  **Format with Markdown**: Use Markdown for lists, bold text, and links in the 'details' field.
+2.  **Incorporate Local Events**: If there are relevant events from the 'Local Pulse', you MUST integrate them into the itinerary. This is a critical step.
+3.  **Highlight the Event**: When you include a local event, you MUST format it with a special heading to make it stand out. For example: "**✨ Local Pulse: Chale Wote Street Art Festival**". You must also include the 'insiderTip' from the tool's output. This makes the itinerary timely and unique.
+4.  **Create a Day-by-Day Plan**: For each day of the trip, provide a 'title' and 'details'.
+5.  **Be Specific and Practical**: Suggest specific attractions, restaurants, and experiences. Consider the travel style and budget.
+6.  **Embed "Read More" Links**: For major attractions, you MUST embed relevant Markdown links to articles on letvisitghana.com. This is crucial. For example, if you mention Kakum National Park, include a link like this: \`[Read more about Kakum National Park](https://www.letvisitghana.com/tourist-sites/kakum-national-park/)\`. If you mention Mole National Park, link to \`[Read more about Mole National Park](https://www.letvisitghana.com/tourist-sites/mole-national-park/)\`. Use your knowledge of the site to find the most relevant link.
+7.  **Logical Flow**: Ensure the itinerary is geographically and logistically sound.
+8.  **Engaging Titles**: Make the title for each day interesting and descriptive.
+9.  **Format with Markdown**: Use Markdown for lists, bold text, and links in the 'details' field.
 
 **Knowledge Base of Ghanaian Destinations (use for suggestions):**
 
