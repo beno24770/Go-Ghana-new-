@@ -31,7 +31,6 @@ import {
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import type { GenerateItineraryOutput, GenerateLanguageGuideOutput, GeneratePackingListOutput, PackingListItemSchema, PhraseSchema, PlanTripInput, PlanTripOutput } from '@/ai/schemas';
-import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { getAudio, getItinerary, getLanguageGuide, getPackingList, regenerateItinerary } from '@/app/actions';
 import { useEffect, useState, useMemo } from 'react';
@@ -189,6 +188,7 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
             region: planData.inputs.region,
             travelStyle: planData.outputs.suggestedTravelStyle,
             activitiesBudget: planData.outputs.activities.cost,
+            startDate: new Date().toISOString().split('T')[0], // Pass today's date
         });
 
         if (result.success) {
@@ -202,7 +202,10 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
     const handleRegenerateItinerary = async () => {
         setIsLoading(prev => ({ ...prev, itinerary: true }));
         setItinerary(null);
-        const result = await regenerateItinerary({ notes: editedItinerary });
+        const result = await regenerateItinerary({ 
+            notes: editedItinerary,
+            startDate: new Date().toISOString().split('T')[0], // Pass today's date
+        });
         if (result.success) {
             setItinerary(result.data);
             setIsEditing(false);
@@ -533,6 +536,9 @@ export default function TripPlanResults({ data, isLoading, initialTool }: TripPl
     return (
       <div className="flex h-full min-h-[500px] w-full items-center justify-center rounded-lg border border-dashed bg-muted/50 p-8">
         <div className="text-center">
+            <div data-ai-hint="ghana travel map">
+                <Ticket className="h-16 w-16 mx-auto text-muted-foreground" />
+            </div>
           <h3 className="font-headline text-2xl">Your Custom Trip Plan Awaits</h3>
           <p className="mt-2 text-muted-foreground">
             Fill out your budget details, and we'll craft a personalized itinerary for your Ghanaian adventure.
@@ -598,3 +604,5 @@ export default function TripPlanResults({ data, isLoading, initialTool }: TripPl
     </Card>
   );
 }
+
+    

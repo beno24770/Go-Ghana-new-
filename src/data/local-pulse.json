@@ -1,39 +1,173 @@
 
 [
     {
-        "id": "evt_cw_2024",
+        "id": "asafotufiam-festival",
+        "title": "Asafotufiam Festival",
+        "description": "Commemorates the victories of the 'Asafo' warrior companies, a state festival honoring the Ga-Dangme people.",
+        "category": ["Festival", "Heritage"],
+        "region": ["Greater Accra"],
+        "location": "Ada",
+        "startDate": "2024-08-01",
+        "endDate": "2024-08-08",
+        "cost": "Free",
+        "insiderTip": "Visit the Torgbui Akorli shrine to learn more about the history of the festival."
+    },
+    {
+        "id": "oguaa-fetu-afahye",
+        "title": "Oguaa Fetu Afahye",
+        "description": "A vibrant festival celebrated by the Oguaa people of Cape Coast to thank the 77 deities of the Oguaa traditional area.",
+        "category": ["Festival", "Culture"],
+        "region": ["Central"],
+        "location": "Cape Coast",
+        "startDate": "2024-09-01",
+        "endDate": "2024-09-07",
+        "cost": "Free",
+        "insiderTip": "The durbar of chiefs on the final Saturday is the main event. Get there early for a good spot."
+    },
+    {
+        "id": "hogbetsotso-festival",
+        "title": "Hogbetsotso Festival",
+        "description": "Celebrates the migration of the Anlo Ewes from their ancestral home in Togo to their current location in Ghana.",
+        "category": ["Festival", "Culture"],
+        "region": ["Volta"],
+        "location": "Anloga",
+        "startDate": "2024-11-01",
+        "endDate": "2024-11-03",
+        "cost": "Free",
+        "insiderTip": "A great time to experience Ewe culture, music, and dance."
+    },
+    {
+        "id": "chale-wote-street-art-festival",
         "title": "Chale Wote Street Art Festival",
-        "description": "Ghana's most vibrant street art festival, celebrating art, music, dance, and performance in the historic Jamestown neighborhood of Accra. A must-see for lovers of contemporary African culture.",
+        "description": "Ghana's most vibrant street art festival, celebrating art, music, dance, and performance in the historic Jamestown neighborhood of Accra.",
         "category": ["Festival", "Art", "Community"],
         "region": ["Greater Accra"],
         "location": "Jamestown, Accra",
         "startDate": "2024-08-19",
         "endDate": "2024-08-25",
-        "cost": "Mostly Free, some events may require tickets.",
-        "insiderTip": "The festival gets very crowded, especially on the weekend. Visit on a weekday for a more relaxed experience. Wear comfortable shoes and stay hydrated."
+        "cost": "Mostly Free",
+        "insiderTip": "The festival gets very crowded, especially on the weekend. Visit on a weekday for a more relaxed experience."
     },
     {
-        "id": "evt_homowo_2024",
+        "id": "homowo-festival",
         "title": "Homowo Festival",
-        "description": "The annual festival of the Ga people, celebrated to 'hoot at hunger.' It involves traditional rituals, processions, and the sprinkling of the special meal 'Kpokpoi.'",
+        "description": "The annual festival of the Ga people, celebrated to 'hoot at hunger'. Involves traditional rituals and processions.",
         "category": ["Festival", "Cultural", "Traditional"],
         "region": ["Greater Accra"],
-        "location": "Accra and surrounding Ga communities",
+        "location": "Accra and Ga communities",
         "startDate": "2024-08-01",
         "endDate": "2024-08-31",
-        "cost": "Free to observe, but be respectful of rituals.",
-        "insiderTip": "The main celebrations and processions typically happen on Saturdays. Ask for permission before taking photos of chiefs or traditional ceremonies."
+        "cost": "Free",
+        "insiderTip": "The main celebrations happen on Saturdays. Ask for permission before taking photos of chiefs."
     },
     {
-        "id": "evt_asabaako_2025",
-        "title": "Asa Baako - One Dance",
-        "description": "An eco-friendly music and arts festival held in Busua, Western Region. It features a mix of Afro-house, funk, soul, and local Ghanaian music on the beach.",
-        "category": ["Festival", "Music"],
+        "id": "edina-bakatue-festival",
+        "title": "Edina Bakatue Festival",
+        "description": "A purification festival for the Benya Lagoon in Elmina, marking the start of the new fishing season.",
+        "category": ["Festival", "Culture"],
+        "region": ["Central"],
+        "location": "Elmina",
+        "startDate": "2024-07-02",
+        "endDate": "2024-07-02",
+        "cost": "Free",
+        "insiderTip": "Watch the regatta on the lagoon and the procession of chiefs."
+    },
+    {
+        "id": "aboakyer-festival",
+        "title": "Aboakyer Festival",
+        "description": "A deer hunting festival of the Effutu people in Winneba to appease the gods.",
+        "category": ["Festival", "Culture"],
+        "region": ["Central"],
+        "location": "Winneba",
+        "startDate": "2024-05-03",
+        "endDate": "2024-05-05",
+        "cost": "Free",
+        "insiderTip": "The deer hunt is the main attraction, followed by a grand durbar."
+    },
+    {
+        "id": "kundum-festival",
+        "title": "Kundum Festival",
+        "description": "A harvest festival of the Ahanta and Nzema people, marked with drumming, dancing, and feasting.",
+        "category": ["Festival", "Harvest"],
         "region": ["Western"],
-        "location": "Busua Beach",
-        "startDate": "2025-03-05",
-        "endDate": "2025-03-07",
-        "cost": "Ticketed event, prices vary.",
-        "insiderTip": "Book accommodation in Busua or the nearby town of Dixcove well in advance, as places fill up quickly. It's a great opportunity to take surfing lessons."
+        "location": "Axim and other towns",
+        "startDate": "2024-09-01",
+        "endDate": "2024-10-31",
+        "cost": "Free",
+        "insiderTip": "The festival moves between towns, check local schedules."
+    },
+    {
+        "id": "damba-festival",
+        "title": "Damba Festival",
+        "description": "A major festival of the people of the northern regions, celebrating the birth and naming of the Prophet Mohammed.",
+        "category": ["Festival", "Religion", "Culture"],
+        "region": ["Northern", "Savannah", "North East", "Upper West"],
+        "location": "Various towns",
+        "startDate": "2024-09-15",
+        "endDate": "2024-09-17",
+        "cost": "Free",
+        "insiderTip": "Witness the spectacular display of horsemanship and traditional costumes."
+    },
+    {
+        "id": "fetu-afahye",
+        "title": "Fetu Afahye",
+        "description": "A festival of the people of Cape Coast, similar to Oguaa Fetu Afahye, celebrated with a grand durbar of chiefs.",
+        "category": ["Festival", "Culture"],
+        "region": ["Central"],
+        "location": "Cape Coast",
+        "startDate": "2024-09-01",
+        "endDate": "2024-09-07",
+        "cost": "Free",
+        "insiderTip": "Experience the rich culture and traditions of the Fante people."
+    },
+    {
+        "id": "odwira-festival",
+        "title": "Odwira Festival",
+        "description": "A spiritual cleansing festival of the Akan people, particularly in Akropong, to purify the land and people.",
+        "category": ["Festival", "Spiritual", "Culture"],
+        "region": ["Eastern"],
+        "location": "Akropong",
+        "startDate": "2024-09-16",
+        "endDate": "2024-09-22",
+        "cost": "Free",
+        "insiderTip": "A very solemn and spiritual event. Be respectful of the traditions."
+    },
+    {
+        "id": "akwambo-festival",
+        "title": "Akwambo Festival",
+        "description": "A 'path clearing' festival to commemorate the clearing of footpaths to farms and rivers by ancestors.",
+        "category": ["Festival", "Community", "Culture"],
+        "region": ["Central"],
+        "location": "Agona Nyakrom, Enyan-Maim",
+        "startDate": "2024-08-01",
+        "endDate": "2024-08-31",
+        "cost": "Free",
+        "insiderTip": "Join the community in their celebrations and communal labor."
+    },
+    {
+        "id": "kloyosikplemi-festival",
+        "title": "Kloyosikplemi Festival",
+        "description": "A harvest and thanksgiving festival of the people of Yilo Krobo.",
+        "category": ["Festival", "Harvest"],
+        "region": ["Eastern"],
+        "location": "Somanya",
+        "startDate": "2024-11-01",
+        "endDate": "2024-11-30",
+        "cost": "Free",
+        "insiderTip": "Witness the display of Krobo culture and the beautiful glass beads."
+    },
+    {
+        "id": "bugum-chugu-festival",
+        "title": "Bugum Chugu (Fire Festival)",
+        "description": "Commemorates the search for a lost prince and is celebrated with a procession of people carrying torches.",
+        "category": ["Festival", "Historical", "Culture"],
+        "region": ["Northern"],
+        "location": "Dagbon traditional area",
+        "startDate": "2024-08-12",
+        "endDate": "2024-08-12",
+        "cost": "Free",
+        "insiderTip": "An amazing spectacle at night, but be careful with the fire."
     }
 ]
+
+    
