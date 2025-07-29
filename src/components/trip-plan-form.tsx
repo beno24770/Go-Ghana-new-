@@ -23,7 +23,8 @@ import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Calendar } from './ui/calendar';
 import { cn } from '@/lib/utils';
-import { format, toDate } from 'date-fns';
+import format from 'date-fns/format';
+import toDate from 'date-fns/toDate';
 
 const ghanaRegions = [
   "Ahafo", "Ashanti", "Bono", "Bono East", "Central", "Eastern",

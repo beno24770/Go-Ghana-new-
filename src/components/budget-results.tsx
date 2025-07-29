@@ -27,7 +27,6 @@ import {
 } from '@/components/ui/chart';
 import { useToast } from '@/hooks/use-toast';
 import type { EstimateBudgetInput, EstimateBudgetOutput } from '@/ai/schemas';
-import Image from 'next/image';
 
 type BudgetData = {
   inputs: EstimateBudgetInput;

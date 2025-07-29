@@ -10,7 +10,8 @@
 import { ai } from '@/ai/genkit';
 import { GenerateItineraryOutput, GenerateItineraryOutputSchema, RegenerateItineraryInput, RegenerateItineraryInputSchema } from '@/ai/schemas';
 import { getLocalPulse } from '@/ai/tools/get-local-pulse';
-import { addDays, format } from 'date-fns';
+import addDays from 'date-fns/addDays';
+import format from 'date-fns/format';
 import { z } from 'zod';
 
 export async function regenerateItineraryFromNotes(input: RegenerateItineraryInput): Promise<GenerateItineraryOutput> {

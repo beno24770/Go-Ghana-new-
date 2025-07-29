@@ -42,7 +42,7 @@ import { z } from 'zod';
 import { Textarea } from './ui/textarea';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { toDate } from 'date-fns';
+import toDate from 'date-fns/toDate';
 import { ItineraryLoader } from './itinerary-loader';
 
 

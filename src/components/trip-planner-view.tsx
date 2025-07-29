@@ -12,7 +12,8 @@ import TripPlanResults from '@/components/trip-plan-results';
 import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, EstimateBudgetInputSchema, PlanTripInputSchema } from '@/ai/schemas';
 import { getBudgetEstimate, getTripPlan } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
-import { add, toDate } from 'date-fns';
+import add from 'date-fns/add';
+import toDate from 'date-fns/toDate';
 
 type BudgetData = {
   inputs: EstimateBudgetInput;
