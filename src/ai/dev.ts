@@ -10,6 +10,7 @@ import '@/ai/flows/generate-packing-list.ts';
 import '@/ai/flows/generate-language-guide.ts';
 import '@/ai/flows/generate-audio.ts';
 import '@/ai/flows/regenerate-itinerary.ts';
+import '@/ai/flows/chat-with-itinerary.ts';
 import '@/ai/tools/get-local-pulse';
 import '@/ai/tools/get-entertainment-events';
 import '@/ai/tools/get-accommodations';

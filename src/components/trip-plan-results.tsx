@@ -31,9 +31,9 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import type { GenerateItineraryOutput, GenerateLanguageGuideOutput, GeneratePackingListOutput, PackingListItemSchema, PhraseSchema, PlanTripInput, PlanTripOutput } from '@/ai/schemas';
+import type { ChatWithItineraryOutput, GenerateItineraryOutput, GenerateLanguageGuideOutput, GeneratePackingListOutput, PackingListItemSchema, PhraseSchema, PlanTripInput, PlanTripOutput } from '@/ai/schemas';
 import { Badge } from '@/components/ui/badge';
-import { getAudio, getItinerary, getLanguageGuide, getPackingList, regenerateItinerary } from '@/app/actions';
+import { getAudio, getItinerary, getLanguageGuide, getPackingList, postItineraryChat, regenerateItinerary } from '@/app/actions';
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
@@ -171,6 +171,8 @@ const ItineraryContent = ({
   onRegenerateItinerary,
   onSetIsEditing,
   onSetEditedItinerary,
+  onChatSubmit,
+  planData,
 }: {
   isLoading: boolean;
   itinerary: GenerateItineraryOutput | null;
@@ -179,10 +181,20 @@ const ItineraryContent = ({
   onRegenerateItinerary: () => void;
   onSetIsEditing: (isEditing: boolean) => void;
   onSetEditedItinerary: (value: string) => void;
+  onChatSubmit: (message: string) => void;
+  planData: TripPlanData;
 }) => {
     const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false);
     const itineraryRef = useRef<HTMLDivElement>(null);
     const { toast } = useToast();
+    const [chatMessage, setChatMessage] = useState('');
+
+    const handleFormSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!chatMessage.trim()) return;
+        onChatSubmit(chatMessage);
+        setChatMessage('');
+    }
 
     const handleDownloadPdf = async () => {
         const content = itineraryRef.current;
@@ -284,10 +296,18 @@ const ItineraryContent = ({
                 <p className="text-sm text-muted-foreground">
                     Ask questions or request changes to your plan.
                 </p>
-                <div className="mt-4 flex gap-2">
-                    <Input placeholder="e.g., 'Add a museum on Day 2'" className="flex-1" />
-                    <Button><Send className="h-4 w-4" /></Button>
-                </div>
+                <form onSubmit={handleFormSubmit} className="mt-4 flex gap-2">
+                    <Input 
+                        placeholder="e.g., 'Add a museum on Day 2'" 
+                        className="flex-1"
+                        value={chatMessage}
+                        onChange={(e) => setChatMessage(e.target.value)}
+                        disabled={isLoading}
+                    />
+                    <Button type="submit" disabled={isLoading}>
+                        {isLoading ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                    </Button>
+                </form>
 
                 <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-center pt-4">
                      <Button onClick={() => onSetIsEditing(true)} variant="outline">
@@ -316,7 +336,7 @@ const ItineraryContent = ({
 }
 
 function ItineraryDialog({ planData, initialTool, open, onOpenChange }: ItineraryDialogProps) {
-    const [isLoading, setIsLoading] = useState({ itinerary: true, packingList: false, languageGuide: false, audio: '' });
+    const [isLoading, setIsLoading] = useState({ itinerary: true, packingList: false, languageGuide: false, audio: '', chat: false });
     const [itinerary, setItinerary] = useState<GenerateItineraryOutput | null>(null);
     const [packingList, setPackingList] = useState<GeneratePackingListOutput | null>(null);
     const [languageGuide, setLanguageGuide] = useState<GenerateLanguageGuideOutput | null>(null);
@@ -324,6 +344,7 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
     const [activeTab, setActiveTab] = useState('itinerary');
     const [isEditing, setIsEditing] = useState(false);
     const [editedItinerary, setEditedItinerary] = useState('');
+    const [chatHistory, setChatHistory] = useState<{role: 'user' | 'model', content: string}[]>([]);
 
     const { toast } = useToast();
 
@@ -389,6 +410,37 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
         }
         setIsLoading(prev => ({ ...prev, itinerary: false }));
     };
+
+    const handleChatSubmit = async (message: string) => {
+        if (!itinerary) return;
+
+        setIsLoading(prev => ({...prev, chat: true}));
+        
+        const currentItineraryMd = itineraryAsMarkdown;
+
+        const result = await postItineraryChat({
+            currentItinerary: currentItineraryMd,
+            userMessage: message,
+            startDate: planData.inputs.startDate,
+            duration: planData.inputs.duration,
+            region: planData.inputs.region,
+        });
+
+        if (result.success) {
+            // Add conversational response to chat history
+            // For now, we'll just toast it
+            toast({
+                title: "AI Assistant",
+                description: result.data.response,
+            });
+
+            // Update itinerary state
+            setItinerary({ itinerary: result.data.itinerary });
+        } else {
+            toast({ variant: 'destructive', title: 'Error', description: result.error });
+        }
+        setIsLoading(prev => ({...prev, chat: false}));
+    }
 
     const handleGeneratePackingList = async () => {
         setIsLoading(prev => ({...prev, packingList: true}));
@@ -479,13 +531,15 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
                     <div className="flex-grow overflow-y-auto">
                         <TabsContent value="itinerary" className="mt-4 h-full">
                            <ItineraryContent
-                             isLoading={isLoading.itinerary}
+                             isLoading={isLoading.itinerary || isLoading.chat}
                              itinerary={itinerary}
                              isEditing={isEditing}
                              editedItinerary={editedItinerary}
                              onRegenerateItinerary={handleRegenerateItinerary}
                              onSetIsEditing={setIsEditing}
                              onSetEditedItinerary={setEditedItinerary}
+                             onChatSubmit={handleChatSubmit}
+                             planData={planData}
                            />
                         </TabsContent>
                         <TabsContent value="packing-list" className="pr-4 mt-0">

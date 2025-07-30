@@ -137,3 +137,18 @@ export const GenerateAudioOutputSchema = z.object({
     media: z.string().describe("The generated audio as a data URI. Expected format: 'data:audio/wav;base64,<encoded_data>'."),
 });
 export type GenerateAudioOutput = z.infer<typeof GenerateAudioOutputSchema>;
+
+export const ChatWithItineraryInputSchema = z.object({
+  currentItinerary: z.string().describe('The current itinerary in Markdown format.'),
+  userMessage: z.string().describe('The user\'s question or change request.'),
+  startDate: z.string().describe("The start date of the trip in YYYY-MM-DD format."),
+  duration: z.number().describe('The duration of the trip in days.'),
+  region: z.array(z.string()).describe('The regions the user will be visiting.'),
+});
+export type ChatWithItineraryInput = z.infer<typeof ChatWithItineraryInputSchema>;
+
+export const ChatWithItineraryOutputSchema = z.object({
+  response: z.string().describe('A conversational response to the user\'s message.'),
+  itinerary: z.array(DayItinerarySchema).describe('The updated day-by-day itinerary for the trip.'),
+});
+export type ChatWithItineraryOutput = z.infer<typeof ChatWithItineraryOutputSchema>;

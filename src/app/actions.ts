@@ -7,6 +7,7 @@ import { planTrip } from '@/ai/flows/plan-trip';
 import { generateLanguageGuide } from '@/ai/flows/generate-language-guide';
 import { generateAudio } from '@/ai/flows/generate-audio';
 import { regenerateItineraryFromNotes } from '@/ai/flows/regenerate-itinerary';
+import { chatWithItinerary } from '@/ai/flows/chat-with-itinerary';
 import {
   type EstimateBudgetInput,
   type EstimateBudgetOutput,
@@ -21,6 +22,8 @@ import {
   type GenerateAudioInput,
   type GenerateAudioOutput,
   type RegenerateItineraryInput,
+  type ChatWithItineraryInput,
+  type ChatWithItineraryOutput,
 } from '@/ai/schemas';
 
 export async function getBudgetEstimate(
@@ -104,5 +107,17 @@ export async function getAudio(
     } catch (error) {
         console.error('Error generating audio:', error);
         return { success: false, error: 'Failed to generate audio. Please try again.' };
+    }
+}
+
+export async function postItineraryChat(
+    data: ChatWithItineraryInput
+): Promise<{ success: true; data: ChatWithItineraryOutput } | { success: false; error: string }> {
+    try {
+        const result = await chatWithItinerary(data);
+        return { success: true, data: result };
+    } catch (error) {
+        console.error('Error chatting with itinerary:', error);
+        return { success: false, error: 'Failed to process your request. Please try again.' };
     }
 }
