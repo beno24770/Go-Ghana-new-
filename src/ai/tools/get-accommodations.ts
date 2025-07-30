@@ -39,9 +39,9 @@ export const getAccommodations = ai.defineTool(
     const { regions, travelStyle } = input;
 
     const relevantAccommodations = accommodationsData.filter(accommodation => {
-      const hasRegionOverlap = regions.includes(accommodation.region);
-      const hasStyleOverlap = accommodation.travelStyle.includes(travelStyle);
-      return hasRegionOverlap && hasStyleOverlap;
+      const isInRegion = regions.includes(accommodation.region);
+      const hasStyle = accommodation.travelStyle.includes(travelStyle);
+      return isInRegion && hasStyle;
     });
 
     return { accommodations: relevantAccommodations };
