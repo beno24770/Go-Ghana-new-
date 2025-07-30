@@ -7,7 +7,8 @@
         "location": "La",
         "travelStyle": ["Luxury"],
         "description": "A premier 5-star hotel offering world-class amenities and direct beach access.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "https://www.labadibeachhotel.com"
     },
     {
         "id": "accra-luxury-golden-tulip",
@@ -16,7 +17,8 @@
         "location": "Accra Central",
         "travelStyle": ["Luxury", "Mid-range"],
         "description": "A well-regarded 4-star hotel known for its excellent service and facilities.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-luxury-la-palm",
@@ -25,7 +27,8 @@
         "location": "La, Accra",
         "travelStyle": ["Luxury", "Mid-range"],
         "description": "A 4-star hotel offering a resort-style experience with pools and beach access.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-luxury-novotel",
@@ -34,7 +37,8 @@
         "location": "Accra Central",
         "travelStyle": ["Luxury", "Mid-range"],
         "description": "A 4-star business hotel with reliable service and a central location.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-midrange-m-plaza",
@@ -43,7 +47,8 @@
         "location": "Roman Ridge",
         "travelStyle": ["Mid-range"],
         "description": "A 3-star hotel offering comfortable accommodations in a serene environment.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-midrange-alisa-labone",
@@ -52,7 +57,8 @@
         "location": "Labone",
         "travelStyle": ["Mid-range"],
         "description": "A popular 3-star hotel with good amenities and a convenient location.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-midrange-alisa-ridge",
@@ -61,7 +67,8 @@
         "location": "Ridge",
         "travelStyle": ["Mid-range"],
         "description": "A sister hotel to the Labone branch, known for its consistent quality.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-midrange-cresta-royale",
@@ -70,7 +77,8 @@
         "location": "North Dzorwulu",
         "travelStyle": ["Mid-range"],
         "description": "A 3-star hotel offering a blend of comfort and Ghanaian hospitality.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-midrange-crown-apartamento",
@@ -79,7 +87,8 @@
         "location": "Airport Res.",
         "travelStyle": ["Mid-range"],
         "description": "Apartment-style hotel providing more space and flexibility for travelers.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-midrange-dutchotel",
@@ -88,7 +97,8 @@
         "location": "Nungua",
         "travelStyle": ["Mid-range"],
         "description": "A cozy 3-star hotel with a unique Dutch-Ghanaian charm.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-midrange-shangri-la",
@@ -97,7 +107,8 @@
         "location": "Airport Res.",
         "travelStyle": ["Mid-range"],
         "description": "A well-established 3-star hotel near the airport, popular with business and leisure travelers.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-midrange-westgate",
@@ -106,7 +117,8 @@
         "location": "Tema Comm. 6",
         "travelStyle": ["Mid-range"],
         "description": "A reliable 3-star option for those staying in the Tema area.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-midrange-manet-paradise",
@@ -115,7 +127,8 @@
         "location": "Ada-Foah",
         "travelStyle": ["Mid-range"],
         "description": "A serene 3-star resort in Ada, perfect for relaxation and water activities.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-midrange-mariset-plaza",
@@ -124,7 +137,8 @@
         "location": "Osu",
         "travelStyle": ["Mid-range"],
         "description": "Located in the vibrant Osu area, this 3-star hotel is close to nightlife and shopping.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-midrange-miklin",
@@ -133,7 +147,8 @@
         "location": "East Legon",
         "travelStyle": ["Mid-range"],
         "description": "A 3-star hotel in a prime residential area, known for its conference facilities.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-midrange-new-coco-beach",
@@ -142,7 +157,8 @@
         "location": "Nungua",
         "travelStyle": ["Mid-range"],
         "description": "A 3-star beachfront resort offering a relaxing atmosphere away from the city center.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-midrange-nogahil",
@@ -151,7 +167,8 @@
         "location": "North Dzorwulu",
         "travelStyle": ["Mid-range"],
         "description": "A comfortable 3-star hotel providing good value and service.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-midrange-royal-ravico",
@@ -160,7 +177,8 @@
         "location": "Nungua",
         "travelStyle": ["Mid-range"],
         "description": "A 3-star hotel offering a range of amenities for a comfortable stay.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-budget-airport-view",
@@ -169,7 +187,8 @@
         "location": "Airport Res.",
         "travelStyle": ["Budget", "Mid-range"],
         "description": "A 2-star hotel offering convenience and value close to the airport.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-budget-airside",
@@ -178,7 +197,8 @@
         "location": "Airport Res.",
         "travelStyle": ["Budget"],
         "description": "A budget-friendly 2-star hotel, ideal for short stays and layovers.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-budget-ange-hill",
@@ -187,7 +207,8 @@
         "location": "East Legon",
         "travelStyle": ["Budget", "Mid-range"],
         "description": "A 2-star hotel offering a mix of affordability and comfort in East Legon.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-budget-apugu-guest-house",
@@ -196,7 +217,8 @@
         "location": "Mandela",
         "travelStyle": ["Budget"],
         "description": "A simple 2-star guesthouse providing basic, affordable lodging.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-budget-bay-view",
@@ -205,7 +227,8 @@
         "location": "East Legon",
         "travelStyle": ["Budget"],
         "description": "A 2-star hotel offering good value in a popular residential area.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-budget-blue-royal",
@@ -214,7 +237,8 @@
         "location": "Osu",
         "travelStyle": ["Budget"],
         "description": "A 2-star budget hotel situated in the lively Osu neighborhood.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-budget-capital-court",
@@ -223,7 +247,8 @@
         "location": "Tesano",
         "travelStyle": ["Budget"],
         "description": "An affordable 2-star hotel located in the Tesano area.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-budget-central",
@@ -232,7 +257,8 @@
         "location": "Ringway Estate",
         "travelStyle": ["Budget"],
         "description": "A 2-star hotel offering a central location at a budget-friendly price.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-budget-coconut-grove-regency",
@@ -241,7 +267,8 @@
         "location": "Kanda",
         "travelStyle": ["Budget", "Mid-range"],
         "description": "Part of a well-known Ghanaian chain, this 2-star hotel offers reliable service.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-budget-charlys",
@@ -250,7 +277,8 @@
         "location": "North Legon",
         "travelStyle": ["Budget"],
         "description": "A 2-star hotel providing simple and affordable accommodation.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-budget-continental-plaza",
@@ -259,7 +287,8 @@
         "location": "Dzorwulu",
         "travelStyle": ["Budget"],
         "description": "A 2-star budget lodging option in the Dzorwulu area.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-budget-court-gardens",
@@ -268,7 +297,8 @@
         "location": "Airport Res.",
         "travelStyle": ["Budget"],
         "description": "A 2-star guesthouse offering value and convenience near the airport.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-budget-courtesy-int",
@@ -277,7 +307,8 @@
         "location": "Tema Comm. 10",
         "travelStyle": ["Budget"],
         "description": "An affordable 2-star hotel option for visitors to Tema.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-budget-crystal-palm",
@@ -286,7 +317,8 @@
         "location": "Tesano",
         "travelStyle": ["Budget"],
         "description": "A 2-star hotel providing basic comfort and affordability in Tesano.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-budget-darold",
@@ -295,7 +327,8 @@
         "location": "New Achimota",
         "travelStyle": ["Budget"],
         "description": "A 2-star hotel serving the New Achimota area with budget-friendly rooms.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-budget-somewhere-nice",
@@ -304,7 +337,8 @@
         "location": "Accra",
         "travelStyle": ["Budget"],
         "description": "A highly-rated hostel known for its vibrant atmosphere and swimming pool, offering both dorms and private rooms.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     },
     {
         "id": "accra-budget-feehi",
@@ -313,6 +347,7 @@
         "location": "Accra",
         "travelStyle": ["Budget"],
         "description": "A basic but friendly guesthouse known for its central location and very fast Wi-Fi, ideal for budget-conscious travelers.",
-        "image": "https://placehold.co/600x400.png"
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
     }
 ]

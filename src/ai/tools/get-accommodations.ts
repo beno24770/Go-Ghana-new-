@@ -18,6 +18,7 @@ const AccommodationSchema = z.object({
     travelStyle: z.array(z.string()),
     description: z.string(),
     image: z.string(),
+    link: z.string().describe("A URL to the accommodation's website or booking page."),
 });
 
 const GetAccommodationsOutputSchema = z.object({
