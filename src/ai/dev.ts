@@ -14,4 +14,3 @@ import '@/ai/tools/get-local-pulse';
 import '@/ai/tools/get-entertainment-events';
 import '@/ai/tools/get-accommodations';
     
-
