@@ -78,9 +78,11 @@ Cost Guidelines (per person per day) - Use these to inform your allocation:
 - Luxury: $400 - $1650+
 
 Transportation Facts (use this to inform your suggestions):
+- For inter-city travel, STC and VIP are reliable bus companies. Trotros (minibuses) are the most common way to travel. The Ford-type trotros are more comfortable and usually have A/C.
 - A budget of ~$25 per day for transport is realistic for inter-city travel (e.g., between Accra, Cape Coast, and Kumasi).
-- A round trip from Accra to Cape Coast or Accra to Kumasi can be done for about $25.
+- A round trip from Accra to Cape Coast or Accra to Kumasi can be done for about $25. A comfortable A/C Ford trotro costs about 70 GHC one way.
 - A budget of ~$45 can cover round trips for both Accra-Cape Coast and Accra-Kumasi.
+- Uber and Bolt are common in major cities. Always select the "pay by cash" option.
 
 Example Descriptions:
 - **Accommodation**: "For a {{travelStyle}} trip, you could consider places like [Hotel A] or [Guesthouse B]. Expect [types of lodging like 'Comfortable mid-range hotels and Airbnbs']."

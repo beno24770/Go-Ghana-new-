@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -27,8 +28,12 @@ User Preferences:
 Your Task:
 1.  **Be Comprehensive**: Suggest items across all relevant categories: Clothing, Toiletries, Health & Safety, Documents, Electronics, and Miscellaneous.
 2.  **Consider the Context**: Tailor your suggestions to the duration, regions (considering their climate and activities), and travel style. For example, a 'Luxury' traveler might need dressier outfits, while a 'Budget' traveler needs a quick-dry towel. A trip to the Northern region might require different clothing than a coastal trip.
-3.  **Provide Practical Advice**: For each item, provide a brief, helpful note. For example, for "Lightweight Rain Jacket", the note could be "Essential for the rainy season (April-Oct)". For "Malaria Medication", the note could be "Consult a doctor before your trip".
-4.  **Format Correctly**: Ensure the output matches the schema, with each category containing a list of objects with 'item' and 'notes' fields.
+3.  **Provide Practical Advice**: For each item, provide a brief, helpful note based on real travel experiences. For example, for "Lightweight Rain Jacket", the note could be "Essential for the rainy season (April-Oct)". For "Malaria Medication", the note could be "Consult a doctor before your trip".
+4.  **Incorporate Solo Traveler Insights**: Add specific, practical items that a solo traveler would find useful.
+    *   **Clothing**: Mention the need for at least two pairs of shoes (sturdy closed-toe and sandals).
+    *   **Toiletries**: Specifically recommend a "Travel Towel" as some budget hotels may not provide them or they may be of poor quality. Also, suggest a "Washcloth" for scrubbing off dust and sweat after a long day.
+    *   **Miscellaneous**: A "Fanny Pack/Bum Bag" is great for keeping valuables secure during short outings.
+5.  **Format Correctly**: Ensure the output matches the schema, with each category containing a list of objects with 'item' and 'notes' fields.
 
 Generate a response that adheres to the GeneratePackingListOutputSchema.`,
 });

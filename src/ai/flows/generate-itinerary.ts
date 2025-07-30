@@ -55,19 +55,24 @@ Your Task:
 6.  **Add Specific Dates to Title**: For each day's title, you MUST include the specific date. Use the provided 'dayDates' array. The format should be "Day [Number] - [Date]: [Your Title]". For example: "Day 1 - 2024-05-25: Arrival in Accra".
 7.  **Be Specific and Practical**: Suggest specific attractions, restaurants, and experiences. Consider the travel style and budget.
 8.  **Embed "Read More" Links**: For major attractions, you MUST embed relevant Markdown links to articles on letvisitghana.com. This is crucial. For example, if you mention Kakum National Park, include a link like this: \`[Read more about Kakum National Park](https://www.letvisitghana.com/tourist-sites/kakum-national-park/)\`. If you mention Mole National Park, link to \`[Read more about Mole National Park](https://www.letvisitghana.com/tourist-sites/mole-national-park/)\`. Use your knowledge of the site to find the most relevant link.
-9.  **Logical Flow**: Ensure the itinerary is geographically and logistically sound.
+9.  **Logical Flow**: Ensure the itinerary is geographically and logistically sound. **IMPORTANT: Travel between Kumasi and Cape Coast is very difficult by public transport. Always route travel between these cities through Accra.**
 10. **Engaging Titles**: Make the title for each day interesting and descriptive.
 11. **Format with Markdown**: Use Markdown for lists, bold text, and links in the 'details' field.
 
 **Knowledge Base of Ghanaian Destinations (use for suggestions):**
 
 **Greater Accra Region:**
-*   **Key Attractions:** Kwame Nkrumah Memorial Park, Independence Square, W.E.B. Du Bois Centre, Jamestown Lighthouse, Arts Centre, Labadi Beach, Osu Castle, National Museum, Shai Hills Resource Reserve, Legon Botanical Gardens.
+*   **Key Attractions:** Kwame Nkrumah Memorial Park, Independence Square (Black Star Square), W.E.B. Du Bois Centre, Jamestown Lighthouse, Arts Centre, Labadi Beach, Osu Castle, National Museum, Shai Hills Resource Reserve, Legon Botanical Gardens.
 *   **Themes:** History, Culture, Pan-Africanism, Shopping, Beach, Nightlife, Nature, Wildlife.
+*   **Practical Tip:** The arch at Black Star Square can be climbed for a small donation to the attendant.
 
 **Central Region:**
 *   **Key Attractions:** Kakum National Park (Canopy Walk), Cape Coast Castle, Elmina Castle, Assin Manso Slave River Site.
 *   **Themes:** Nature, Adventure, History, Slave Trade.
+*   **Practical Tips:**
+    *   Cape Coast & Elmina Castles entry fee is 50 GHC for non-Ghanaians. The tours are similar; Elmina is smaller and the town has more preserved colonial buildings.
+    *   Kakum National Park entry is 100 GHC for the canopy walk. It opens at 8:30 AM, but tours start at 9 AM. Arrive early to avoid crowds. The forest hike is a good alternative to the canopy walk.
+    *   Getting from Cape Coast to Kumasi by public transport is very difficult and not recommended. It's much easier to travel from Accra to Kumasi.
 
 **Ashanti Region:**
 *   **Key Attractions:** Manhyia Palace Museum, Kejetia Market, Lake Bosomtwe, and cultural villages like Adanwomase (Kente) and Ntonso (Adinkra).
@@ -76,6 +81,7 @@ Your Task:
 **Volta Region:**
 *   **Key Attractions:** Wli Waterfalls, Tafi Atome Monkey Sanctuary, Mountain Afadja (Afadjato), Keta Lagoon.
 *   **Themes:** Nature, Hiking, Waterfalls, Wildlife, Scenery.
+*   **Practical Tip:** Mount Afadja is a very steep hike. The trails to Tagbo Falls and Wli Falls are easier and very scenic.
 
 **Eastern Region:**
 *   **Key Attractions:** Boti Falls, Aburi Botanical Gardens, Umbrella Rock, Cedi Bead Factory.
@@ -84,6 +90,7 @@ Your Task:
 **Northern Region:**
 *   **Key Attractions:** Mole National Park (Safari), Larabanga Mosque, Mognori Eco-village.
 *   **Themes:** Wildlife, Safari, History, Religion, Ecotourism.
+*   **Practical Tip:** At Mole, walking safaris offer a better chance to see more birds and get deeper into the wilderness. Night safaris are also available for a different experience.
 
 Generate a response that adheres to the GenerateItineraryOutputSchema.`,
 });
