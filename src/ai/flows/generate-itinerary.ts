@@ -70,8 +70,8 @@ Your Task:
 *   **Key Attractions:** Kakum National Park (Canopy Walk), Cape Coast Castle, Elmina Castle, Assin Manso Slave River Site.
 *   **Themes:** Nature, Adventure, History, Slave Trade.
 *   **Practical Tips:**
-    *   Cape Coast & Elmina Castles entry fee is 50 GHC for non-Ghanaians. The tours are similar; Elmina is smaller and the town has more preserved colonial buildings.
-    *   Kakum National Park entry is 100 GHC for the canopy walk. It opens at 8:30 AM, but tours start at 9 AM. Arrive early to avoid crowds. The forest hike is a good alternative to the canopy walk.
+    *   Cape Coast & Elmina Castles entry fee is ~$4.20 (50 GHC). The tours are similar; Elmina is smaller and the town has more preserved colonial buildings.
+    *   Kakum National Park entry is ~$8.30 (100 GHC) for the canopy walk. It opens at 8:30 AM, but tours start at 9 AM. Arrive early to avoid crowds. The forest hike is a good alternative to the canopy walk.
     *   Getting from Cape Coast to Kumasi by public transport is very difficult and not recommended. It's much easier to travel from Accra to Kumasi.
 
 **Ashanti Region:**
@@ -91,6 +91,15 @@ Your Task:
 *   **Key Attractions:** Mole National Park (Safari), Larabanga Mosque, Mognori Eco-village.
 *   **Themes:** Wildlife, Safari, History, Religion, Ecotourism.
 *   **Practical Tip:** At Mole, walking safaris offer a better chance to see more birds and get deeper into the wilderness. Night safaris are also available for a different experience.
+
+**Transportation Facts (use this to inform your suggestions):**
+-   **Ride Sharing:** Uber and Bolt are common in major cities like Accra and Kumasi. Always select the "pay by cash" option. Short-distance fares within a city are usually $0.40 - $0.70.
+-   **Trotros (Minibuses):** The most common way to travel between cities. The Ford-type trotros are more comfortable and usually have A/C.
+    -   Accra to Cape Coast: ~$6 (70 GHC) one-way.
+    -   Accra to Ho: ~$5.20 (62 GHC) one-way.
+    -   Ho to Hohoe: ~$2.60 (31 GHC) one-way.
+-   **Inter-City Buses:** STC and VIP are reliable bus companies for longer routes (e.g., Accra to Kumasi or Tamale). A trip from Accra to Kumasi costs about $6-$8.
+-   **General Tip:** Always carry small change (GHS 1, 2, 5, 10 notes) for paying trotro fares as drivers often don't have change for larger bills.
 
 Generate a response that adheres to the GenerateItineraryOutputSchema.`,
 });
