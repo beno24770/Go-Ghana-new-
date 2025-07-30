@@ -168,6 +168,7 @@ const ItineraryContent = ({
   itinerary,
   isEditing,
   editedItinerary,
+  chatHistory,
   onRegenerateItinerary,
   onSetIsEditing,
   onSetEditedItinerary,
@@ -178,6 +179,7 @@ const ItineraryContent = ({
   itinerary: GenerateItineraryOutput | null;
   isEditing: boolean;
   editedItinerary: string;
+  chatHistory: {role: 'user' | 'model', content: string}[];
   onRegenerateItinerary: () => void;
   onSetIsEditing: (isEditing: boolean) => void;
   onSetEditedItinerary: (value: string) => void;
@@ -241,7 +243,7 @@ const ItineraryContent = ({
     };
 
 
-    if (isLoading) {
+    if (isLoading && !itinerary) {
         return (
             <div className="flex h-full min-h-[300px] w-full items-center justify-center">
                 <ItineraryLoader />
@@ -290,6 +292,17 @@ const ItineraryContent = ({
                         </AccordionItem>
                     ))}
                 </Accordion>
+                 {chatHistory.length > 0 && (
+                    <div className="mt-4 border-t pt-4 space-y-4">
+                        {chatHistory.map((chat, index) => (
+                            <div key={index} className={`flex flex-col ${chat.role === 'user' ? 'items-end' : 'items-start'}`}>
+                                <div className={`rounded-lg px-4 py-2 ${chat.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
+                                    <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: marked.parse(chat.content) as string }} />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
             <div className="mt-6 space-y-3 border-t pt-6 text-center bg-muted/20 p-4 rounded-lg -mx-6 -mb-6">
                 <h4 className="font-headline text-lg">Chat with your Itinerary</h4>
@@ -354,9 +367,17 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
     }, [itinerary]);
     
     useEffect(() => {
-        if (open && initialTool) {
-            setActiveTab(initialTool);
+        if (open) {
+            if (initialTool) {
+                setActiveTab(initialTool);
+            } else {
+                 setActiveTab('itinerary');
+            }
+             setItinerary(null);
+             setChatHistory([]);
+             handleGenerateItinerary();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open, initialTool]);
 
     const handleGenerateItinerary = async () => {
@@ -379,13 +400,6 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
         }
         setIsLoading(prev => ({...prev, itinerary: false}));
     }
-
-    useEffect(() => {
-        if (open) {
-            handleGenerateItinerary();
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [open]);
 
     useEffect(() => {
         if (itineraryAsMarkdown) {
@@ -415,6 +429,7 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
         if (!itinerary) return;
 
         setIsLoading(prev => ({...prev, chat: true}));
+        setChatHistory(prev => [...prev, {role: 'user', content: message}]);
         
         const currentItineraryMd = itineraryAsMarkdown;
 
@@ -427,17 +442,11 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
         });
 
         if (result.success) {
-            // Add conversational response to chat history
-            // For now, we'll just toast it
-            toast({
-                title: "AI Assistant",
-                description: result.data.response,
-            });
-
-            // Update itinerary state
+            setChatHistory(prev => [...prev, {role: 'model', content: result.data.response}]);
             setItinerary({ itinerary: result.data.itinerary });
         } else {
             toast({ variant: 'destructive', title: 'Error', description: result.error });
+            setChatHistory(prev => prev.slice(0, -1)); // Remove user message on error
         }
         setIsLoading(prev => ({...prev, chat: false}));
     }
@@ -535,6 +544,7 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
                              itinerary={itinerary}
                              isEditing={isEditing}
                              editedItinerary={editedItinerary}
+                             chatHistory={chatHistory}
                              onRegenerateItinerary={handleRegenerateItinerary}
                              onSetIsEditing={setIsEditing}
                              onSetEditedItinerary={setEditedItinerary}
