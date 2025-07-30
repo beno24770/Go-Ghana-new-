@@ -1,6 +1,303 @@
 
 [
     {
+        "id": "accra-luxury-labadi-beach",
+        "name": "Labadi Beach Hotel",
+        "region": "Greater Accra",
+        "location": "La",
+        "travelStyle": ["Luxury"],
+        "description": "A premier 5-star hotel offering world-class amenities and direct beach access.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-luxury-golden-tulip",
+        "name": "Golden Tulip Hotel",
+        "region": "Greater Accra",
+        "location": "Accra Central",
+        "travelStyle": ["Luxury", "Mid-range"],
+        "description": "A well-regarded 4-star hotel known for its excellent service and facilities.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-luxury-la-palm",
+        "name": "La Palm Royal Beach Hotel",
+        "region": "Greater Accra",
+        "location": "La, Accra",
+        "travelStyle": ["Luxury", "Mid-range"],
+        "description": "A 4-star hotel offering a resort-style experience with pools and beach access.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-luxury-novotel",
+        "name": "Novotel, Accra",
+        "region": "Greater Accra",
+        "location": "Accra Central",
+        "travelStyle": ["Luxury", "Mid-range"],
+        "description": "A 4-star business hotel with reliable service and a central location.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-midrange-m-plaza",
+        "name": "M-Plaza Hotel",
+        "region": "Greater Accra",
+        "location": "Roman Ridge",
+        "travelStyle": ["Mid-range"],
+        "description": "A 3-star hotel offering comfortable accommodations in a serene environment.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-midrange-alisa-labone",
+        "name": "Alisa Hotel",
+        "region": "Greater Accra",
+        "location": "Labone",
+        "travelStyle": ["Mid-range"],
+        "description": "A popular 3-star hotel with good amenities and a convenient location.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-midrange-alisa-ridge",
+        "name": "Alisa Hotel",
+        "region": "Greater Accra",
+        "location": "Ridge",
+        "travelStyle": ["Mid-range"],
+        "description": "A sister hotel to the Labone branch, known for its consistent quality.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-midrange-cresta-royale",
+        "name": "Cresta Royale Hotel",
+        "region": "Greater Accra",
+        "location": "North Dzorwulu",
+        "travelStyle": ["Mid-range"],
+        "description": "A 3-star hotel offering a blend of comfort and Ghanaian hospitality.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-midrange-crown-apartamento",
+        "name": "Crown Apartamento",
+        "region": "Greater Accra",
+        "location": "Airport Res.",
+        "travelStyle": ["Mid-range"],
+        "description": "Apartment-style hotel providing more space and flexibility for travelers.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-midrange-dutchotel",
+        "name": "Dutchotel Nsiona",
+        "region": "Greater Accra",
+        "location": "Nungua",
+        "travelStyle": ["Mid-range"],
+        "description": "A cozy 3-star hotel with a unique Dutch-Ghanaian charm.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-midrange-shangri-la",
+        "name": "Hotel Shangri-La",
+        "region": "Greater Accra",
+        "location": "Airport Res.",
+        "travelStyle": ["Mid-range"],
+        "description": "A well-established 3-star hotel near the airport, popular with business and leisure travelers.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-midrange-westgate",
+        "name": "Hotel Westgate",
+        "region": "Greater Accra",
+        "location": "Tema Comm. 6",
+        "travelStyle": ["Mid-range"],
+        "description": "A reliable 3-star option for those staying in the Tema area.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-midrange-manet-paradise",
+        "name": "Manet Paradise",
+        "region": "Greater Accra",
+        "location": "Ada-Foah",
+        "travelStyle": ["Mid-range"],
+        "description": "A serene 3-star resort in Ada, perfect for relaxation and water activities.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-midrange-mariset-plaza",
+        "name": "Mariset Plaza Hotel",
+        "region": "Greater Accra",
+        "location": "Osu",
+        "travelStyle": ["Mid-range"],
+        "description": "Located in the vibrant Osu area, this 3-star hotel is close to nightlife and shopping.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-midrange-miklin",
+        "name": "Miklin Hotel",
+        "region": "Greater Accra",
+        "location": "East Legon",
+        "travelStyle": ["Mid-range"],
+        "description": "A 3-star hotel in a prime residential area, known for its conference facilities.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-midrange-new-coco-beach",
+        "name": "New Coco Beach",
+        "region": "Greater Accra",
+        "location": "Nungua",
+        "travelStyle": ["Mid-range"],
+        "description": "A 3-star beachfront resort offering a relaxing atmosphere away from the city center.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-midrange-nogahil",
+        "name": "Nogahil Hotel",
+        "region": "Greater Accra",
+        "location": "North Dzorwulu",
+        "travelStyle": ["Mid-range"],
+        "description": "A comfortable 3-star hotel providing good value and service.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-midrange-royal-ravico",
+        "name": "Royal Ravico Hotel",
+        "region": "Greater Accra",
+        "location": "Nungua",
+        "travelStyle": ["Mid-range"],
+        "description": "A 3-star hotel offering a range of amenities for a comfortable stay.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-budget-airport-view",
+        "name": "Airport View Hotel",
+        "region": "Greater Accra",
+        "location": "Airport Res.",
+        "travelStyle": ["Budget", "Mid-range"],
+        "description": "A 2-star hotel offering convenience and value close to the airport.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-budget-airside",
+        "name": "Airside Hotel",
+        "region": "Greater Accra",
+        "location": "Airport Res.",
+        "travelStyle": ["Budget"],
+        "description": "A budget-friendly 2-star hotel, ideal for short stays and layovers.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-budget-ange-hill",
+        "name": "Ange Hill Hotel",
+        "region": "Greater Accra",
+        "location": "East Legon",
+        "travelStyle": ["Budget", "Mid-range"],
+        "description": "A 2-star hotel offering a mix of affordability and comfort in East Legon.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-budget-apugu-guest-house",
+        "name": "Apugu Guest House",
+        "region": "Greater Accra",
+        "location": "Mandela",
+        "travelStyle": ["Budget"],
+        "description": "A simple 2-star guesthouse providing basic, affordable lodging.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-budget-bay-view",
+        "name": "Bay View Hotel",
+        "region": "Greater Accra",
+        "location": "East Legon",
+        "travelStyle": ["Budget"],
+        "description": "A 2-star hotel offering good value in a popular residential area.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-budget-blue-royal",
+        "name": "Blue Royal Hotel",
+        "region": "Greater Accra",
+        "location": "Osu",
+        "travelStyle": ["Budget"],
+        "description": "A 2-star budget hotel situated in the lively Osu neighborhood.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-budget-capital-court",
+        "name": "Capital Court Hotel",
+        "region": "Greater Accra",
+        "location": "Tesano",
+        "travelStyle": ["Budget"],
+        "description": "An affordable 2-star hotel located in the Tesano area.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-budget-central",
+        "name": "Central Hotel",
+        "region": "Greater Accra",
+        "location": "Ringway Estate",
+        "travelStyle": ["Budget"],
+        "description": "A 2-star hotel offering a central location at a budget-friendly price.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-budget-coconut-grove-regency",
+        "name": "Coconut Grove Regency",
+        "region": "Greater Accra",
+        "location": "Kanda",
+        "travelStyle": ["Budget", "Mid-range"],
+        "description": "Part of a well-known Ghanaian chain, this 2-star hotel offers reliable service.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-budget-charlys",
+        "name": "Charlys Hotel",
+        "region": "Greater Accra",
+        "location": "North Legon",
+        "travelStyle": ["Budget"],
+        "description": "A 2-star hotel providing simple and affordable accommodation.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-budget-continental-plaza",
+        "name": "Continental Plaza",
+        "region": "Greater Accra",
+        "location": "Dzorwulu",
+        "travelStyle": ["Budget"],
+        "description": "A 2-star budget lodging option in the Dzorwulu area.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-budget-court-gardens",
+        "name": "Court Gardens",
+        "region": "Greater Accra",
+        "location": "Airport Res.",
+        "travelStyle": ["Budget"],
+        "description": "A 2-star guesthouse offering value and convenience near the airport.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-budget-courtesy-int",
+        "name": "Courtesy Int. Hotel",
+        "region": "Greater Accra",
+        "location": "Tema Comm. 10",
+        "travelStyle": ["Budget"],
+        "description": "An affordable 2-star hotel option for visitors to Tema.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-budget-crystal-palm",
+        "name": "Crystal Palm Hotel",
+        "region": "Greater Accra",
+        "location": "Tesano",
+        "travelStyle": ["Budget"],
+        "description": "A 2-star hotel providing basic comfort and affordability in Tesano.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-budget-darold",
+        "name": "Darold Hotel",
+        "region": "Greater Accra",
+        "location": "New Achimota",
+        "travelStyle": ["Budget"],
+        "description": "A 2-star hotel serving the New Achimota area with budget-friendly rooms.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
         "id": "accra-budget-somewhere-nice",
         "name": "Somewhere Nice",
         "region": "Greater Accra",
@@ -16,78 +313,6 @@
         "location": "Accra",
         "travelStyle": ["Budget"],
         "description": "A basic but friendly guesthouse known for its central location and very fast Wi-Fi, ideal for budget-conscious travelers.",
-        "image": "https://placehold.co/600x400.png"
-    },
-    {
-        "id": "accra-midrange-afia-beach",
-        "name": "Afia Beach Hotel",
-        "region": "Greater Accra",
-        "location": "Accra",
-        "travelStyle": ["Mid-range"],
-        "description": "A comfortable mid-range hotel with a private beach area, offering a quiet escape within the city.",
-        "image": "https://placehold.co/600x400.png"
-    },
-    {
-        "id": "accra-luxury-kempinski",
-        "name": "Kempinski Hotel Gold Coast City",
-        "region": "Greater Accra",
-        "location": "Accra",
-        "travelStyle": ["Luxury"],
-        "description": "A premier 5-star hotel offering world-class amenities, luxurious rooms, and exceptional service in the heart of Accra.",
-        "image": "https://placehold.co/600x400.png"
-    },
-    {
-        "id": "central-budget-oasis-beach",
-        "name": "Oasis Beach Resort",
-        "region": "Central",
-        "location": "Cape Coast",
-        "travelStyle": ["Budget"],
-        "description": "A popular beachfront resort in Cape Coast with a lively atmosphere, offering simple rooms and a great place to meet other travelers.",
-        "image": "https://placehold.co/600x400.png"
-    },
-    {
-        "id": "central-midrange-ridge-royal",
-        "name": "Ridge Royal Hotel",
-        "region": "Central",
-        "location": "Cape Coast",
-        "travelStyle": ["Mid-range", "Luxury"],
-        "description": "A modern and upscale hotel in Cape Coast, providing comfortable rooms, a pool, and professional service.",
-        "image": "https://placehold.co/600x400.png"
-    },
-    {
-        "id": "ashanti-budget-tumi-hostel",
-        "name": "Tumi Hostel",
-        "region": "Ashanti",
-        "location": "Kumasi",
-        "travelStyle": ["Budget"],
-        "description": "A well-known budget-friendly hostel in Kumasi, offering a clean and safe base for exploring the Ashanti region.",
-        "image": "https://placehold.co/600x400.png"
-    },
-    {
-        "id": "northern-luxury-zaina-lodge",
-        "name": "Zaina Lodge",
-        "region": "Northern",
-        "location": "Mole National Park",
-        "travelStyle": ["Luxury"],
-        "description": "West Africa's first luxury safari lodge, offering stunning views, private infinity pools, and unparalleled access to Mole National Park.",
-        "image": "https://placehold.co/600x400.png"
-    },
-    {
-        "id": "northern-midrange-mole-motel",
-        "name": "Mole Motel",
-        "region": "Northern",
-        "location": "Mole National Park",
-        "travelStyle": ["Mid-range"],
-        "description": "The classic place to stay within Mole National Park, offering basic but convenient rooms and a famous viewpoint overlooking the watering hole.",
-        "image": "https://placehold.co/600x400.png"
-    },
-    {
-        "id": "volta-midrange-tagbo-falls-lodge",
-        "name": "Tagbo Falls Lodge",
-        "region": "Volta",
-        "location": "Liati Wote",
-        "travelStyle": ["Mid-range", "Budget"],
-        "description": "A lovely, community-focused lodge nestled in the serene environment of the Volta Region, known for its beautiful gardens and proximity to hiking trails.",
         "image": "https://placehold.co/600x400.png"
     }
 ]
