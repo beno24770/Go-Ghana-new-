@@ -14,6 +14,7 @@ import { getEntertainmentEvents } from '@/ai/tools/get-entertainment-events';
 import addDays from 'date-fns/addDays';
 import format from 'date-fns/format';
 import { z } from 'zod';
+import { getAccommodations } from '../tools/get-accommodations';
 
 export async function chatWithItinerary(input: ChatWithItineraryInput): Promise<ChatWithItineraryOutput> {
     const endDate = addDays(new Date(input.startDate), input.duration - 1);
@@ -33,7 +34,7 @@ const chatItineraryPrompt = ai.definePrompt({
     name: 'chatItineraryPrompt',
     input: { schema: ChatWithItineraryInputSchema.extend({endDate: z.string(), dayDates: z.array(z.string())}) },
     output: { schema: ChatWithItineraryOutputSchema },
-    tools: [getLocalPulse, getEntertainmentEvents],
+    tools: [getLocalPulse, getEntertainmentEvents, getAccommodations],
     prompt: `You are a friendly and expert Ghanaian travel assistant and content curator for letvisitghana.com. A user is asking a question or requesting a change to their current travel itinerary.
 
 Your task is to respond conversationally while also regenerating the itinerary based on their request.
@@ -46,16 +47,17 @@ Current Itinerary:
 User's Message: "{{userMessage}}"
 
 Instructions:
-1.  **Analyze the User's Message**: Understand if the user is asking a question (e.g., "How long does it take to get from Accra to Cape Coast?") or requesting a change (e.g., "Can you add a visit to a museum in Accra on Day 2?").
+1.  **Analyze the User's Message**: Understand if the user is asking a question, requesting a change, or asking for recommendations.
+    *   If the user asks for hotel or accommodation recommendations, you **MUST** use the 'getAccommodations' tool to find suitable options based on their travel style and region.
 2.  **Formulate a Conversational Response**: Write a friendly, helpful response that directly addresses the user's message.
-    *   If they ask a question, answer it using your knowledge base.
+    *   If they ask a question, answer it using your knowledge base or tools.
     *   If they request a change, confirm you are making the change.
     *   If the request is not feasible, explain why kindly and suggest an alternative.
-3.  **Update the Itinerary**: Modify the original itinerary to incorporate the user's request.
+3.  **Update the Itinerary (if applicable)**: If the user's request involves a change to the schedule, modify the original itinerary to incorporate the request.
     *   The updated itinerary MUST be logistically sound and geographically plausible. Use the knowledge base below.
     *   As you rebuild the itinerary, use your tools ('getLocalPulse', 'getEntertainmentEvents') to see if any new events are relevant based on the changes.
     *   Maintain all the original formatting rules: specific dates in titles, "Read More" links, and highlighted special events.
-4.  **Return Both Response and Itinerary**: Your final output MUST include both the 'response' text and the full, updated 'itinerary' object.
+4.  **Return Both Response and Itinerary**: Your final output MUST include both the 'response' text and the full, updated 'itinerary' object. If the user only asked a question (e.g., about hotels), you can return the original itinerary unmodified.
 
 Key Information for you to use:
 - Trip Dates: {{startDate}} to {{endDate}}
