@@ -9,7 +9,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useRouter } from 'next/navigation';
 
 
 const EventCard = ({ event }: { event: any }) => (
@@ -56,8 +55,6 @@ const EventCard = ({ event }: { event: any }) => (
 
 
 export default function EventsPage() {
-    const router = useRouter();
-
     return (
         <main className="flex-1">
             <div className="bg-muted py-12 sm:py-20">
@@ -72,9 +69,11 @@ export default function EventsPage() {
             </div>
 
             <div className="container mx-auto max-w-5xl px-4 py-16 sm:py-24">
-                <Button onClick={() => router.back()} variant="outline" className="mb-8">
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back
+                <Button asChild variant="outline" className="mb-8">
+                    <Link href="/">
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Back to Home
+                    </Link>
                 </Button>
 
                 <Tabs defaultValue="festivals" className="w-full">

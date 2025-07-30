@@ -36,7 +36,4 @@ const nextConfig = {
   },
 };
 
-// Only apply PWA wrapper when not using Turbopack, as it's not yet fully compatible.
-const finalConfig = process.env.TURBOPACK ? nextConfig : withPWA(nextConfig);
-
-module.exports = finalConfig;
+module.exports = withPWA(nextConfig);

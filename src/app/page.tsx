@@ -39,7 +39,20 @@ const features = [
     }
 ]
 
-const IconSkeleton = () => <Skeleton className="h-20 w-20 rounded-full" />;
+const IconSkeleton = () => <Skeleton className="h-10 w-10" />;
+const CardSkeleton = () => (
+    <div className="flex h-full flex-col text-left sm:flex-row rounded-lg border bg-card p-6">
+        <div className="flex items-center justify-center sm:p-4">
+            <Skeleton className="h-20 w-20 rounded-full" />
+        </div>
+        <div className="flex-1 p-6 pt-0 sm:pt-6 space-y-2">
+            <Skeleton className="h-6 w-3/4" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+        </div>
+    </div>
+);
+
 
 export default function Home() {
   return (
@@ -71,21 +84,21 @@ export default function Home() {
 
         <div className="mt-12 grid gap-8 md:grid-cols-2">
             {features.map(feature => (
-              <Link href={feature.href} key={feature.title} className="block transition-transform duration-300 hover:scale-105">
-                <Card className="flex h-full flex-col text-left sm:flex-row">
-                    <div className="flex items-center justify-center p-6 sm:p-4">
-                        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 p-4 text-4xl">
-                            <Suspense fallback={<IconSkeleton />}>
-                                <LazyIcon name={feature.icon as any} className="h-10 w-10" />
-                            </Suspense>
-                        </div>
-                    </div>
-                    <div className="flex-1 p-6 pt-0 sm:pt-6">
-                        <CardTitle className="font-headline text-xl">{feature.title}</CardTitle>
-                        <p className="mt-2 text-muted-foreground">{feature.description}</p>
-                    </div>
-                </Card>
-              </Link>
+              <Suspense key={feature.title} fallback={<CardSkeleton />}>
+                <Link href={feature.href} className="block transition-transform duration-300 hover:scale-105">
+                  <Card className="flex h-full flex-col text-left sm:flex-row">
+                      <div className="flex items-center justify-center p-6 sm:p-4">
+                          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 p-4 text-4xl">
+                            <LazyIcon name={feature.icon as any} className="h-10 w-10" />
+                          </div>
+                      </div>
+                      <div className="flex-1 p-6 pt-0 sm:pt-6">
+                          <CardTitle className="font-headline text-xl">{feature.title}</CardTitle>
+                          <p className="mt-2 text-muted-foreground">{feature.description}</p>
+                      </div>
+                  </Card>
+                </Link>
+              </Suspense>
             ))}
         </div>
       </div>

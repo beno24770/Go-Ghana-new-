@@ -6,8 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowLeft, UserPlus } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense } from 'react';
 
 const drivers = [
     {
@@ -60,17 +59,6 @@ const DriverSkeleton = () => (
 )
 
 export default function DriversPage() {
-  const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
-
-  useEffect(() => {
-    // Simulate loading to show skeleton
-    const timer = setTimeout(() => {
-        setIsLoading(false);
-    }, 500); // Adjust delay as needed
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <main className="flex-1">
       <div className="bg-muted py-12 sm:py-20">
@@ -85,23 +73,18 @@ export default function DriversPage() {
       </div>
 
       <div className="container mx-auto max-w-5xl px-4 py-16 sm:py-24">
-        <Button onClick={() => router.back()} variant="outline" className="mb-8">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
+        <Button asChild variant="outline" className="mb-8">
+            <Link href="/">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Home
+            </Link>
         </Button>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            {isLoading ? (
-                <>
-                    <DriverSkeleton />
-                    <DriverSkeleton />
-                    <DriverSkeleton />
-                    <DriverSkeleton />
-                </>
-            ) : (
-                drivers.map(driver => (
-                    <DriverProfileCard key={driver.name} {...driver} />
-                ))
-            )}
+            {drivers.map(driver => (
+                <Suspense key={driver.name} fallback={<DriverSkeleton />}>
+                    <DriverProfileCard {...driver} />
+                </Suspense>
+            ))}
         </div>
 
          <div className="mt-16 rounded-lg bg-primary/5 p-8 text-center">
