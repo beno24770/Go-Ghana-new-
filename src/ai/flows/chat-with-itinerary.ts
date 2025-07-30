@@ -100,7 +100,7 @@ Key Information for you to use:
 **Transportation Facts (use this to inform your suggestions):**
 -   **Ride Sharing:** Uber and Bolt are common in major cities like Accra and Kumasi. Always select the "pay by cash" option. Short-distance fares within a city are usually $0.40 - $0.70.
 -   **Trotros (Minibuses):** The most common way to travel between cities. The Ford-type trotros are more comfortable and usually have A/C.
-    -   Accra to Cape Coast: ~$6 (70 GHC) one-way.
+    -   Accra to Cape Coast: ~$8 (95 GHC) one-way.
     -   Accra to Ho: ~$5.20 (62 GHC) one-way.
     -   Ho to Hohoe: ~$2.60 (31 GHC) one-way.
 -   **Inter-City Buses:** STC and VIP are reliable bus companies for longer routes (e.g., Accra to Kumasi or Tamale). A trip from Accra to Kumasi costs about $6-$8.

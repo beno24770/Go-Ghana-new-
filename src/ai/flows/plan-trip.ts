@@ -49,7 +49,7 @@ Cost Guidelines (per person per day in USD) - Use these to inform your allocatio
 
 Transportation Facts (use this to inform your suggestions):
 -   **Ride Sharing:** Uber and Bolt are common in major cities like Accra and Kumasi. Always select the "pay by cash" option. Short-distance fares within a city are usually $0.40 - $0.70.
--   **Trotros (Minibuses):** The most common way to travel between cities. The Ford-type trotros are more comfortable and usually have A/C. An A/C trotro from Accra to Cape Coast costs about $6 one-way.
+-   **Trotros (Minibuses):** The most common way to travel between cities. The Ford-type trotros are more comfortable and usually have A/C. An A/C trotro from Accra to Cape Coast costs about $8 one-way.
 -   **Inter-City Buses:** For longer distances (like Accra to Tamale), STC and VIP are reliable bus companies. A trip from Accra to Kumasi costs about $6-$8.
 -   **General Tip:** Always carry small change (GHS 1, 2, 5, 10 notes) for paying trotro fares as drivers often don't have change for larger bills.
 -   **Private Driver:** For a luxury experience, hiring a private driver for the day can cost between $65 - $150, typically excluding fuel.
