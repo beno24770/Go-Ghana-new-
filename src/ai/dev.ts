@@ -1,3 +1,5 @@
+'use server';
+
 import { config } from 'dotenv';
 config();
 
@@ -10,6 +12,6 @@ import '@/ai/flows/generate-audio.ts';
 import '@/ai/flows/regenerate-itinerary.ts';
 import '@/ai/tools/get-local-pulse';
 import '@/ai/tools/get-entertainment-events';
-
-
+import '@/ai/tools/get-accommodations';
     
+

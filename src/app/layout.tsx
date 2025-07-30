@@ -49,6 +49,9 @@ export default function RootLayout({
                 <Button asChild variant="ghost">
                     <Link href="/">Home</Link>
                 </Button>
+                 <Button asChild variant="ghost">
+                    <Link href="/events">Events</Link>
+                </Button>
                 <Button asChild variant="ghost">
                     <Link href="/planner">Planner</Link>
                 </Button>
@@ -68,6 +71,9 @@ export default function RootLayout({
                         <nav className="flex flex-col gap-6 pt-12 text-lg font-medium">
                             <SheetClose asChild>
                                 <Link href="/">Home</Link>
+                            </SheetClose>
+                             <SheetClose asChild>
+                                <Link href="/events">Events</Link>
                             </SheetClose>
                             <SheetClose asChild>
                                 <Link href="/planner">Planner</Link>
