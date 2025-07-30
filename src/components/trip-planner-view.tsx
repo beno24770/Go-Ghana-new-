@@ -35,6 +35,7 @@ const parseDateSafe = (dateString: string | undefined): Date | undefined => {
         if (isNaN(date.getTime())) {
             return undefined;
         }
+        // Adjust for timezone offset to prevent hydration errors
         return add(date, { minutes: date.getTimezoneOffset() });
     } catch (error) {
         console.warn("Invalid date string provided:", dateString);
@@ -373,3 +374,5 @@ export default function TripPlannerView() {
       </main>
   );
 }
+
+    
