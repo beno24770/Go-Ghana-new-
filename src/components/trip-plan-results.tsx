@@ -46,6 +46,9 @@ import { Label } from './ui/label';
 import { ItineraryLoader } from './itinerary-loader';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 
 
 type TripPlanData = {
@@ -79,28 +82,20 @@ const downloadFormSchema = z.object({
     name: z.string().min(2, { message: "Name must be at least 2 characters." }),
     email: z.string().email({ message: "Please enter a valid email address." }),
 });
+type DownloadFormValues = z.infer<typeof downloadFormSchema>;
 
 
 function DownloadDialog({ onDownload, onOpenChange }: { onDownload: () => Promise<void>; onOpenChange: (open: boolean) => void }) {
-    const [formData, setFormData] = useState({ name: '', email: '' });
-    const [errors, setErrors] = useState<{ name?: string; email?: string }>({});
     const [isDownloading, setIsDownloading] = useState(false);
     const { toast } = useToast();
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const result = downloadFormSchema.safeParse(formData);
-        if (!result.success) {
-            const formattedErrors: { name?: string; email?: string } = {};
-            result.error.errors.forEach(err => {
-                if (err.path[0] === 'name') formattedErrors.name = err.message;
-                if (err.path[0] === 'email') formattedErrors.email = err.message;
-            });
-            setErrors(formattedErrors);
-            return;
-        }
-        
-        console.log("Lead captured:", { name: formData.name, email: formData.email });
+    const form = useForm<DownloadFormValues>({
+        resolver: zodResolver(downloadFormSchema),
+        defaultValues: { name: '', email: '' },
+    });
+
+    const onSubmit = async (values: DownloadFormValues) => {
+        console.log("Lead captured:", values);
         setIsDownloading(true);
         toast({ title: "Generating PDF...", description: "Your itinerary is being prepared for download." });
 
@@ -110,14 +105,6 @@ function DownloadDialog({ onDownload, onOpenChange }: { onDownload: () => Promis
         onOpenChange(false);
     };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { id, value } = e.target;
-        setFormData(prev => ({ ...prev, [id]: value }));
-        if (errors[id as keyof typeof errors]) {
-            setErrors(prev => ({ ...prev, [id]: undefined }));
-        }
-    }
-
     return (
         <DialogContent>
             <DialogHeader>
@@ -126,30 +113,48 @@ function DownloadDialog({ onDownload, onOpenChange }: { onDownload: () => Promis
                     Enter your details below to get your personalized itinerary as a PDF.
                 </DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
-                    <Input id="name" value={formData.name} onChange={handleInputChange} disabled={isDownloading} />
-                    {errors.name && <p className="text-sm text-destructive">{errors.name}</p>}
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" value={formData.email} onChange={handleInputChange} disabled={isDownloading} />
-                     {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
-                </div>
-                <DialogFooter>
-                    <Button type="submit" disabled={isDownloading}>
-                        {isDownloading ? (
-                            <>
-                                <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                                Downloading...
-                            </>
-                        ) : (
-                            'Download Now'
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Name</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Your name" {...field} disabled={isDownloading} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
                         )}
-                    </Button>
-                </DialogFooter>
-            </form>
+                    />
+                    <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Email</FormLabel>
+                                <FormControl>
+                                    <Input type="email" placeholder="your@email.com" {...field} disabled={isDownloading} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <DialogFooter>
+                        <Button type="submit" disabled={isDownloading}>
+                            {isDownloading ? (
+                                <>
+                                    <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                                    Downloading...
+                                </>
+                            ) : (
+                                'Download Now'
+                            )}
+                        </Button>
+                    </DialogFooter>
+                </form>
+            </Form>
         </DialogContent>
     );
 }
@@ -201,7 +206,6 @@ const ItineraryContent = ({
             let heightLeft = canvasHeight;
             let position = 0;
             
-            // Use the raw canvas data instead of converting to PNG first for better performance
             pdf.addImage(canvas, 'PNG', 0, position, pdfWidth, pdfHeight);
             heightLeft -= pdf.internal.pageSize.getHeight() * (canvasWidth / pdfWidth);
 

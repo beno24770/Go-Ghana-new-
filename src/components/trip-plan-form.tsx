@@ -175,13 +175,11 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                                 checked={field.value?.includes(region)}
                                 onCheckedChange={(checked) => {
                                   const currentValue = field.value || [];
-                                  return checked
-                                    ? field.onChange([...currentValue, region])
-                                    : field.onChange(
-                                        currentValue?.filter(
-                                          (value) => value !== region
-                                        )
-                                      )
+                                  if (checked) {
+                                    field.onChange([...currentValue, region]);
+                                  } else {
+                                    field.onChange(currentValue.filter((value) => value !== region));
+                                  }
                                 }}
                               />
                             </FormControl>
@@ -225,13 +223,13 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                                 checked={field.value?.includes(interest.id)}
                                 onCheckedChange={(checked) => {
                                   const currentValue = field.value || [];
-                                  return checked
-                                    ? field.onChange([...currentValue, interest.id])
-                                    : field.onChange(
-                                        currentValue?.filter(
-                                          (value) => value !== interest.id
-                                        )
-                                      )
+                                  if (checked) {
+                                    field.onChange([...currentValue, interest.id]);
+                                  } else {
+                                    field.onChange(
+                                      currentValue.filter((value) => value !== interest.id)
+                                    );
+                                  }
                                 }}
                               />
                             </FormControl>
