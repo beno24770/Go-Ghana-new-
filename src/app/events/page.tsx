@@ -32,7 +32,7 @@ const EventCard = ({ event }: { event: any }) => (
                 {event.startDate && (
                      <div className="flex items-center gap-2">
                         <Calendar className="h-4 w-4 text-primary shrink-0" />
-                        <span>{new Date(event.startDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} - {new Date(event.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                        <span>{new Date(event.startDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' })} - {new Date(event.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}</span>
                     </div>
                 )}
                 {event.typicalDays && (
