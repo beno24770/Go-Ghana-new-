@@ -41,7 +41,7 @@ Budget:
   - Activities: $10-25
 
 Mid-range:
-  - Accommodation: $70-150
+  - Accommodation: $150-500
   - Food: $20-60
   - Transportation: $20-60 (mix of trotros and ride-sharing apps like Uber/Bolt)
   - Activities: $25-50
