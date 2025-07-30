@@ -30,13 +30,16 @@ type TripPlanData = {
 
 const parseDateSafe = (dateString: string | undefined): Date | undefined => {
     if (!dateString) return undefined;
-    const date = toDate(dateString);
-    // Check if the date is valid
-    if (isNaN(date.getTime())) {
+    try {
+        const date = toDate(dateString);
+        if (isNaN(date.getTime())) {
+            return undefined;
+        }
+        return add(date, { minutes: date.getTimezoneOffset() });
+    } catch (error) {
+        console.warn("Invalid date string provided:", dateString);
         return undefined;
     }
-    // Adjust for timezone offset to prevent off-by-one day errors
-    return add(date, { minutes: date.getTimezoneOffset() });
 };
 
 
