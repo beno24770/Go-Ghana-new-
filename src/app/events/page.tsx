@@ -13,7 +13,7 @@ import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const EventCard = dynamic(() => import('@/components/event-card').then(mod => mod.EventCard), {
+const EventCard = dynamic(() => import('@/components/event-card'), {
     suspense: true,
 });
 
