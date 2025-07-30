@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { PT_Sans, Playfair_Display } from 'next/font/google';
 import './globals.css';
@@ -22,7 +23,7 @@ const playfairDisplay = Playfair_Display({
 
 export const metadata: Metadata = {
   title: 'GoGhana Planner',
-  description: 'Your AI-powered guide to planning the perfect trip to Ghana. Estimate budgets, generate itineraries, and get personalized packing lists and language guides.',
+  description: 'Your trusted guide to Ghana, powered by local expertise. Get realistic budgets, authentic itineraries, and travel tips from a real Ghanaian perspective.',
   manifest: '/manifest.json',
   icons: {
     icon: '/favicon.svg',
