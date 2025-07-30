@@ -4,7 +4,7 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import entertainmentData from '@/data/entertainment-events.json';
-import { getDay } from 'date-fns';
+import { getDay, parseISO } from 'date-fns';
 
 const EntertainmentEventsInputSchema = z.object({
   regions: z.array(z.string()).describe('The regions the user will be visiting.'),
@@ -41,16 +41,20 @@ export const getEntertainmentEvents = ai.defineTool(
   },
   async (input) => {
     const { regions, startDate, endDate } = input;
-    const userStartDate = new Date(startDate);
-    const userEndDate = new Date(endDate);
+    const userStartDate = parseISO(startDate);
+    const userEndDate = parseISO(endDate);
 
     const dayMap = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     
     const tripDays = new Set<string>();
     let currentDate = new Date(userStartDate);
-    while (currentDate <= userEndDate) {
+    
+    // Ensure we don't get stuck in an infinite loop if dates are invalid
+    let i = 0;
+    while (currentDate <= userEndDate && i < 365) {
         tripDays.add(dayMap[getDay(currentDate)]);
         currentDate.setDate(currentDate.getDate() + 1);
+        i++;
     }
 
     const relevantEvents = entertainmentData.filter(event => {
