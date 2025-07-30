@@ -368,14 +368,10 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
     
     useEffect(() => {
         if (open) {
-            if (initialTool) {
-                setActiveTab(initialTool);
-            } else {
-                 setActiveTab('itinerary');
-            }
-             setItinerary(null);
-             setChatHistory([]);
-             handleGenerateItinerary();
+            setActiveTab(initialTool || 'itinerary');
+            setItinerary(null);
+            setChatHistory([]);
+            handleGenerateItinerary();
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open, initialTool]);
@@ -443,7 +439,9 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
 
         if (result.success) {
             setChatHistory(prev => [...prev, {role: 'model', content: result.data.response}]);
-            setItinerary({ itinerary: result.data.itinerary });
+            if (result.data.itinerary) {
+                setItinerary({ itinerary: result.data.itinerary });
+            }
         } else {
             toast({ variant: 'destructive', title: 'Error', description: result.error });
             setChatHistory(prev => prev.slice(0, -1)); // Remove user message on error
@@ -613,6 +611,7 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
                                                 <div className="flex items-center justify-between">
                                                     <div>
                                                         <p className="text-sm text-muted-foreground">{phrase.english}</p>
+
                                                         <p className="font-bold text-lg">{phrase.translation}</p>
                                                     </div>
                                                     <Button 
@@ -771,3 +770,4 @@ export default function TripPlanResults({ data, isLoading, initialTool, onBack, 
     </Card>
   );
 }
+
