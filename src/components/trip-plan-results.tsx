@@ -280,7 +280,7 @@ const ItineraryContent = ({
         <div className="flex flex-col h-full">
             <div ref={itineraryRef} className="flex-grow overflow-y-auto pr-4 -mr-4">
                 <Accordion type="single" collapsible className="w-full" defaultValue="day-1">
-                    {itinerary.itinerary && itinerary.itinerary.map((dayPlan) => (
+                    {itinerary && itinerary.itinerary && itinerary.itinerary.map((dayPlan) => (
                         <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
                             <AccordionTrigger className="font-bold hover:no-underline text-left">{dayPlan.title}</AccordionTrigger>
                             <AccordionContent>
@@ -771,5 +771,3 @@ export default function TripPlanResults({ data, isLoading, initialTool, onBack, 
     </Card>
   );
 }
-
-    
