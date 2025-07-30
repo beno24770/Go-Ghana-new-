@@ -172,7 +172,7 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                           <FormItem className="flex flex-row items-center space-x-3 space-y-0">
                             <FormControl>
                               <Checkbox
-                                checked={(field.value || []).includes(region)}
+                                checked={field.value?.includes(region)}
                                 onCheckedChange={(checked) => {
                                   const currentValue = field.value || [];
                                   return checked
@@ -222,7 +222,7 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                           >
                             <FormControl>
                               <Checkbox
-                                checked={(field.value || []).includes(interest.id)}
+                                checked={field.value?.includes(interest.id)}
                                 onCheckedChange={(checked) => {
                                   const currentValue = field.value || [];
                                   return checked
