@@ -24,6 +24,7 @@ import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Calendar } from './ui/calendar';
 import { cn } from '@/lib/utils';
 import format from 'date-fns/format';
+import add from 'date-fns/add';
 import toDate from 'date-fns/toDate';
 
 const ghanaRegions = [
@@ -52,6 +53,12 @@ interface TripPlanFormProps {
   isSubmitting: boolean;
   defaultValues?: Partial<PlanTripInput>;
 }
+
+const parseDateWithOffset = (dateString: string) => {
+    const date = toDate(dateString);
+    return add(date, { minutes: date.getTimezoneOffset() });
+};
+
 
 export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: TripPlanFormProps) {
   const form = useForm<PlanTripInput>({
@@ -130,7 +137,7 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                             )}
                             >
                             {field.value ? (
-                                format(toDate(field.value), "PPP")
+                                format(parseDateWithOffset(field.value), "PPP")
                             ) : (
                                 <span>Pick a date</span>
                             )}

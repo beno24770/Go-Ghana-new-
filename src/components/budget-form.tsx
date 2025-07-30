@@ -24,6 +24,7 @@ import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Calendar } from './ui/calendar';
 import { cn } from '@/lib/utils';
 import format from 'date-fns/format';
+import add from 'date-fns/add';
 import toDate from 'date-fns/toDate';
 
 const ghanaRegions = [
@@ -43,6 +44,12 @@ interface BudgetFormProps {
   isSubmitting: boolean;
   defaultValues?: Partial<EstimateBudgetInput>;
 }
+
+const parseDateWithOffset = (dateString: string) => {
+    const date = toDate(dateString);
+    return add(date, { minutes: date.getTimezoneOffset() });
+};
+
 
 export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: BudgetFormProps) {
   const form = useForm<EstimateBudgetInput>({
@@ -105,7 +112,7 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
                         )}
                         >
                         {field.value ? (
-                            format(toDate(field.value), "PPP")
+                            format(parseDateWithOffset(field.value), "PPP")
                         ) : (
                             <span>Pick a date</span>
                         )}
