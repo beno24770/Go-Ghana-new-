@@ -1,11 +1,11 @@
 
 'use client';
 
-import { lazy, Suspense } from 'react';
 import type { LucideProps } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import { ComponentType, Suspense } from 'react';
 
-const fallback = <div style={{ background: '#ddd', width: 24, height: 24 }}/>
+const fallback = <div style={{ background: '#ddd', width: 24, height: 24, borderRadius: '50%' }}/>
 
 type IconName = 'Calculator' | 'Map' | 'Car' | 'Languages';
 
@@ -13,11 +13,11 @@ interface LazyIconProps extends LucideProps {
   name: IconName;
 }
 
-const iconComponents = {
-  Calculator: lazy(() => import('lucide-react').then(module => ({ default: module.Calculator }))),
-  Map: lazy(() => import('lucide-react').then(module => ({ default: module.Map }))),
-  Car: lazy(() => import('lucide-react').then(module => ({ default: module.Car }))),
-  Languages: lazy(() => import('lucide-react').then(module => ({ default: module.Languages }))),
+const iconComponents: { [key in IconName]: ComponentType<LucideProps> } = {
+  Calculator: dynamic(() => import('lucide-react').then(module => module.Calculator), { ssr: false }),
+  Map: dynamic(() => import('lucide-react').then(module => module.Map), { ssr: false }),
+  Car: dynamic(() => import('lucide-react').then(module => module.Car), { ssr: false }),
+  Languages: dynamic(() => import('lucide-react').then(module => module.Languages), { ssr: false }),
 };
 
 export function LazyIcon({ name, ...props }: LazyIconProps) {
