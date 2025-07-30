@@ -35,7 +35,7 @@ const ghanaRegions = [
 
 const travelStyles: { name: EstimateBudgetInput['travelStyle'], description: string }[] = [
     { name: 'Budget', description: '(approx. $60-140/day)' },
-    { name: 'Mid-range', description: '(approx. $150-320/day)' },
+    { name: 'Mid-range', description: '(approx. $150-500/day)' },
     { name: 'Luxury', description: '(approx. $400+/day)' },
 ];
 
@@ -155,13 +155,16 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
                               <Checkbox
                                 checked={field.value?.includes(region)}
                                 onCheckedChange={(checked) => {
-                                  return checked
-                                    ? field.onChange([...(field.value || []), region])
-                                    : field.onChange(
-                                        field.value?.filter(
-                                          (value) => value !== region
-                                        )
+                                  const currentValue = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...currentValue, region]);
+                                  } else {
+                                    field.onChange(
+                                      currentValue.filter(
+                                        (value) => value !== region
                                       )
+                                    );
+                                  }
                                 }}
                               />
                             </FormControl>

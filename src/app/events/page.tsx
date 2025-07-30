@@ -9,48 +9,33 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Suspense } from "react";
+import dynamic from "next/dynamic";
+import { Skeleton } from "@/components/ui/skeleton";
 
+const EventCard = dynamic(() => import('@/components/event-card').then(mod => mod.EventCard), {
+    suspense: true,
+});
 
-const EventCard = ({ event }: { event: any }) => (
-    <Card className="flex flex-col">
-        <CardHeader>
-            <CardTitle className="font-headline text-2xl">{event.title}</CardTitle>
-             <div className="flex flex-wrap gap-2 pt-2">
-                {event.category.map((cat: string) => (
-                    <Badge key={cat} variant="secondary">{cat}</Badge>
-                ))}
-            </div>
-        </CardHeader>
-        <CardContent className="flex flex-col flex-grow justify-between">
-            <p className="text-muted-foreground">{event.description}</p>
-            <div className="space-y-3 pt-6 text-sm">
-                <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-primary shrink-0" />
-                    <span>{event.location}{event.venue ? `, ${event.venue}` : ''}</span>
-                </div>
-                {event.startDate && (
-                     <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-primary shrink-0" />
-                        <span>{new Date(event.startDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' })} - {new Date(event.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}</span>
-                    </div>
-                )}
-                {event.typicalDays && (
-                     <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-primary shrink-0" />
-                        <span>{event.typicalDays.join(', ')}</span>
-                    </div>
-                )}
-                <div className="flex items-center gap-2">
-                    <Ticket className="h-4 w-4 text-primary shrink-0" />
-                    <span>{event.cost}</span>
-                </div>
-                 <div className="flex items-center gap-2">
-                    <Tag className="h-4 w-4 text-primary shrink-0" />
-                    <span className="italic">{event.insiderTip}</span>
-                </div>
-            </div>
-        </CardContent>
-    </Card>
+const EventSkeleton = () => (
+    <div className="flex flex-col space-y-3 rounded-lg border bg-card p-6 h-[420px]">
+        <Skeleton className="h-7 w-3/4 rounded" />
+        <div className="flex flex-wrap gap-2 pt-2">
+            <Skeleton className="h-5 w-20 rounded-full" />
+            <Skeleton className="h-5 w-24 rounded-full" />
+        </div>
+         <div className="space-y-2 pt-4 flex-grow">
+            <Skeleton className="h-4 w-full rounded" />
+            <Skeleton className="h-4 w-full rounded" />
+            <Skeleton className="h-4 w-5/6 rounded" />
+        </div>
+        <div className="space-y-3 pt-6">
+            <Skeleton className="h-5 w-full rounded" />
+            <Skeleton className="h-5 w-1/2 rounded" />
+            <Skeleton className="h-5 w-3/4 rounded" />
+            <Skeleton className="h-5 w-full rounded" />
+        </div>
+    </div>
 );
 
 
@@ -84,14 +69,18 @@ export default function EventsPage() {
                     <TabsContent value="festivals">
                          <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                             {localPulseData.map(event => (
-                                <EventCard key={event.id} event={event} />
+                                <Suspense key={event.id} fallback={<EventSkeleton />}>
+                                    <EventCard event={event} />
+                                </Suspense>
                             ))}
                         </div>
                     </TabsContent>
                     <TabsContent value="entertainment">
                         <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                             {entertainmentData.map(event => (
-                                <EventCard key={event.id} event={event} />
+                                <Suspense key={event.id} fallback={<EventSkeleton />}>
+                                    <EventCard event={event} />
+                                </Suspense>
                             ))}
                         </div>
                     </TabsContent>

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { LazyIcon } from "@/components/lazy-icon";
 import { Skeleton } from "@/components/ui/skeleton";
+import dynamic from "next/dynamic";
 
 const features = [
     {
@@ -37,12 +38,15 @@ const features = [
         href: "/planner?tab=plan",
         "data-ai-hint": "language translation"
     }
-]
+];
 
-const IconSkeleton = () => <Skeleton className="h-10 w-10" />;
+const FeatureCard = dynamic(() => import('@/components/feature-card'), {
+    suspense: true,
+});
+
 const CardSkeleton = () => (
     <div className="flex h-full flex-col text-left sm:flex-row rounded-lg border bg-card p-6">
-        <div className="flex items-center justify-center sm:p-4">
+        <div className="flex items-center justify-center p-6 sm:p-4">
             <Skeleton className="h-20 w-20 rounded-full" />
         </div>
         <div className="flex-1 p-6 pt-0 sm:pt-6 space-y-2">
@@ -85,19 +89,7 @@ export default function Home() {
         <div className="mt-12 grid gap-8 md:grid-cols-2">
             {features.map(feature => (
               <Suspense key={feature.title} fallback={<CardSkeleton />}>
-                <Link href={feature.href} className="block transition-transform duration-300 hover:scale-105">
-                  <Card className="flex h-full flex-col text-left sm:flex-row">
-                      <div className="flex items-center justify-center p-6 sm:p-4">
-                          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 p-4 text-4xl">
-                            <LazyIcon name={feature.icon as any} className="h-10 w-10" />
-                          </div>
-                      </div>
-                      <div className="flex-1 p-6 pt-0 sm:pt-6">
-                          <CardTitle className="font-headline text-xl">{feature.title}</CardTitle>
-                          <p className="mt-2 text-muted-foreground">{feature.description}</p>
-                      </div>
-                  </Card>
-                </Link>
+                <FeatureCard feature={feature} />
               </Suspense>
             ))}
         </div>

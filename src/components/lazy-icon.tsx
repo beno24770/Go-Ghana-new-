@@ -4,8 +4,9 @@
 import type { LucideProps } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { ComponentType, Suspense } from 'react';
+import { Skeleton } from './ui/skeleton';
 
-const fallback = <div style={{ background: '#ddd', width: 24, height: 24, borderRadius: '50%' }}/>
+const fallback = <Skeleton className="h-10 w-10 rounded-full" />
 
 type IconName = 'Calculator' | 'Map' | 'Car' | 'Languages';
 

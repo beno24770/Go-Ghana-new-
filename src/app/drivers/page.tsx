@@ -1,12 +1,16 @@
 
 'use client';
 
-import DriverProfileCard from '@/components/driver-profile-card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowLeft, UserPlus } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
+
+const DriverProfileCard = dynamic(() => import('@/components/driver-profile-card'), {
+    suspense: true,
+});
 
 const drivers = [
     {
