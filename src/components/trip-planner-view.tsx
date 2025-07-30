@@ -14,6 +14,9 @@ import { getBudgetEstimate, getTripPlan } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import add from 'date-fns/add';
 import toDate from 'date-fns/toDate';
+import { Button } from './ui/button';
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 
 type BudgetData = {
   inputs: EstimateBudgetInput;
@@ -303,6 +306,14 @@ export default function TripPlannerView() {
 
   return (
       <main className="container mx-auto max-w-5xl flex-1 px-4 py-8">
+        <div className="mb-8 flex items-center">
+            <Button asChild variant="outline">
+                <Link href="/">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back to Home
+                </Link>
+            </Button>
+        </div>
         <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="estimate">Estimate Budget</TabsTrigger>
