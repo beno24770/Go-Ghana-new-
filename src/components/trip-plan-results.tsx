@@ -149,7 +149,10 @@ function DownloadDialog({ onDownload, onOpenChange }: { onDownload: () => Promis
                                     Downloading...
                                 </>
                             ) : (
-                                'Download Now'
+                                <>
+                                    <Download className="mr-2 h-4 w-4" />
+                                    Download Now
+                                </>
                             )}
                         </Button>
                     </DialogFooter>
@@ -324,7 +327,7 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
     }, [itinerary]);
     
     useEffect(() => {
-        if(open && initialTool) {
+        if (open && initialTool) {
             setActiveTab(initialTool);
         }
     }, [open, initialTool]);
