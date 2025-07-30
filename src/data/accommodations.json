@@ -1,0 +1,93 @@
+
+[
+    {
+        "id": "accra-budget-somewhere-nice",
+        "name": "Somewhere Nice",
+        "region": "Greater Accra",
+        "location": "Accra",
+        "travelStyle": ["Budget"],
+        "description": "A highly-rated hostel known for its vibrant atmosphere and swimming pool, offering both dorms and private rooms.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-budget-feehi",
+        "name": "Feehi's Place",
+        "region": "Greater Accra",
+        "location": "Accra",
+        "travelStyle": ["Budget"],
+        "description": "A basic but friendly guesthouse known for its central location and very fast Wi-Fi, ideal for budget-conscious travelers.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-midrange-afia-beach",
+        "name": "Afia Beach Hotel",
+        "region": "Greater Accra",
+        "location": "Accra",
+        "travelStyle": ["Mid-range"],
+        "description": "A comfortable mid-range hotel with a private beach area, offering a quiet escape within the city.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "accra-luxury-kempinski",
+        "name": "Kempinski Hotel Gold Coast City",
+        "region": "Greater Accra",
+        "location": "Accra",
+        "travelStyle": ["Luxury"],
+        "description": "A premier 5-star hotel offering world-class amenities, luxurious rooms, and exceptional service in the heart of Accra.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "central-budget-oasis-beach",
+        "name": "Oasis Beach Resort",
+        "region": "Central",
+        "location": "Cape Coast",
+        "travelStyle": ["Budget"],
+        "description": "A popular beachfront resort in Cape Coast with a lively atmosphere, offering simple rooms and a great place to meet other travelers.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "central-midrange-ridge-royal",
+        "name": "Ridge Royal Hotel",
+        "region": "Central",
+        "location": "Cape Coast",
+        "travelStyle": ["Mid-range", "Luxury"],
+        "description": "A modern and upscale hotel in Cape Coast, providing comfortable rooms, a pool, and professional service.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "ashanti-budget-tumi-hostel",
+        "name": "Tumi Hostel",
+        "region": "Ashanti",
+        "location": "Kumasi",
+        "travelStyle": ["Budget"],
+        "description": "A well-known budget-friendly hostel in Kumasi, offering a clean and safe base for exploring the Ashanti region.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "northern-luxury-zaina-lodge",
+        "name": "Zaina Lodge",
+        "region": "Northern",
+        "location": "Mole National Park",
+        "travelStyle": ["Luxury"],
+        "description": "West Africa's first luxury safari lodge, offering stunning views, private infinity pools, and unparalleled access to Mole National Park.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "northern-midrange-mole-motel",
+        "name": "Mole Motel",
+        "region": "Northern",
+        "location": "Mole National Park",
+        "travelStyle": ["Mid-range"],
+        "description": "The classic place to stay within Mole National Park, offering basic but convenient rooms and a famous viewpoint overlooking the watering hole.",
+        "image": "https://placehold.co/600x400.png"
+    },
+    {
+        "id": "volta-midrange-tagbo-falls-lodge",
+        "name": "Tagbo Falls Lodge",
+        "region": "Volta",
+        "location": "Liati Wote",
+        "travelStyle": ["Mid-range", "Budget"],
+        "description": "A lovely, community-focused lodge nestled in the serene environment of the Volta Region, known for its beautiful gardens and proximity to hiking trails.",
+        "image": "https://placehold.co/600x400.png"
+    }
+]
