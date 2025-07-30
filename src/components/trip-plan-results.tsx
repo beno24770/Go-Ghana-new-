@@ -14,6 +14,7 @@ import {
   Mail,
   Pencil,
   PlayCircle,
+  Send,
   Share2,
   Ticket,
   Utensils,
@@ -279,11 +280,16 @@ const ItineraryContent = ({
                 </Accordion>
             </div>
             <div className="mt-6 space-y-3 border-t pt-6 text-center bg-muted/20 p-4 rounded-lg -mx-6 -mb-6">
-                <h4 className="font-headline text-lg">Ready for the Next Step?</h4>
+                <h4 className="font-headline text-lg">Chat with your Itinerary</h4>
                 <p className="text-sm text-muted-foreground">
-                    Let local experts help you refine and book your perfect Ghanaian adventure.
+                    Ask questions or request changes to your plan.
                 </p>
-                <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-center">
+                <div className="mt-4 flex gap-2">
+                    <Input placeholder="e.g., 'Add a museum on Day 2'" className="flex-1" />
+                    <Button><Send className="h-4 w-4" /></Button>
+                </div>
+
+                <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-center pt-4">
                      <Button onClick={() => onSetIsEditing(true)} variant="outline">
                         <Pencil className="shrink-0" /> <span className="ml-2">Edit</span>
                     </Button>
