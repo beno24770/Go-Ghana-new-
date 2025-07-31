@@ -20,13 +20,7 @@ import {
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import type { EstimateBudgetInput, EstimateBudgetOutput } from '@/ai/schemas';
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  ChartConfig,
-} from '@/components/ui/chart';
-import { PieChart, Pie, Cell, Tooltip } from 'recharts';
+import { Progress } from './ui/progress';
 
 type BudgetData = {
   inputs: EstimateBudgetInput;
@@ -47,25 +41,6 @@ const categoryIcons = {
 };
 
 type CategoryKey = keyof Omit<EstimateBudgetOutput, 'total'>;
-
-const chartConfig = {
-  accommodation: {
-    label: 'Accommodation',
-    color: 'hsl(var(--chart-1))',
-  },
-  food: {
-    label: 'Food',
-    color: 'hsl(var(--chart-2))',
-  },
-  transportation: {
-    label: 'Transportation',
-    color: 'hsl(var(--chart-3))',
-  },
-  activities: {
-    label: 'Activities',
-    color: 'hsl(var(--chart-4))',
-  },
-} satisfies ChartConfig;
 
 
 export default function BudgetResults({ data, isLoading, onPlanItinerary }: BudgetResultsProps) {
@@ -113,14 +88,6 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
   }
 
   const { inputs, outputs } = data;
-  const chartData = (Object.keys(outputs) as CategoryKey[])
-    .filter(key => key !== 'total' && outputs[key].total > 0)
-    .map(key => ({
-      name: key,
-      value: outputs[key].total,
-      fill: `var(--color-${key})`,
-    }));
-
   const totalPerDay = outputs.total / inputs.duration;
 
   return (
@@ -142,42 +109,29 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
           </p>
         </div>
 
-        <ChartContainer config={chartConfig} className="mx-auto aspect-square h-[250px]">
-          <PieChart>
-            <ChartTooltip content={<ChartTooltipContent nameKey="name" />} />
-            <Pie data={chartData} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5}>
-                {chartData.map((entry) => (
-                    <Cell key={`cell-${entry.name}`} fill={chartConfig[entry.name as keyof typeof chartConfig].color} />
-                ))}
-            </Pie>
-          </PieChart>
-        </ChartContainer>
-        
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {(Object.keys(outputs) as CategoryKey[])
-              .filter(key => key !== 'total')
+        <div className="space-y-4 pt-4">
+             {(Object.keys(outputs) as CategoryKey[])
+              .filter(key => key !== 'total' && outputs[key].total > 0)
               .map(key => (
-              <Card key={key} className="bg-background/50">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    {key.charAt(0).toUpperCase() + key.slice(1)}
-                  </CardTitle>
-                  {categoryIcons[key]}
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">${outputs[key].total.toLocaleString()}</div>
-                  <p className="text-xs text-muted-foreground">${outputs[key].perDay.toLocaleString()} / day</p>
-                </CardContent>
-              </Card>
+                <div key={key} className="space-y-2">
+                    <div className="flex justify-between items-baseline">
+                        <div className="flex items-center gap-2">
+                            {categoryIcons[key]}
+                            <span className="font-medium capitalize">{key}</span>
+                        </div>
+                        <span className="font-semibold text-lg">${outputs[key].total.toLocaleString()}</span>
+                    </div>
+                    <Progress value={(outputs[key].total / outputs.total) * 100} />
+                </div>
             ))}
         </div>
-
-        <div className="space-y-2">
-            <Button onClick={handlePlanClick} className="w-full">
+        
+        <div className="space-y-2 pt-4">
+            <Button onClick={handlePlanClick} className="w-full" size="lg">
               <Wand2 className="mr-2 h-4 w-4" />
               Create a Plan with this Budget
             </Button>
-            <Button onClick={handleShare} variant="outline" className="w-full">
+            <Button onClick={handleShare} variant="outline" className="w-full" size="lg">
               <Share2 className="mr-2 h-4 w-4" />
               Share This Estimate
             </Button>
