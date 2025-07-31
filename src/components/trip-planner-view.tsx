@@ -94,13 +94,14 @@ function TripPlannerViewInternal() {
   const [isPending, startTransition] = useTransition();
   const [initialTool, setInitialTool] = useState<string | null>(null);
   const [cameFromBudget, setCameFromBudget] = useState(false);
+  const [planTriggerData, setPlanTriggerData] = useState<PlanTripInput | null>(null);
 
 
   const searchParams = useSearchParams();
   const router = useRouter();
   const { toast } = useToast();
 
-  const updateUrl = useCallback((tab: string, data: any, options?: { fromBudget?: boolean, generate?: boolean }) => {
+  const updateUrl = useCallback((tab: string, data: any) => {
     startTransition(() => {
         const params = new URLSearchParams();
         params.set('tab', tab);
@@ -122,17 +123,10 @@ function TripPlannerViewInternal() {
             }
         }
 
-        if (options?.fromBudget) {
-            params.set('fromBudget', 'true');
-        }
-        if (options?.generate) {
-            params.set('generate', 'true');
-        }
-
         router.push(`/planner?${params.toString()}`, { scroll: false });
     });
   }, [router]);
-
+  
   const handlePlan = useCallback(async (inputs: PlanTripInput) => {
     setIsLoading(true);
     setTripPlanData(null);
@@ -140,13 +134,19 @@ function TripPlannerViewInternal() {
     if (result.success) {
         const newTripPlanData = { inputs, outputs: result.data };
         setTripPlanData(newTripPlanData);
-        // We remove the `generate` param here so it doesn't run again on refresh
-        updateUrl('plan', newTripPlanData, { fromBudget: cameFromBudget, generate: false });
+        updateUrl('plan', newTripPlanData);
     } else {
         toast({ variant: 'destructive', title: 'Error', description: result.error });
     }
     setIsLoading(false);
-  }, [toast, updateUrl, cameFromBudget]);
+  }, [toast, updateUrl]);
+
+  useEffect(() => {
+    if (planTriggerData) {
+      handlePlan(planTriggerData);
+      setPlanTriggerData(null); 
+    }
+  }, [planTriggerData, handlePlan]);
 
   const parseUrlParams = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString());
@@ -187,39 +187,30 @@ function TripPlannerViewInternal() {
             });
         }
     } else if (tab === 'plan') {
-         if (params.has('fromBudget')) {
-            setCameFromBudget(true);
-        }
-        if (params.has('budget')) {
-            // If we have output data, it means we have a full plan to display
-            if (params.has('outputs.total')) {
-                const parsedPlan = planUrlSchema.safeParse(Object.fromEntries(params));
-                if (parsedPlan.success) {
-                    const { budget, duration, numTravelers, region, travelStyle, interests, startDate, isNewToGhana, fromBudget, ...rest } = parsedPlan.data;
-                    const regionArray = Array.isArray(region) ? region : [region];
-                    const interestsArray = Array.isArray(interests) ? interests : (interests ? [interests] : []);
-                    setTripPlanData({
-                        inputs: { duration, region: regionArray, budget, numTravelers, travelStyle, interests: interestsArray, startDate, isNewToGhana },
-                        outputs: {
-                            suggestedTravelStyle: rest['outputs.suggestedTravelStyle'],
-                            accommodation: { cost: rest['outputs.accommodation.cost'], description: rest['outputs.accommodation.description'] },
-                            food: { cost: rest['outputs.food.cost'], description: rest['outputs.food.description'] },
-                            transportation: { cost: rest['outputs.transportation.cost'], description: rest['outputs.transportation.description'] },
-                            activities: { cost: rest['outputs.activities.cost'], description: rest['outputs.activities.description'] },
-                            total: rest['outputs.total'],
-                        },
-                    });
+         if (params.has('outputs.total')) {
+            const parsedPlan = planUrlSchema.safeParse(Object.fromEntries(params));
+            if (parsedPlan.success) {
+                 if (params.has('fromBudget')) {
+                    setCameFromBudget(true);
                 }
-            } else if (params.get('generate') === 'true') { // Otherwise, if we have a generate flag, run the plan
-                const parsedInputs = PlanTripBaseSchema.safeParse(data);
-                 if (parsedInputs.success) {
-                    // @ts-ignore
-                    handlePlan(parsedInputs.data);
-                }
+                const { budget, duration, numTravelers, region, travelStyle, interests, startDate, isNewToGhana, fromBudget, ...rest } = parsedPlan.data;
+                const regionArray = Array.isArray(region) ? region : [region];
+                const interestsArray = Array.isArray(interests) ? interests : (interests ? [interests] : []);
+                setTripPlanData({
+                    inputs: { duration, region: regionArray, budget, numTravelers, travelStyle, interests: interestsArray, startDate, isNewToGhana },
+                    outputs: {
+                        suggestedTravelStyle: rest['outputs.suggestedTravelStyle'],
+                        accommodation: { cost: rest['outputs.accommodation.cost'], description: rest['outputs.accommodation.description'] },
+                        food: { cost: rest['outputs.food.cost'], description: rest['outputs.food.description'] },
+                        transportation: { cost: rest['outputs.transportation.cost'], description: rest['outputs.transportation.description'] },
+                        activities: { cost: rest['outputs.activities.cost'], description: rest['outputs.activities.description'] },
+                        total: rest['outputs.total'],
+                    },
+                });
             }
         }
     }
-  }, [searchParams, handlePlan]);
+  }, [searchParams]);
 
   useEffect(() => {
     parseUrlParams();
@@ -251,9 +242,10 @@ function TripPlannerViewInternal() {
         isNewToGhana: budgetInputs.isNewToGhana,
     };
     
-    // We navigate to the URL with the `generate` param to trigger the plan creation
-    updateUrl('plan', { inputs: planInputs }, { fromBudget: true, generate: true });
-  }, [updateUrl]);
+    setActiveTab('plan');
+    setCameFromBudget(true);
+    setPlanTriggerData(planInputs);
+  }, []);
 
   const handleBackToBudget = () => {
     if (budgetData) {
@@ -370,7 +362,3 @@ export default function TripPlannerView() {
         </Suspense>
     )
 }
-
-    
-
-    
