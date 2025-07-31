@@ -1,11 +1,9 @@
 
 'use client';
 
-import { ArrowLeft, Calendar, MapPin, Tag, Ticket } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import localPulseData from '@/data/local-pulse.json';
 import entertainmentData from '@/data/entertainment-events.json';
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";

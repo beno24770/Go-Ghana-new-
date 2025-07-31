@@ -5,6 +5,13 @@ import { ArrowRight, Wand2 } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { PhoneMockup } from "@/components/phone-mockup";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const PhoneSkeleton = () => (
+    <div className="relative mx-auto border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-xl">
+        <Skeleton className="h-full w-full rounded-[2rem] bg-muted/50" />
+    </div>
+)
 
 export default function Home() {
   return (
@@ -34,7 +41,9 @@ export default function Home() {
                 </div>
 
                 <div className="relative h-full min-h-[600px] flex items-center justify-center">
-                   <PhoneMockup />
+                    <Suspense fallback={<PhoneSkeleton />}>
+                        <PhoneMockup />
+                    </Suspense>
                 </div>
             </div>
         </div>

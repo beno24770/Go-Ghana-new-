@@ -28,17 +28,16 @@ type TripPlanData = {
     outputs: PlanTripOutput;
 }
 
-const parseDateSafe = (dateString: string | undefined): Date | undefined => {
+const parseUrlDate = (dateString: string | undefined): Date | undefined => {
     if (!dateString) return undefined;
     try {
+        // Dates in URL are 'yyyy-MM-dd'. JS new Date() treats this as UTC midnight.
+        // We add the timezone offset to get the correct local date.
         const date = toDate(dateString);
-        if (isNaN(date.getTime())) {
-            return undefined;
-        }
-        // Adjust for timezone offset to prevent hydration errors
+        if (isNaN(date.getTime())) return undefined;
         return add(date, { minutes: date.getTimezoneOffset() });
     } catch (error) {
-        console.warn("Invalid date string provided:", dateString);
+        console.warn("Invalid date string in URL:", dateString);
         return undefined;
     }
 };
@@ -143,7 +142,7 @@ export default function TripPlannerView() {
         if (parsed.success) {
             const { duration, region, travelStyle, numTravelers, startDate, ...rest } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
-            const safeStartDate = parseDateSafe(startDate)?.toISOString().split('T')[0];
+            const safeStartDate = parseUrlDate(startDate)?.toISOString().split('T')[0];
 
             setBudgetData({
                 inputs: { duration, region: regionArray, travelStyle, numTravelers, startDate: safeStartDate },
@@ -162,7 +161,7 @@ export default function TripPlannerView() {
             const { budget, duration, numTravelers, region, travelStyle, interests, startDate, fromBudget, ...rest } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
             const interestsArray = Array.isArray(interests) ? interests : (interests ? [interests] : []);
-            const safeStartDate = parseDateSafe(startDate)?.toISOString().split('T')[0];
+            const safeStartDate = parseUrlDate(startDate)?.toISOString().split('T')[0];
 
             if (fromBudget) {
               setCameFromBudget(true);

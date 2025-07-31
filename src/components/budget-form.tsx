@@ -45,11 +45,14 @@ interface BudgetFormProps {
   defaultValues?: Partial<EstimateBudgetInput>;
 }
 
-const parseDateWithOffset = (dateString: string) => {
+const parseDateWithOffset = (dateString?: string) => {
+    if (!dateString) return new Date();
     const date = toDate(dateString);
+    if (isNaN(date.getTime())) return new Date();
+    // Dates from the form are already in local time (YYYY-MM-DD), which JS interprets as UTC.
+    // We add the timezone offset to treat it as a local date, preventing one-day shifts.
     return add(date, { minutes: date.getTimezoneOffset() });
 };
-
 
 export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: BudgetFormProps) {
   const form = useForm<EstimateBudgetInput>({
@@ -123,7 +126,7 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
                     <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                         mode="single"
-                        selected={field.value ? parseDateWithOffset(field.value) : undefined}
+                        selected={parseDateWithOffset(field.value)}
                         onSelect={(date) => {
                             if (date) {
                                 field.onChange(format(date, 'yyyy-MM-dd'));
