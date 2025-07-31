@@ -35,7 +35,7 @@ const nextConfig = {
     ],
   },
   experimental: {
-    // The `allowedDevOrigins` key is now at the top level.
+    // This experimental object is kept for future configurations if needed.
   }
 };
 
