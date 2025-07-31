@@ -180,16 +180,18 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
                         activeIndex={activeIndex ?? -1}
                         activeShape={(props: any) => {
                             const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
-                            // This is a simplified active shape; you can customize it further.
                             return (
                                 <g>
                                     <path d={props.d} stroke={props.stroke} fill={fill} />
                                     <path 
                                         d={props.d} 
-                                        stroke={fill} 
                                         strokeWidth={2}
-                                        fill="none"
-                                        style={{ transform: 'scale(1.05)', transformOrigin: `${cx}px ${cy}px` }}
+                                        style={{
+                                            transform: 'scale(1.05)',
+                                            transformOrigin: `${cx}px ${cy}px`,
+                                            stroke: fill,
+                                            fill: 'transparent',
+                                        }}
                                     />
                                 </g>
                             );
@@ -203,7 +205,7 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
             </ResponsiveContainer>
         </div>
 
-        <Legend content={renderLegend} onMouseEnter={(e: any) => e.payload && setActiveIndex(e.payload.index)} onMouseLeave={() => setActiveIndex(null)} />
+        <Legend content={renderLegend} onMouseEnter={(e: any) => e.payload && setActiveIndex(e.dataKey)} onMouseLeave={() => setActiveIndex(null)} />
         
         <div className="space-y-2 pt-4">
             <Button onClick={handlePlanClick} className="w-full" size="lg">

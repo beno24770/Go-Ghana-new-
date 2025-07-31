@@ -55,9 +55,9 @@ interface TripPlanFormProps {
 }
 
 const parseDateWithOffset = (dateString?: string) => {
-    if (!dateString) return new Date();
-    const date = toDate(dateString);
-    if (isNaN(date.getTime())) return new Date();
+    if (!dateString) return undefined;
+    const date = toDate(new Date(dateString));
+    if (isNaN(date.getTime())) return undefined;
     // Dates from the form are already in local time (YYYY-MM-DD), which JS interprets as UTC.
     // We add the timezone offset to treat it as a local date, preventing one-day shifts.
     return add(date, { minutes: date.getTimezoneOffset() });
@@ -141,7 +141,7 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                             )}
                             >
                             {field.value ? (
-                                format(parseDateWithOffset(field.value), "PPP")
+                                format(parseDateWithOffset(field.value) || new Date(), "PPP")
                             ) : (
                                 <span>Pick a date</span>
                             )}
