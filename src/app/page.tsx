@@ -16,7 +16,7 @@ export default function Home() {
                         Plan Your Dream Ghana Trip in Minutes
                     </h1>
                     <p className="text-lg text-muted-foreground">
-                        Stop guessing. Get a realistic budget, a personalized itinerary, and connect with trusted local experts—all powered by AI and authentic Ghanaian knowledge.
+                        Stop guessing. Get a realistic budget, a personalized itinerary, and connect with trusted local experts — all built on real data and insight from those who know Ghana best.
                     </p>
                     <div className="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                         <Button asChild size="lg">
