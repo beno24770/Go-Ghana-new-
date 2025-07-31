@@ -2,7 +2,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import { LoaderCircle } from 'lucide-react';
 
 const loadingSteps = [
@@ -30,17 +29,9 @@ export function ItineraryLoader() {
         <div className="flex flex-col items-center justify-center text-center">
             <LoaderCircle className="h-12 w-12 animate-spin text-primary" />
             <div className="mt-4 font-headline text-xl h-12">
-                <AnimatePresence mode="wait">
-                    <motion.p
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        {loadingSteps[index].text}
-                    </motion.p>
-                </AnimatePresence>
+                <p>
+                    {loadingSteps[index].text}
+                </p>
             </div>
         </div>
     );
