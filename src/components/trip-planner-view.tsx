@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import BudgetForm from '@/components/budget-form';
 import BudgetResults from '@/components/budget-results';
 import TripPlanForm from '@/components/trip-plan-form';
+import TripPlanResults from '@/components/trip-plan-results';
 import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, EstimateBudgetInputSchema, PlanTripInputSchema, EstimateBudgetBaseSchema, PlanTripBaseSchema } from '@/ai/schemas';
 import { getBudgetEstimate, getTripPlan } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
