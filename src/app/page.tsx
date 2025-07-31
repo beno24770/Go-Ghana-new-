@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Wand2 } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import { PhoneMockup } from "@/components/phone-mockup";
 import { Skeleton } from "@/components/ui/skeleton";
+import PhoneMockupWrapper from "@/components/phone-mockup-wrapper";
 
 const PhoneSkeleton = () => (
     <div className="relative mx-auto border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-xl">
@@ -42,7 +42,7 @@ export default function Home() {
 
                 <div className="relative h-full min-h-[600px] flex items-center justify-center">
                     <Suspense fallback={<PhoneSkeleton />}>
-                        <PhoneMockup />
+                        <PhoneMockupWrapper />
                     </Suspense>
                 </div>
             </div>
