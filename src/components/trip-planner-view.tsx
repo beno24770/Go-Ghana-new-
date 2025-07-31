@@ -27,7 +27,6 @@ type TripPlanData = {
 }
 
 // Zod schema for parsing budget data from URL search params
-// We use the base schema here because the refined schema causes issues with .extend() on SSR
 const budgetUrlSchema = EstimateBudgetBaseSchema.extend({
     duration: z.coerce.number(),
     numTravelers: z.coerce.number(),
@@ -64,7 +63,6 @@ const planUrlSchema = PlanTripBaseSchema.extend({
     "outputs.activities.cost": z.coerce.number(),
     "outputs.activities.description": z.string(),
     "outputs.total": z.coerce.number(),
-    "fromBudget": z.string().optional(),
 }));
 
 
@@ -92,10 +90,7 @@ function TripPlannerViewInternal() {
   const [tripPlanData, setTripPlanData] = useState<TripPlanData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const [initialTool, setInitialTool] = useState<string | null>(null);
-  const [cameFromBudget, setCameFromBudget] = useState(false);
   const [planTriggerData, setPlanTriggerData] = useState<PlanTripInput | null>(null);
-
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -122,7 +117,6 @@ function TripPlannerViewInternal() {
                  params.set(urlKey, String(value));
             }
         }
-
         router.push(`/planner?${params.toString()}`, { scroll: false });
     });
   }, [router]);
@@ -141,6 +135,7 @@ function TripPlannerViewInternal() {
     setIsLoading(false);
   }, [toast, updateUrl]);
 
+  // Effect to run plan generation when triggered from budget results
   useEffect(() => {
     if (planTriggerData) {
       handlePlan(planTriggerData);
@@ -152,7 +147,6 @@ function TripPlannerViewInternal() {
     const params = new URLSearchParams(searchParams.toString());
     const tab = params.get('tab') || 'estimate';
     setActiveTab(tab);
-    setInitialTool(params.get('tool'));
 
     const data: { [key: string]: any } = {};
     for(const [key, value] of params.entries()) {
@@ -186,28 +180,23 @@ function TripPlannerViewInternal() {
                 },
             });
         }
-    } else if (tab === 'plan') {
-         if (params.has('outputs.total')) {
-            const parsedPlan = planUrlSchema.safeParse(Object.fromEntries(params));
-            if (parsedPlan.success) {
-                 if (params.has('fromBudget')) {
-                    setCameFromBudget(true);
-                }
-                const { budget, duration, numTravelers, region, travelStyle, interests, startDate, isNewToGhana, fromBudget, ...rest } = parsedPlan.data;
-                const regionArray = Array.isArray(region) ? region : [region];
-                const interestsArray = Array.isArray(interests) ? interests : (interests ? [interests] : []);
-                setTripPlanData({
-                    inputs: { duration, region: regionArray, budget, numTravelers, travelStyle, interests: interestsArray, startDate, isNewToGhana },
-                    outputs: {
-                        suggestedTravelStyle: rest['outputs.suggestedTravelStyle'],
-                        accommodation: { cost: rest['outputs.accommodation.cost'], description: rest['outputs.accommodation.description'] },
-                        food: { cost: rest['outputs.food.cost'], description: rest['outputs.food.description'] },
-                        transportation: { cost: rest['outputs.transportation.cost'], description: rest['outputs.transportation.description'] },
-                        activities: { cost: rest['outputs.activities.cost'], description: rest['outputs.activities.description'] },
-                        total: rest['outputs.total'],
-                    },
-                });
-            }
+    } else if (tab === 'plan' && params.has('outputs.total')) {
+         const parsedPlan = planUrlSchema.safeParse(Object.fromEntries(params));
+         if (parsedPlan.success) {
+            const { budget, duration, numTravelers, region, travelStyle, interests, startDate, isNewToGhana, ...rest } = parsedPlan.data;
+            const regionArray = Array.isArray(region) ? region : [region];
+            const interestsArray = Array.isArray(interests) ? interests : (interests ? [interests] : []);
+            setTripPlanData({
+                inputs: { duration, region: regionArray, budget, numTravelers, travelStyle, interests: interestsArray, startDate, isNewToGhana },
+                outputs: {
+                    suggestedTravelStyle: rest['outputs.suggestedTravelStyle'],
+                    accommodation: { cost: rest['outputs.accommodation.cost'], description: rest['outputs.accommodation.description'] },
+                    food: { cost: rest['outputs.food.cost'], description: rest['outputs.food.description'] },
+                    transportation: { cost: rest['outputs.transportation.cost'], description: rest['outputs.transportation.description'] },
+                    activities: { cost: rest['outputs.activities.cost'], description: rest['outputs.activities.description'] },
+                    total: rest['outputs.total'],
+                },
+            });
         }
     }
   }, [searchParams]);
@@ -243,7 +232,6 @@ function TripPlannerViewInternal() {
     };
     
     setActiveTab('plan');
-    setCameFromBudget(true);
     setPlanTriggerData(planInputs);
   }, []);
 
@@ -251,39 +239,29 @@ function TripPlannerViewInternal() {
     if (budgetData) {
         onTabChange('estimate');
         setTripPlanData(null);
-        setCameFromBudget(false);
         updateUrl('estimate', budgetData);
     } else {
         onTabChange('estimate');
         setTripPlanData(null);
-        setCameFromBudget(false);
     }
   };
 
   const onTabChange = (value: string) => {
     startTransition(() => {
-        const params = new URLSearchParams(searchParams.toString());
+        const params = new URLSearchParams();
         params.set('tab', value);
 
         if (value === 'plan') {
-             if (!params.has('fromBudget')) {
-                setBudgetData(null);
-                setTripPlanData(null);
-                setCameFromBudget(false);
-                // Clear all params except tab
-                const newParams = new URLSearchParams();
-                newParams.set('tab', 'plan');
-                router.push(`/planner?${newParams.toString()}`, { scroll: false });
-            }
-        } else {
-            setTripPlanData(null);
-            if (!cameFromBudget) {
-                setBudgetData(null);
-            }
-            setCameFromBudget(false);
-            const newParams = new URLSearchParams();
-            newParams.set('tab', 'estimate');
-            router.push(`/planner?${newParams.toString()}`, { scroll: false });
+          // When user manually clicks "Plan a Trip" tab, clear everything.
+          setBudgetData(null);
+          setTripPlanData(null);
+          router.push(`/planner?${params.toString()}`, { scroll: false });
+
+        } else if (value === 'estimate') {
+          // When user clicks "Estimate Budget", clear everything.
+           setBudgetData(null);
+           setTripPlanData(null);
+           router.push(`/planner?${params.toString()}`, { scroll: false });
         }
         setActiveTab(value);
     });
@@ -342,10 +320,9 @@ function TripPlannerViewInternal() {
                     <div className="relative">
                         <TripPlanResults 
                             data={tripPlanData} 
-                            isLoading={(isLoading || isPending) && activeTab === 'plan'} 
-                            initialTool={initialTool}
+                            isLoading={(isLoading || isPending) && activeTab === 'plan'}
                             onBack={handleBackToBudget}
-                            showBackButton={cameFromBudget}
+                            showBackButton={!!budgetData}
                         />
                     </div>
                 </div>
@@ -362,3 +339,5 @@ export default function TripPlannerView() {
         </Suspense>
     )
 }
+
+    

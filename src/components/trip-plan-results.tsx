@@ -38,7 +38,6 @@ type TripPlanData = {
 interface TripPlanResultsProps {
   data: TripPlanData | null;
   isLoading: boolean;
-  initialTool?: string | null;
   onBack?: () => void;
   showBackButton?: boolean;
 }
@@ -76,9 +75,11 @@ function PlanSection({ title, cost, description, icon, cta }: { title: string; c
 }
 
 
-export default function TripPlanResults({ data, isLoading, initialTool, onBack, showBackButton }: TripPlanResultsProps) {
+export default function TripPlanResults({ data, isLoading, onBack, showBackButton }: TripPlanResultsProps) {
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const initialTool = searchParams.get('tool');
 
   useEffect(() => {
     if (initialTool && data) {
@@ -190,3 +191,5 @@ export default function TripPlanResults({ data, isLoading, initialTool, onBack, 
     </Card>
   );
 }
+
+    
