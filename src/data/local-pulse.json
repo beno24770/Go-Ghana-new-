@@ -3,38 +3,38 @@
     {
         "id": "asafotufiam-festival",
         "title": "Asafotufiam Festival",
-        "description": "Commemorates the victories of the 'Asafo' warrior companies, a state festival honoring the Ga-Dangme people.",
-        "category": ["Festival", "Heritage"],
+        "description": "This annual festival of the Ga-Adangbe people of Ada commemorates the victories of their ancestors in wars and is a time for the gathering of the sons and daughters of Ada.",
+        "category": ["Festival", "Heritage", "Durbar"],
         "region": ["Greater Accra"],
         "location": "Ada",
         "startDate": "2024-08-01",
         "endDate": "2024-08-08",
-        "cost": "Free",
-        "insiderTip": "Visit the Torgbui Akorli shrine to learn more about the history of the festival."
+        "cost": "Free to observe",
+        "insiderTip": "The grand durbar of chiefs on Saturday is the climax. Expect vibrant drumming, dancing, and musketry displays. Get there early to find a good viewing spot."
     },
     {
         "id": "oguaa-fetu-afahye",
         "title": "Oguaa Fetu Afahye",
-        "description": "A vibrant festival celebrated by the Oguaa people of Cape Coast to thank the 77 deities of the Oguaa traditional area.",
-        "category": ["Festival", "Culture"],
+        "description": "A vibrant festival celebrated by the people of Cape Coast to thank the 77 deities of the Oguaa traditional area and to mark the beginning of a new year.",
+        "category": ["Festival", "Culture", "Harvest"],
         "region": ["Central"],
         "location": "Cape Coast",
         "startDate": "2024-09-01",
         "endDate": "2024-09-07",
         "cost": "Free",
-        "insiderTip": "The durbar of chiefs on the final Saturday is the main event. Get there early for a good spot."
+        "insiderTip": "The highlight is the procession of chiefs, queen mothers, and traditional groups through the streets on the final Saturday. The 'Orange Friday' street carnival is also a must-see."
     },
     {
         "id": "hogbetsotso-festival",
         "title": "Hogbetsotso Festival",
-        "description": "Celebrates the migration of the Anlo Ewes from their ancestral home in Togo to their current location in Ghana.",
-        "category": ["Festival", "Culture"],
+        "description": "A historic festival celebrating the migration of the Anlo Ewes from their ancestral home in Notsie, Togo, to their current location in Ghana. The re-enactment of this migration is a key part of the festival.",
+        "category": ["Festival", "Culture", "History"],
         "region": ["Volta"],
         "location": "Anloga",
         "startDate": "2024-11-01",
         "endDate": "2024-11-03",
-        "cost": "Free",
-        "insiderTip": "A great time to experience Ewe culture, music, and dance."
+        "cost": "Free to observe",
+        "insiderTip": "The main event is the grand durbar on the first Saturday of November. It's a spectacular display of Ewe culture, with chiefs arriving in palanquins amidst drumming and dancing."
     },
     {
         "id": "chale-wote-street-art-festival",
@@ -51,14 +51,14 @@
     {
         "id": "homowo-festival",
         "title": "Homowo Festival",
-        "description": "The annual festival of the Ga people, celebrated to 'hoot at hunger'. Involves traditional rituals and processions.",
+        "description": "The annual festival of the Ga people, celebrated to 'hoot at hunger'. Involves traditional rituals, processions, and the sprinkling of the special meal 'Kpekple'.",
         "category": ["Festival", "Cultural", "Traditional"],
         "region": ["Greater Accra"],
         "location": "Accra and Ga communities",
         "startDate": "2024-08-01",
         "endDate": "2024-08-31",
         "cost": "Free",
-        "insiderTip": "The main celebrations happen on Saturdays. Ask for permission before taking photos of chiefs."
+        "insiderTip": "The main celebrations happen on Saturdays. Ask for permission before taking photos of chiefs and traditional rites."
     },
     {
         "id": "edina-bakatue-festival",

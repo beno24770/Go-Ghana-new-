@@ -18,7 +18,7 @@
         "travelStyle": ["Luxury", "Mid-range"],
         "description": "A well-regarded 4-star hotel known for its excellent service and facilities.",
         "image": "https://placehold.co/600x400.png",
-        "link": "#"
+        "link": "https://accra.goldentulip.com/en-us/"
     },
     {
         "id": "accra-luxury-la-palm",
@@ -28,7 +28,7 @@
         "travelStyle": ["Luxury", "Mid-range"],
         "description": "A 4-star hotel offering a resort-style experience with pools and beach access.",
         "image": "https://placehold.co/600x400.png",
-        "link": "#"
+        "link": "https://www.lapalmroyalbeachhotel.com/"
     },
     {
         "id": "accra-luxury-novotel",
@@ -38,7 +38,7 @@
         "travelStyle": ["Luxury", "Mid-range"],
         "description": "A 4-star business hotel with reliable service and a central location.",
         "image": "https://placehold.co/600x400.png",
-        "link": "#"
+        "link": "https://all.accor.com/hotel/0526/index.en.shtml"
     },
     {
         "id": "accra-midrange-m-plaza",
@@ -48,7 +48,7 @@
         "travelStyle": ["Mid-range"],
         "description": "A 3-star hotel offering comfortable accommodations in a serene environment.",
         "image": "https://placehold.co/600x400.png",
-        "link": "#"
+        "link": "https://www.m-plazahotel.com/"
     },
     {
         "id": "accra-midrange-alisa-labone",
@@ -58,7 +58,7 @@
         "travelStyle": ["Mid-range"],
         "description": "A popular 3-star hotel with good amenities and a convenient location.",
         "image": "https://placehold.co/600x400.png",
-        "link": "#"
+        "link": "https://www.alisahotels.com/"
     },
     {
         "id": "accra-midrange-alisa-ridge",
@@ -68,7 +68,7 @@
         "travelStyle": ["Mid-range"],
         "description": "A sister hotel to the Labone branch, known for its consistent quality.",
         "image": "https://placehold.co/600x400.png",
-        "link": "#"
+        "link": "https://www.alisahotels.com/"
     },
     {
         "id": "accra-budget-somewhere-nice",
@@ -87,6 +87,126 @@
         "location": "Accra",
         "travelStyle": ["Budget"],
         "description": "A basic but friendly guesthouse known for its central location and very fast Wi-Fi, ideal for budget-conscious travelers.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
+    },
+    {
+        "id": "accra-luxury-marriot",
+        "name": "Marriot Hotel",
+        "region": "Greater Accra",
+        "location": "Airport City",
+        "travelStyle": ["Luxury"],
+        "description": "5-star luxury with exceptional service, close to the airport.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "https://www.marriott.com/en-us/hotels/accac-accra-marriott-hotel/overview/"
+    },
+    {
+        "id": "accra-luxury-kempinski",
+        "name": "Kempinski Hotel",
+        "region": "Greater Accra",
+        "location": "Ridge",
+        "travelStyle": ["Luxury"],
+        "description": "The epitome of luxury in Accra, offering world-class amenities.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "https://www.kempinski.com/en/accra/hotel-gold-coast-city"
+    },
+    {
+        "id": "accra-midrange-fiesta-residences",
+        "name": "Fiesta Residences",
+        "region": "Greater Accra",
+        "location": "Cantonments",
+        "travelStyle": ["Mid-range", "Luxury"],
+        "description": "Boutique hotel with serviced apartments, great for longer stays.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "https://www.fiestaresidences.com/"
+    },
+    {
+        "id": "accra-midrange-best-western",
+        "name": "Best Western",
+        "region": "Greater Accra",
+        "location": "Airport",
+        "travelStyle": ["Mid-range"],
+        "description": "Reliable international standard hotel with convenient airport access.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "https://www.bestwestern.com/en_US/book/hotel-rooms.75102.html"
+    },
+    {
+        "id": "accra-midrange-fiesta-royale",
+        "name": "Fiesta Royale Hotel",
+        "region": "Greater Accra",
+        "location": "Dzorwulu",
+        "travelStyle": ["Mid-range", "Luxury"],
+        "description": "4-star comfort with excellent conference facilities and a large pool.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "https://www.fiestahospitality.com/fiesta-royale-hotel"
+    },
+    {
+        "id": "accra-budget-osda-house",
+        "name": "OSDA House",
+        "region": "Greater Accra",
+        "location": "Osu",
+        "travelStyle": ["Budget"],
+        "description": "Clean, simple rooms in the heart of Osu's vibrant neighborhood.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
+    },
+    {
+        "id": "accra-budget-pink-hostel",
+        "name": "Pink Hostel",
+        "region": "Greater Accra",
+        "location": "Asylum Down",
+        "travelStyle": ["Budget"],
+        "description": "A long-standing backpacker favorite, known for its social vibe.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "http://www.pinkhostel.com.gh/"
+    },
+    {
+        "id": "accra-midrange-afrikiko",
+        "name": "Afrikiko Riverfront",
+        "region": "Greater Accra",
+        "location": "Akosombo",
+        "travelStyle": ["Mid-range"],
+        "description": "Riverside resort with serene views of the Volta River.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "https://www.afrikikoresort.com/"
+    },
+    {
+        "id": "accra-luxury-royal-senchi",
+        "name": "Royal Senchi",
+        "region": "Greater Accra",
+        "location": "Akosombo",
+        "travelStyle": ["Luxury"],
+        "description": "Luxurious escape on the Volta River, perfect for relaxation.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "https://www.theroyalsenchi.com/"
+    },
+    {
+        "id": "accra-midrange-villa-cisneros",
+        "name": "Villa Cisneros",
+        "region": "Greater Accra",
+        "location": "Ada Foah",
+        "travelStyle": ["Mid-range", "Budget"],
+        "description": "Beachfront hotel with a mix of rooms and chalets, popular for water sports.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "https://www.villacisnerosresort.com/en/"
+    },
+    {
+        "id": "accra-luxury-aqua-safari",
+        "name": "Aqua Safari",
+        "region": "Greater Accra",
+        "location": "Ada Foah",
+        "travelStyle": ["Luxury", "Mid-range"],
+        "description": "Stylish resort on the estuary, known for its water activities and lively vibe.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "https://www.aquasafariresort.com/"
+    },
+    {
+        "id": "accra-budget-treasure-island",
+        "name": "Treasure Island",
+        "region": "Greater Accra",
+        "location": "Ada Foah",
+        "travelStyle": ["Budget"],
+        "description": "Basic and rustic riverside retreat, great for a true getaway.",
         "image": "https://placehold.co/600x400.png",
         "link": "#"
     },
@@ -177,6 +297,56 @@
         "location": "Tamale",
         "travelStyle": ["Budget"],
         "description": "A clean and friendly guesthouse in Tamale, offering great value for budget travelers.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
+    },
+    {
+        "id": "volta-midrange-chances-hotel",
+        "name": "Chances Hotel",
+        "region": "Volta",
+        "location": "Ho",
+        "travelStyle": ["Mid-range"],
+        "description": "A popular and reliable hotel in Ho, often used as a base for exploring the region.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "https://chanceshotel.com/"
+    },
+    {
+        "id": "volta-budget-biakpa-mountain-paradise",
+        "name": "Biakpa Mountain Paradise",
+        "region": "Volta",
+        "location": "Biakpa",
+        "travelStyle": ["Budget"],
+        "description": "A rustic and charming eco-lodge with stunning views, great for hikers.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "https://www.biakpamountainparadise.com/en/"
+    },
+    {
+        "id": "volta-budget-wli-water-heights",
+        "name": "Wli Water Heights",
+        "region": "Volta",
+        "location": "Wli",
+        "travelStyle": ["Budget"],
+        "description": "Simple guesthouse very close to the Wli waterfalls, perfect for early morning hikes.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "#"
+    },
+    {
+        "id": "volta-luxury-volta-serene",
+        "name": "Volta Serene",
+        "region": "Volta",
+        "location": "Ho",
+        "travelStyle": ["Luxury", "Mid-range"],
+        "description": "The premier hotel in Ho, offering upscale rooms and great service.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "https://www.voltaserenehotel.com/"
+    },
+    {
+        "id": "volta-midrange-freedom-hotel",
+        "name": "Freedom Hotel",
+        "region": "Volta",
+        "location": "Ho",
+        "travelStyle": ["Mid-range"],
+        "description": "A well-known hotel in Ho with a lively atmosphere and conference facilities.",
         "image": "https://placehold.co/600x400.png",
         "link": "#"
     }
