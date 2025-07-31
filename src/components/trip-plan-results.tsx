@@ -25,7 +25,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import type { PlanTripInput, PlanTripOutput } from '@/ai/schemas';
 import { Badge } from '@/components/ui/badge';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, Suspense } from 'react';
 import { marked } from 'marked';
 import dynamic from 'next/dynamic';
 
