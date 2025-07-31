@@ -8,7 +8,7 @@
  */
 
 import { ai } from '@/ai/genkit';
-import { ChatWithItineraryInput, ChatWithItineraryInputSchema, ChatWithItineraryOutput, ChatWithItineraryOutputSchema } from '@/ai/schemas';
+import { ChatWithItineraryInput, ChatWithItineraryInputSchema, ChatWithItineraryOutput, ChatWithItineraryOutputSchema, DayItinerarySchema } from '@/ai/schemas';
 import { getLocalPulse } from '@/ai/tools/get-local-pulse';
 import { getEntertainmentEvents } from '@/ai/tools/get-entertainment-events';
 import addDays from 'date-fns/addDays';
@@ -31,81 +31,71 @@ export async function chatWithItinerary(input: ChatWithItineraryInput): Promise<
     return chatWithItineraryFlow(fullInput);
 }
 
+const summarizeItineraryPrompt = ai.definePrompt({
+    name: 'summarizeItineraryPrompt',
+    input: { schema: z.object({ currentItinerary: z.string() }) },
+    output: { schema: z.object({ summary: z.string().describe('A concise, one-paragraph summary of the travel itinerary.') }) },
+    prompt: `Concisely summarize the following travel itinerary in a single paragraph. Capture the main themes, locations, and duration.
+
+Itinerary:
+---
+{{{currentItinerary}}}
+---`,
+});
+
 const chatItineraryPrompt = ai.definePrompt({
     name: 'chatItineraryPrompt',
-    input: { schema: ChatWithItineraryInputSchema.extend({endDate: z.string(), dayDates: z.array(z.string())}) },
+    input: { schema: ChatWithItineraryInputSchema.extend({
+        endDate: z.string(), 
+        dayDates: z.array(z.string()),
+        itinerarySummary: z.string(),
+    }) },
     output: { schema: ChatWithItineraryOutputSchema },
     tools: [getLocalPulse, getEntertainmentEvents, getAccommodations, getRestaurants],
-    prompt: `You are a friendly and expert Ghanaian travel assistant and content curator for letvisitghana.com. A user is asking a question or requesting a change to their current travel itinerary.
+    prompt: `You are a friendly and expert Ghanaian travel assistant for letvisitghana.com. A user is asking a question or requesting a change to their travel itinerary.
 
-Your task is to respond conversationally. If the user requests a change to their itinerary, you MUST also regenerate the itinerary based on their request.
+Your primary goal is to be fast and responsive.
 
-Current Itinerary:
+**Itinerary Summary:** "{{itinerarySummary}}"
+
+**User's Message:** "{{userMessage}}"
+
+**Instructions:**
+
+1.  **Analyze User Intent:** First, determine if the user is just asking a question OR if they are requesting a change to the itinerary.
+    *   **If it's a question (e.g., "are there any museums?", "what's the weather like?", "suggest a hotel"):**
+        *   Your priority is a fast, conversational answer.
+        *   Use the Itinerary Summary for context. Use your tools and knowledge base to provide a direct answer.
+        *   **CRITICAL: You MUST NOT return the 'itinerary' object for simple questions.** Your response object should ONLY contain the 'response' field.
+        *   If you recommend a hotel, you **MUST** use the 'getAccommodations' tool and format it as a clickable Markdown link: "I'd recommend [Labadi Beach Hotel](https://www.labadibeachhotel.com)."
+        *   If you recommend a restaurant, you **MUST** use the 'getRestaurants' tool and mention its name, like: "You should try **Oasis Beach Resort**."
+
+    *   **If it's a direct request to CHANGE the itinerary (e.g., "add a museum on day 2", "remove the beach day", "can we go to Kumasi instead?"):**
+        *   Only in this case should you perform the more complex task of regenerating the plan.
+        *   Provide a conversational response confirming the change (e.g., "Sure, I've updated your plan to include a visit to the National Museum on Day 2.").
+        *   Regenerate the *entire* itinerary object based on the **full original itinerary** provided below, incorporating the user's changes. Ensure it is logistically sound.
+        *   Use your tools ('getLocalPulse', 'getEntertainmentEvents', etc.) to enhance the new plan.
+        *   The final output **MUST** include both the 'response' text and the full, updated 'itinerary' object.
+
+**Full Original Itinerary (ONLY for making changes):**
 ---
 {{{currentItinerary}}}
 ---
 
-User's Message: "{{userMessage}}"
-
-Instructions:
-1.  **Analyze the User's Message**: Understand if the user is asking a question, requesting a change, or asking for recommendations.
-    *   **If it's a question or recommendation request (e.g., "are there museums?", "suggest a hotel"):**
-        *   Use your tools and knowledge base to provide a direct, conversational answer.
-        *   You **MUST NOT** regenerate or return the full itinerary object. Your response MUST only contain the 'response' field.
-        *   If you recommend a hotel, you **MUST** use the 'getAccommodations' tool and format it as a clickable Markdown link: "I'd recommend [Labadi Beach Hotel](https://www.labadibeachhotel.com)."
-        *   If you recommend a restaurant, you **MUST** use the 'getRestaurants' tool and mention its name, like: "You should try **Oasis Beach Resort**."
-    *   **If it's a direct request to change the itinerary (e.g., "add a museum on day 2", "swap day 3 and 4"):**
-        *   Formulate a conversational response confirming the change.
-        *   Regenerate the *entire* itinerary object to incorporate the changes, ensuring it is logistically sound.
-        *   Use your tools ('getLocalPulse', 'getEntertainmentEvents', etc.) to enhance the new plan.
-        *   The final output MUST include both the 'response' text and the full, updated 'itinerary' object.
-
-Key Information for you to use:
+**Key Information for you to use:**
 - Trip Dates: {{startDate}} to {{endDate}}
 - Trip Regions: {{#each region}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
 - Day Dates Array: {{#each dayDates}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
 
-**Knowledge Base of Ghanaian Destinations (use for suggestions):**
-
-**Greater Accra Region:**
-*   **Key Attractions:** Kwame Nkrumah Memorial Park, Independence Square (Black Star Square), W.E.B. Du Bois Centre, Jamestown Lighthouse, Arts Centre, Labadi Beach, Osu Castle, National Museum, Shai Hills Resource Reserve, Legon Botanical Gardens.
-*   **Themes:** History, Culture, Pan-Africanism, Shopping, Beach, Nightlife, Nature, Wildlife.
-*   **Practical Tip:** The arch at Black Star Square can be climbed for a small donation to the attendant.
-
-**Central Region:**
-*   **Key Attractions:** Kakum National Park (Canopy Walk), Cape Coast Castle, Elmina Castle, Assin Manso Slave River Site.
-*   **Themes:** Nature, Adventure, History, Slave Trade.
-*   **Practical Tips:**
-    *   Cape Coast & Elmina Castles entry fee is ~$4.20 (50 GHC). The tours are similar; Elmina is smaller and the town has more preserved colonial buildings.
-    *   Kakum National Park entry is ~$8.30 (100 GHC) for the canopy walk. It opens at 8:30 AM, but tours start at 9 AM. Arrive early to avoid crowds. The forest hike is a good alternative to the canopy walk.
-    *   Getting from Cape Coast to Kumasi by public transport is very difficult and not recommended. It's much easier to travel from Accra to Kumasi.
-
-**Ashanti Region:**
-*   **Key Attractions:** Manhyia Palace Museum, Kejetia Market, Lake Bosomtwe, and cultural villages like Adanwomase (Kente) and Ntonso (Adinkra).
-*   **Themes:** History, Culture, Royalty, Shopping, Nature.
-
-**Volta Region:**
-*   **Key Attractions:** Wli Waterfalls, Tafi Atome Monkey Sanctuary, Mountain Afadja (Afadjato), Keta Lagoon.
-*   **Themes:** Nature, Hiking, Waterfalls, Wildlife, Scenery.
-*   **Practical Tip:** Mount Afadja is a very steep hike. The trails to Tagbo Falls and Wli Falls are easier and very scenic.
-
-**Eastern Region:**
-*   **Key Attractions:** Boti Falls, Aburi Botanical Gardens, Umbrella Rock, Cedi Bead Factory.
-*   **Themes:** Nature, Waterfalls, Gardens, Crafts.
-
-**Northern Region:**
-*   **Key Attractions:** Mole National Park (Safari), Larabanga Mosque, Mognori Eco-village.
-*   **Themes:** Wildlife, Safari, History, Religion, Ecotourism.
-*   **Practical Tip:** At Mole, walking safaris offer a better chance to see more birds and get deeper into the wilderness. Night safaris are also available for a different experience.
-
-**Transportation Facts (use this to inform your suggestions):**
--   **Ride Sharing:** Uber and Bolt are common in major cities like Accra and Kumasi. Always select the "pay by cash" option. Short-distance fares within a city are usually $0.40 - $0.70.
--   **Trotros (Minibuses):** The most common way to travel between cities. The Ford-type trotros are more comfortable and usually have A/C.
-    -   Accra to Cape Coast: ~$8 (95 GHC) one-way.
-    -   Accra to Ho: ~$5.20 (62 GHC) one-way.
-    -   Ho to Hohoe: ~$2.60 (31 GHC) one-way.
--   **Inter-City Buses:** STC and VIP are reliable bus companies for longer routes (e.g., Accra to Kumasi or Tamale). A trip from Accra to Kumasi costs about $6-$8.
--   **General Tip:** Always carry small change (GHS 1, 2, 5, 10 notes) for paying trotro fares as drivers often don't have change for larger bills.
+**Knowledge Base Snippets (for quick answers):**
+- **Museums:** The National Museum in Accra is a great choice for history and culture.
+- **Transport:** Uber/Bolt are common in cities. Trotros are used for city-to-city travel. STC/VIP buses for long distances.
+- **Regions & Attractions:**
+    - **Accra:** History, culture, nightlife (Jamestown, Nkrumah Memorial).
+    - **Central:** Slave Castles (Cape Coast, Elmina), Nature (Kakum Canopy Walk).
+    - **Ashanti:** Royalty, culture (Manhyia Palace, Kente villages).
+    - **Volta:** Nature, waterfalls, hiking (Wli, Afadjato).
+    - **Northern:** Wildlife safari (Mole National Park).
 
 Generate a valid JSON object that adheres to the ChatWithItineraryOutputSchema.`,
 });
@@ -118,7 +108,15 @@ const chatWithItineraryFlow = ai.defineFlow(
         outputSchema: ChatWithItineraryOutputSchema,
     },
     async (input) => {
-        const { output } = await chatItineraryPrompt(input);
+        // First, generate a summary of the itinerary for faster processing on simple questions.
+        const { output: summaryOutput } = await summarizeItineraryPrompt({ currentItinerary: input.currentItinerary });
+        if (!summaryOutput?.summary) {
+            throw new Error("Failed to summarize the itinerary.");
+        }
+
+        const fullInput = { ...input, itinerarySummary: summaryOutput.summary };
+        
+        const { output } = await chatItineraryPrompt(fullInput);
         return output!;
     }
 );
