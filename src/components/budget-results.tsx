@@ -21,7 +21,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import type { EstimateBudgetInput, EstimateBudgetOutput } from '@/ai/schemas';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 type BudgetData = {
   inputs: EstimateBudgetInput;
@@ -112,7 +112,7 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
     return null;
   };
 
-  const renderLegend = (props: any) => {
+  const renderLegend = useCallback((props: any) => {
     const { payload } = props;
 
     if (!payload) return null;
@@ -123,7 +123,6 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
           payload.map((entry: any, index: number) => {
             const categoryKey = entry.value.toLowerCase() as CategoryKey;
             
-            // This check is to prevent a crash if a category doesn't exist in our details map.
             if (!categoryDetails[categoryKey] || !outputs[categoryKey]) return null;
 
             return (
@@ -142,7 +141,7 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
         }
       </ul>
     );
-  }
+  }, [outputs]);
   
   return (
     <Card className="w-full">
@@ -182,7 +181,7 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
                             const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
                             return (
                                 <g>
-                                    <path d={props.d} stroke={props.stroke} fill={fill} />
+                                    <path d={props.d} stroke="none" fill={fill} />
                                     <path 
                                         d={props.d} 
                                         strokeWidth={2}
@@ -196,6 +195,8 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
                                 </g>
                             );
                         }}
+                        onMouseEnter={(_, index) => setActiveIndex(index)}
+                        onMouseLeave={() => setActiveIndex(null)}
                     >
                     {chartData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
@@ -205,7 +206,7 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
             </ResponsiveContainer>
         </div>
 
-        <Legend content={renderLegend} onMouseEnter={(e: any) => e.payload && setActiveIndex(e.dataKey)} onMouseLeave={() => setActiveIndex(null)} />
+        <Legend content={renderLegend} />
         
         <div className="space-y-2 pt-4">
             <Button onClick={handlePlanClick} className="w-full" size="lg">

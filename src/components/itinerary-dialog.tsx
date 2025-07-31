@@ -8,6 +8,7 @@ import {
   Download,
   Languages,
   LoaderCircle,
+  MoreVertical,
   Pencil,
   Send,
   Volume2,
@@ -19,6 +20,7 @@ import type { GenerateItineraryOutput, GenerateLanguageGuideOutput, GeneratePack
 import { getAudio, getItinerary, getLanguageGuide, getPackingList, postItineraryChat, regenerateItinerary } from '@/app/actions';
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import Link from 'next/link';
 import { marked } from 'marked';
@@ -27,8 +29,6 @@ import { z } from 'zod';
 import { Textarea } from './ui/textarea';
 import { Input } from './ui/input';
 import { ItineraryLoader } from './itinerary-loader';
-import type jsPDF from 'jspdf';
-import type html2canvas from 'html2canvas';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
@@ -43,90 +43,6 @@ interface ItineraryDialogProps {
     initialTool?: string | null;
     open: boolean;
     onOpenChange: (open: boolean) => void;
-}
-
-const downloadFormSchema = z.object({
-    name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-    email: z.string().email({ message: "Please enter a valid email address." }),
-});
-type DownloadFormValues = z.infer<typeof downloadFormSchema>;
-
-
-function DownloadDialog({ onDownload, onOpenChange }: { onDownload: () => Promise<void>; onOpenChange: (open: boolean) => void }) {
-    const [isDownloading, setIsDownloading] = useState(false);
-    const { toast } = useToast();
-
-    const form = useForm<DownloadFormValues>({
-        resolver: zodResolver(downloadFormSchema),
-        defaultValues: { name: '', email: '' },
-    });
-
-    const onSubmit = async (values: DownloadFormValues) => {
-        console.log("Lead captured:", values);
-        setIsDownloading(true);
-        toast({ title: "Generating PDF...", description: "Your itinerary is being prepared for download." });
-
-        await onDownload();
-
-        setIsDownloading(false);
-        onOpenChange(false);
-    };
-
-    return (
-        <DialogContent>
-            <DialogHeader>
-                <DialogTitle className="font-headline">Download Your Itinerary</DialogTitle>
-                <DialogDescription>
-                    Enter your details below to get your personalized itinerary as a PDF.
-                </DialogDescription>
-            </DialogHeader>
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Name</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Your name" {...field} disabled={isDownloading} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                    <Input type="email" placeholder="your@email.com" {...field} disabled={isDownloading} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <DialogFooter>
-                        <Button type="submit" disabled={isDownloading}>
-                            {isDownloading ? (
-                                <>
-                                    <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                                    Downloading...
-                                </>
-                            ) : (
-                                <>
-                                    <Download className="mr-2 h-4 w-4" />
-                                    Download Now
-                                </>
-                            )}
-                        </Button>
-                    </DialogFooter>
-                </form>
-            </Form>
-        </DialogContent>
-    );
 }
 
 const ItineraryContent = ({
@@ -150,10 +66,7 @@ const ItineraryContent = ({
   onSetEditedItinerary: (value: string) => void;
   onChatSubmit: (message: string) => void;
 }) => {
-    const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false);
-    const itineraryRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
-    const { toast } = useToast();
     const [chatMessage, setChatMessage] = useState('');
 
     useEffect(() => {
@@ -169,60 +82,6 @@ const ItineraryContent = ({
         setChatMessage('');
     }
 
-    const handleDownloadPdf = async () => {
-        const content = itineraryRef.current;
-        if (!content) {
-            toast({ variant: 'destructive', title: 'Error', description: "Could not find itinerary content to download."});
-            return;
-        }
-
-        try {
-            const [
-                { default: jsPDF },
-                { default: html2canvas }
-            ] = await Promise.all([
-                import('jspdf'),
-                import('html2canvas')
-            ]);
-
-            const canvas = await html2canvas(content, { scale: 2 });
-            const imgData = canvas.toDataURL('image/png');
-            
-            const pdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'px',
-                format: 'a4'
-            });
-
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = pdf.internal.pageSize.getHeight();
-            const canvasWidth = canvas.width;
-            const canvasHeight = canvas.height;
-            const ratio = canvasWidth / canvasHeight;
-            
-            let imgHeight = pdfWidth / ratio;
-            let heightLeft = imgHeight;
-            let position = 0;
-            
-            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-            heightLeft -= pdfHeight;
-
-            while (heightLeft > 0) {
-                position -= pdfHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-                heightLeft -= pdfHeight;
-            }
-            
-            pdf.save('goghana-itinerary.pdf');
-            toast({ title: "Success!", description: "Your itinerary has been downloaded." });
-        } catch (error) {
-            console.error("Error generating PDF:", error);
-            toast({ variant: 'destructive', title: 'Error', description: "Failed to generate PDF. Please try again." });
-        }
-    };
-
-
     if (isLoading && !itinerary) {
         return (
             <div className="flex h-full min-h-[300px] w-full items-center justify-center">
@@ -230,6 +89,7 @@ const ItineraryContent = ({
             </div>
         )
     }
+
     if (!itinerary) {
          return (
             <div className="text-center p-8 flex flex-col items-center justify-center h-full min-h-[400px]">
@@ -237,6 +97,7 @@ const ItineraryContent = ({
             </div>
         )
     }
+
     if (isEditing) {
         return (
             <div className="flex flex-col h-full">
@@ -256,9 +117,10 @@ const ItineraryContent = ({
             </div>
         );
     }
+    
     return (
         <div className="flex flex-col h-full">
-            <div ref={itineraryRef} className="flex-grow overflow-y-auto pr-4 -mr-4">
+            <div className="flex-grow overflow-y-auto pr-4 -mr-4">
                 <Accordion type="single" collapsible className="w-full" defaultValue="day-1">
                     {itinerary && itinerary.itinerary && itinerary.itinerary.map((dayPlan) => (
                         <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
@@ -311,22 +173,16 @@ const ItineraryContent = ({
 
                 <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-center pt-4">
                      <Button onClick={() => onSetIsEditing(true)} variant="outline">
-                        <Pencil className="shrink-0" /> <span className="ml-2">Edit</span>
+                        <Pencil className="shrink-0" /> <span className="ml-2">Edit Plan</span>
                     </Button>
-                    <Dialog open={isDownloadDialogOpen} onOpenChange={setIsDownloadDialogOpen}>
-                        <DialogTrigger asChild>
-                            <Button variant="outline"><Download className="shrink-0" /> <span className="ml-2">Download</span></Button>
-                        </DialogTrigger>
-                        <DownloadDialog onDownload={handleDownloadPdf} onOpenChange={setIsDownloadDialogOpen} />
-                    </Dialog>
                     <Button asChild>
                         <Link href="/drivers">
-                            <Car className="shrink-0" /> <span className="ml-2">Go Solo</span>
+                            <Car className="shrink-0" /> <span className="ml-2">Find a Driver</span>
                         </Link>
                     </Button>
                     <Button asChild variant="secondary">
                         <Link href="https://letvisitghanatours.com" target="_blank">
-                            <Briefcase className="shrink-0" /> <span className="ml-2">Book This Tour</span>
+                            <Briefcase className="shrink-0" /> <span className="ml-2">Book a Tour</span>
                         </Link>
                     </Button>
                 </div>
@@ -336,7 +192,7 @@ const ItineraryContent = ({
 }
 
 export function ItineraryDialog({ planData, initialTool, open, onOpenChange }: ItineraryDialogProps) {
-    const [isLoading, setIsLoading] = useState({ itinerary: true, packingList: false, languageGuide: false, audio: '', chat: false });
+    const [isLoading, setIsLoading] = useState({ itinerary: false, packingList: false, languageGuide: false, audio: '', chat: false });
     const [itinerary, setItinerary] = useState<GenerateItineraryOutput | null>(null);
     const [packingList, setPackingList] = useState<GeneratePackingListOutput | null>(null);
     const [languageGuide, setLanguageGuide] = useState<GenerateLanguageGuideOutput | null>(null);
@@ -356,9 +212,9 @@ export function ItineraryDialog({ planData, initialTool, open, onOpenChange }: I
     useEffect(() => {
         if (open) {
             setActiveTab(initialTool || 'itinerary');
-            setItinerary(null);
-            setChatHistory([]);
-            handleGenerateItinerary();
+            if (!itinerary) {
+                handleGenerateItinerary();
+            }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open, initialTool]);
@@ -366,6 +222,7 @@ export function ItineraryDialog({ planData, initialTool, open, onOpenChange }: I
     const handleGenerateItinerary = async () => {
         setIsLoading(prev => ({...prev, itinerary: true}));
         setItinerary(null);
+        setChatHistory([]);
         setIsEditing(false);
         const result = await getItinerary({
             duration: planData.inputs.duration,

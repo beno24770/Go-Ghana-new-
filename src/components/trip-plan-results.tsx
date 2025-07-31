@@ -6,21 +6,13 @@ import {
   BedDouble,
   Briefcase,
   Car,
-  Check,
   Copy,
-  Download,
   Languages,
-  LoaderCircle,
-  Mail,
-  Pencil,
-  PlayCircle,
-  Send,
-  Share2,
   Ticket,
   Utensils,
-  Volume2,
   Wallet,
   Wand2,
+  Share2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -31,25 +23,10 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import type { ChatWithItineraryOutput, GenerateItineraryOutput, GenerateLanguageGuideOutput, GeneratePackingListOutput, PackingListItemSchema, PhraseSchema, PlanTripInput, PlanTripOutput } from '@/ai/schemas';
+import type { PlanTripInput, PlanTripOutput } from '@/ai/schemas';
 import { Badge } from '@/components/ui/badge';
-import { getAudio, getItinerary, getLanguageGuide, getPackingList, postItineraryChat, regenerateItinerary } from '@/app/actions';
-import { useEffect, useState, useMemo, useRef, Suspense } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
-import Link from 'next/link';
+import { useEffect, useState, useMemo } from 'react';
 import { marked } from 'marked';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { z } from 'zod';
-import { Textarea } from './ui/textarea';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { ItineraryLoader } from './itinerary-loader';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 import dynamic from 'next/dynamic';
 
 
@@ -201,12 +178,14 @@ export default function TripPlanResults({ data, isLoading, initialTool, onBack, 
 
       </CardContent>
       {data && (
-        <ItineraryDialog 
-            planData={data} 
-            initialTool={initialTool} 
-            open={isDialogOpen}
-            onOpenChange={setIsDialogOpen}
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+            <ItineraryDialog 
+                planData={data} 
+                initialTool={initialTool} 
+                open={isDialogOpen}
+                onOpenChange={setIsDialogOpen}
+            />
+        </Suspense>
       )}
     </Card>
   );

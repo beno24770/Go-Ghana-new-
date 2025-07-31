@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback, useTransition } from 'react';
+import React, { useState, useEffect, useCallback, useTransition, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -12,8 +12,6 @@ import TripPlanResults from '@/components/trip-plan-results';
 import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, EstimateBudgetInputSchema, PlanTripInputSchema } from '@/ai/schemas';
 import { getBudgetEstimate, getTripPlan } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
-import add from 'date-fns/add';
-import toDate from 'date-fns/toDate';
 import { Button } from './ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
@@ -28,27 +26,11 @@ type TripPlanData = {
     outputs: PlanTripOutput;
 }
 
-const parseUrlDate = (dateString: string | undefined): Date | undefined => {
-    if (!dateString) return undefined;
-    try {
-        // Dates in URL are 'yyyy-MM-dd'. JS new Date() treats this as UTC midnight.
-        // We add the timezone offset to get the correct local date.
-        const date = toDate(dateString);
-        if (isNaN(date.getTime())) return undefined;
-        return add(date, { minutes: date.getTimezoneOffset() });
-    } catch (error) {
-        console.warn("Invalid date string in URL:", dateString);
-        return undefined;
-    }
-};
-
-
 // Zod schema for parsing budget data from URL search params
 const budgetUrlSchema = EstimateBudgetInputSchema.extend({
     duration: z.coerce.number(),
     numTravelers: z.coerce.number(),
     region: z.union([z.string(), z.array(z.string())]),
-    startDate: z.string().optional(),
 }).merge(z.object({
     "outputs.accommodation.perDay": z.coerce.number(),
     "outputs.accommodation.total": z.coerce.number(),
@@ -68,7 +50,6 @@ const planUrlSchema = PlanTripInputSchema.extend({
     budget: z.coerce.number(),
     region: z.union([z.string(), z.array(z.string())]),
     interests: z.union([z.string(), z.array(z.string())]).optional(),
-    startDate: z.string(),
 }).merge(z.object({
     "outputs.suggestedTravelStyle": z.enum(['Budget', 'Mid-range', 'Luxury']),
     "outputs.accommodation.cost": z.coerce.number(),
@@ -101,7 +82,7 @@ const flattenObject = (obj: any, prefix = '') => {
 };
 
 
-export default function TripPlannerView() {
+function TripPlannerViewInternal() {
   const [activeTab, setActiveTab] = useState('estimate');
   const [budgetData, setBudgetData] = useState<BudgetData | null>(null);
   const [tripPlanData, setTripPlanData] = useState<TripPlanData | null>(null);
@@ -142,10 +123,9 @@ export default function TripPlannerView() {
         if (parsed.success) {
             const { duration, region, travelStyle, numTravelers, startDate, ...rest } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
-            const safeStartDate = parseUrlDate(startDate)?.toISOString().split('T')[0];
 
             setBudgetData({
-                inputs: { duration, region: regionArray, travelStyle, numTravelers, startDate: safeStartDate },
+                inputs: { duration, region: regionArray, travelStyle, numTravelers, startDate },
                 outputs: {
                     accommodation: { perDay: rest['outputs.accommodation.perDay'], total: rest['outputs.accommodation.total'] },
                     food: { perDay: rest['outputs.food.perDay'], total: rest['outputs.food.total'] },
@@ -161,25 +141,22 @@ export default function TripPlannerView() {
             const { budget, duration, numTravelers, region, travelStyle, interests, startDate, fromBudget, ...rest } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
             const interestsArray = Array.isArray(interests) ? interests : (interests ? [interests] : []);
-            const safeStartDate = parseUrlDate(startDate)?.toISOString().split('T')[0];
 
             if (fromBudget) {
               setCameFromBudget(true);
             }
 
-            if(safeStartDate) {
-                setTripPlanData({
-                    inputs: { duration, region: regionArray, budget, numTravelers, travelStyle, interests: interestsArray, startDate: safeStartDate },
-                    outputs: {
-                        suggestedTravelStyle: rest['outputs.suggestedTravelStyle'],
-                        accommodation: { cost: rest['outputs.accommodation.cost'], description: rest['outputs.accommodation.description'] },
-                        food: { cost: rest['outputs.food.cost'], description: rest['outputs.food.description'] },
-                        transportation: { cost: rest['outputs.transportation.cost'], description: rest['outputs.transportation.description'] },
-                        activities: { cost: rest['outputs.activities.cost'], description: rest['outputs.activities.description'] },
-                        total: rest['outputs.total'],
-                    },
-                });
-            }
+            setTripPlanData({
+                inputs: { duration, region: regionArray, budget, numTravelers, travelStyle, interests: interestsArray, startDate },
+                outputs: {
+                    suggestedTravelStyle: rest['outputs.suggestedTravelStyle'],
+                    accommodation: { cost: rest['outputs.accommodation.cost'], description: rest['outputs.accommodation.description'] },
+                    food: { cost: rest['outputs.food.cost'], description: rest['outputs.food.description'] },
+                    transportation: { cost: rest['outputs.transportation.cost'], description: rest['outputs.transportation.description'] },
+                    activities: { cost: rest['outputs.activities.cost'], description: rest['outputs.activities.description'] },
+                    total: rest['outputs.total'],
+                },
+            });
         }
     }
   }, [searchParams]);
@@ -189,33 +166,31 @@ export default function TripPlannerView() {
   }, [parseUrlParams]);
 
   const updateUrl = useCallback((tab: string, data: any, options?: { fromBudget?: boolean }) => {
-    const params = new URLSearchParams();
-    params.set('tab', tab);
-    
-    const flatData = flattenObject(data);
-    
-    params.delete('region');
-    params.delete('interests');
-
-    for (const key in flatData) {
-        if(key === 'inputs.region') {
-            if(Array.isArray(flatData[key])) {
-                flatData[key].forEach((r: string) => params.append('region', r));
-            }
-        } else if (key === 'inputs.interests') {
-            if(Array.isArray(flatData[key])) {
-                flatData[key].forEach((i: string) => params.append('interests', i));
-            }
-        } else if (flatData[key] !== undefined) {
-             params.set(key.replace('inputs.', '').replace('outputs.', 'outputs.'), flatData[key]);
-        }
-    }
-
-    if (options?.fromBudget) {
-        params.set('fromBudget', 'true');
-    }
-
     startTransition(() => {
+        const params = new URLSearchParams();
+        params.set('tab', tab);
+        
+        const flatData = flattenObject(data);
+        
+        for (const key in flatData) {
+            const urlKey = key.replace('inputs.', '').replace('outputs.', 'outputs.');
+            const value = flatData[key];
+
+            if (key === 'inputs.region' || key === 'inputs.interests') {
+                if (Array.isArray(value)) {
+                    // clear old values first
+                    params.delete(urlKey);
+                    value.forEach((item: string) => params.append(urlKey, item));
+                }
+            } else if (value !== undefined && value !== null) {
+                 params.set(urlKey, value);
+            }
+        }
+
+        if (options?.fromBudget) {
+            params.set('fromBudget', 'true');
+        }
+
         router.push(`/planner?${params.toString()}`, { scroll: false });
     });
   }, [router]);
@@ -286,25 +261,32 @@ export default function TripPlannerView() {
 
   const onTabChange = (value: string, options?: {fromBudget: boolean}) => {
     startTransition(() => {
-        setActiveTab(value);
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('tab', value);
+
         if (value === 'plan') {
-          if (options?.fromBudget) {
-            setCameFromBudget(true);
-          } else {
-             setBudgetData(null);
-             setTripPlanData(null);
-             setCameFromBudget(false);
-             router.push('/planner?tab=plan', { scroll: false });
-          }
+            if (options?.fromBudget) {
+                setCameFromBudget(true);
+            } else {
+                setBudgetData(null);
+                setTripPlanData(null);
+                setCameFromBudget(false);
+                // Clear all params except tab
+                const newParams = new URLSearchParams();
+                newParams.set('tab', 'plan');
+                router.push(`/planner?${newParams.toString()}`, { scroll: false });
+            }
         } else {
-          setTripPlanData(null);
-          // Only clear budget data if we are not coming from a "back" action
-          if (!cameFromBudget) {
-             setBudgetData(null);
-          }
-          setCameFromBudget(false);
-          router.push('/planner?tab=estimate', { scroll: false });
+            setTripPlanData(null);
+            if (!cameFromBudget) {
+                setBudgetData(null);
+            }
+            setCameFromBudget(false);
+            const newParams = new URLSearchParams();
+            newParams.set('tab', 'estimate');
+            router.push(`/planner?${newParams.toString()}`, { scroll: false });
         }
+        setActiveTab(value);
     });
   }
 
@@ -370,7 +352,14 @@ export default function TripPlannerView() {
                 </div>
             </TabsContent>
         </Tabs>
-
       </main>
   );
+}
+
+export default function TripPlannerView() {
+    return (
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div></div>}>
+            <TripPlannerViewInternal />
+        </Suspense>
+    )
 }

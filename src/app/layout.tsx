@@ -1,5 +1,5 @@
 
-import type { Metadata } from 'next';
+import type { Metadata, Manifest } from 'next';
 import { PT_Sans, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
@@ -12,12 +12,14 @@ import { Menu } from 'lucide-react';
 
 const ptSans = PT_Sans({
   subsets: ['latin'],
+  display: 'swap',
   weight: ['400', '700'],
   variable: '--font-pt-sans',
 });
 
 const playfairDisplay = Playfair_Display({
   subsets: ['latin'],
+  display: 'swap',
   variable: '--font-playfair-display',
 });
 
@@ -26,9 +28,9 @@ export const metadata: Metadata = {
   description: 'Your trusted guide to Ghana, powered by local expertise. Get realistic budgets, authentic itineraries, and travel tips from a real Ghanaian perspective.',
   manifest: '/manifest.json',
   icons: {
-    icon: '/favicon.svg',
-    shortcut: '/favicon.svg',
-    apple: '/favicon.svg',
+    icon: '/icon.png',
+    shortcut: '/icon.png',
+    apple: '/icon.png',
   },
 };
 

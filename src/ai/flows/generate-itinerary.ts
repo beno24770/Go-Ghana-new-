@@ -15,6 +15,7 @@ import addDays from 'date-fns/addDays';
 import format from 'date-fns/format';
 import { z } from 'zod';
 import { getRestaurants } from '../tools/get-restaurants';
+import { getArticleLink } from '../tools/get-article-link';
 
 export async function generateItinerary(input: GenerateItineraryInput): Promise<GenerateItineraryOutput> {
     const endDate = addDays(new Date(input.startDate), input.duration -1);
@@ -34,7 +35,7 @@ const generateItineraryPrompt = ai.definePrompt({
     name: 'generateItineraryPrompt',
     input: { schema: GenerateItineraryInputSchema.extend({endDate: z.string(), dayDates: z.array(z.string())}) },
     output: { schema: GenerateItineraryOutputSchema },
-    tools: [getLocalPulse, getEntertainmentEvents, getRestaurants],
+    tools: [getLocalPulse, getEntertainmentEvents, getRestaurants, getArticleLink],
     prompt: `You are a Ghana travel expert and a content curator for the website letvisitghana.com. Create a detailed, day-by-day itinerary based on the user's preferences.
 
 User Preferences:
@@ -56,7 +57,7 @@ Your Task:
 6.  **Create a Day-by-Day Plan**: For each day of the trip, provide a 'title' and 'details'.
 7.  **Add Specific Dates to Title**: For each day's title, you MUST include the specific date. Use the provided 'dayDates' array. The format should be "Day [Number] - [Date]: [Your Title]". For example: "Day 1 - 2024-05-25: Arrival in Accra".
 8.  **Be Specific and Practical**: Suggest specific attractions, restaurants, and experiences. Consider the travel style and budget.
-9.  **Embed "Read More" Links**: For major attractions, you MUST embed relevant Markdown links to articles on letvisitghana.com. This is crucial. For example, if you mention Kakum National Park, include a link like this: \`[Read more about Kakum National Park](https://www.letvisitghana.com/tourist-sites/kakum-national-park/)\`. If you mention Mole National Park, link to \`[Read more about Mole National Park](https://www.letvisitghana.com/tourist-sites/mole-national-park/)\`. Use your knowledge of the site to find the most relevant link.
+9.  **Embed "Read More" Links**: For major attractions, you MUST use the 'getArticleLink' tool to retrieve the URL and then embed it as a Markdown link. This is crucial. For example, if you mention Kakum National Park, call the tool with \`getArticleLink({attractionName: "Kakum National Park"})\` and then format the result like this: \`[Read more about Kakum National Park](https://www.letvisitghana.com/tourist-sites/kakum-national-park/)\`. Use this for any major tourist site mentioned.
 10. **Logical Flow**: Ensure the itinerary is geographically and logistically sound. **IMPORTANT: Travel between Kumasi and Cape Coast is very difficult by public transport. Always route travel between these cities through Accra.**
 11. **Engaging Titles**: Make the title for each day interesting and descriptive.
 12. **Add Daily Budget Estimate**: At the end of each day's details, you MUST include a section called "**Estimated Budget for Day [Number]:**" with a bulleted list of estimated costs for that day's specific activities. This should include:

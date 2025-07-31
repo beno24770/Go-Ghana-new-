@@ -15,4 +15,5 @@ import '@/ai/tools/get-local-pulse';
 import '@/ai/tools/get-entertainment-events';
 import '@/ai/tools/get-accommodations';
 import '@/ai/tools/get-restaurants';
+import '@/ai/tools/get-article-link';
     
