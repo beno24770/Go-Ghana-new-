@@ -114,12 +114,18 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
 
   const renderLegend = (props: any) => {
     const { payload } = props;
+
+    if (!payload) return null;
+    
     return (
       <ul className="grid grid-cols-2 gap-x-6 gap-y-2 mt-4 text-sm">
         {
           payload.map((entry: any, index: number) => {
             const categoryKey = entry.value.toLowerCase() as CategoryKey;
-            const detail = categoryDetails[categoryKey];
+            
+            // This check is to prevent a crash if a category doesn't exist in our details map.
+            if (!categoryDetails[categoryKey] || !outputs[categoryKey]) return null;
+
             return (
               <li 
                 key={`item-${index}`}
@@ -174,9 +180,17 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
                         activeIndex={activeIndex ?? -1}
                         activeShape={(props: any) => {
                             const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
+                            // This is a simplified active shape; you can customize it further.
                             return (
                                 <g>
                                     <path d={props.d} stroke={props.stroke} fill={fill} />
+                                    <path 
+                                        d={props.d} 
+                                        stroke={fill} 
+                                        strokeWidth={2}
+                                        fill="none"
+                                        style={{ transform: 'scale(1.05)', transformOrigin: `${cx}px ${cy}px` }}
+                                    />
                                 </g>
                             );
                         }}
@@ -189,7 +203,7 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
             </ResponsiveContainer>
         </div>
 
-        <Legend content={renderLegend} onMouseEnter={(e) => setActiveIndex(e.payload.index)} onMouseLeave={() => setActiveIndex(null)} />
+        <Legend content={renderLegend} onMouseEnter={(e: any) => e.payload && setActiveIndex(e.payload.index)} onMouseLeave={() => setActiveIndex(null)} />
         
         <div className="space-y-2 pt-4">
             <Button onClick={handlePlanClick} className="w-full" size="lg">
