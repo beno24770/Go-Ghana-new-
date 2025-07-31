@@ -7,10 +7,10 @@ import { Beer, Utensils, BedDouble, Plane } from 'lucide-react';
 import { Progress } from './ui/progress';
 
 const items = [
-    { icon: Beer, title: "Beers", category: "Drinks", amount: "2.35", ghanaAmount: "₫55,000", color: "bg-purple-500/20 text-purple-400" },
-    { icon: Utensils, title: "Noodle soup", category: "Restaurants", amount: "2.13", ghanaAmount: "₫50,000", color: "bg-teal-500/20 text-teal-400" },
-    { icon: BedDouble, title: "Hostel in Accra", category: "Accommodation", amount: "21.32", ghanaAmount: "₫500,000", color: "bg-red-500/20 text-red-400" },
-    { icon: Plane, title: "Flight to Kumasi", category: "Transport", amount: "45.50", ghanaAmount: "₫1,200,000", color: "bg-blue-500/20 text-blue-400" },
+    { icon: Beer, title: "Beers", category: "Drinks", amount: "2.35", ghanaAmount: "GHS 35", color: "bg-purple-500/20 text-purple-400" },
+    { icon: Utensils, title: "Waakye Breakfast", category: "Food", amount: "3.50", ghanaAmount: "GHS 50", color: "bg-teal-500/20 text-teal-400" },
+    { icon: BedDouble, title: "Hostel in Accra", category: "Accommodation", amount: "25.00", ghanaAmount: "GHS 375", color: "bg-red-500/20 text-red-400" },
+    { icon: Plane, title: "Flight to Kumasi", category: "Transport", amount: "55.50", ghanaAmount: "GHS 830", color: "bg-blue-500/20 text-blue-400" },
 ];
 
 const AnimatedPhoneMockup = () => {
@@ -35,13 +35,13 @@ const AnimatedPhoneMockup = () => {
                 <div className="w-full h-full p-4 flex flex-col text-white">
                     {/* Header */}
                     <div className="text-center pb-4 flex items-center justify-between">
-                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs">7:55</motion.div>
+                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs">9:41</motion.div>
                          <motion.h3
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="font-bold text-sm"
                         >
-                            Around the World
+                            Ghana Trip
                         </motion.h3>
                         <div />
                     </div>
@@ -54,20 +54,20 @@ const AnimatedPhoneMockup = () => {
                         transition={{ delay: 0.2 }}
                     >
                         <div>
-                            <p className="text-xs text-muted-foreground uppercase">Total</p>
-                            <p className="font-bold text-xl">${currentTotal.toFixed(2)}<span className="text-xs text-muted-foreground">/300</span></p>
-                            <Progress value={(currentTotal / 300) * 100} className="h-1 mt-1 bg-muted/50" />
+                            <p className="text-xs text-muted-foreground uppercase">Total Spent</p>
+                            <p className="font-bold text-xl">${currentTotal.toFixed(2)}<span className="text-xs text-muted-foreground">/1000</span></p>
+                            <Progress value={(currentTotal / 1000) * 100} className="h-1 mt-1 bg-muted/50" />
                         </div>
                          <div>
                             <p className="text-xs text-muted-foreground uppercase">Daily Average</p>
-                            <p className="font-bold text-xl">$54<span className="text-xs text-muted-foreground">/75</span></p>
-                             <Progress value={(54/75) * 100} className="h-1 mt-1 bg-muted/50" />
+                            <p className="font-bold text-xl">$65<span className="text-xs text-muted-foreground">/100</span></p>
+                             <Progress value={(65/100) * 100} className="h-1 mt-1 bg-muted/50" />
                         </div>
                     </motion.div>
 
                     {/* List */}
                     <div className="flex-grow space-y-3 overflow-hidden">
-                        <p className="text-xs font-bold text-muted-foreground px-2">Today</p>
+                        <p className="text-xs font-bold text-muted-foreground px-2">Today's Expenses</p>
                         <div className="relative h-full">
                             <AnimatePresence>
                                 {items.map((item, index) => (
@@ -89,7 +89,7 @@ const AnimatedPhoneMockup = () => {
                                                     <p className="text-xs text-muted-foreground">{item.category}</p>
                                                 </div>
                                                 <div className="ml-auto text-right">
-                                                    <p className="font-bold">{item.amount}</p>
+                                                    <p className="font-bold">${item.amount}</p>
                                                     <p className="text-xs text-muted-foreground">{item.ghanaAmount}</p>
                                                 </div>
                                             </div>
