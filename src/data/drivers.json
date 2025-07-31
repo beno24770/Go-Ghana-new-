@@ -1,0 +1,42 @@
+[
+    {
+        "id": "jerome-evame",
+        "name": "Jerome Evame",
+        "regions": ["Greater Accra", "Central", "Eastern", "Volta"],
+        "bio": "With over 10 years of experience driving in Accra and the coastal regions, I know all the best spots, from historic landmarks to hidden gems. I ensure a safe, comfortable, and insightful journey.",
+        "vehicle": "Toyota Corolla (A/C)",
+        "whatsAppUrl": "https://wa.me/233200635250",
+        "image": "https://placehold.co/400x400.png",
+        "data-ai-hint": "male driver"
+    },
+    {
+        "id": "ama-serwaa",
+        "name": "Ama Serwaa",
+        "regions": ["Ashanti", "Bono", "Ahafo"],
+        "bio": "As a proud Ashanti native, I love sharing the rich culture of my homeland. From the bustling Kejetia market to serene craft villages, I'll guide you through the heart of Ghana with a smile.",
+        "vehicle": "Hyundai Tucson (SUV)",
+        "whatsAppUrl": "https://wa.me/233200635250",
+        "image": "https://placehold.co/400x400.png",
+        "data-ai-hint": "female guide"
+    },
+    {
+        "id": "yaw-asante",
+        "name": "Yaw Asante",
+        "regions": ["Northern", "Savannah", "North East"],
+        "bio": "The northern regions are full of adventure! I specialize in wildlife tours to Mole National Park and exploring historic sites like the Larabanga Mosque. My 4x4 is ready for any road.",
+        "vehicle": "Ford Ranger (4x4)",
+        "whatsAppUrl": "https://wa.me/233200635250",
+        "image": "https://placehold.co/400x400.png",
+        "data-ai-hint": "man smiling"
+    },
+    {
+        "id": "esi-badu",
+        "name": "Esi Badu",
+        "regions": ["Volta", "Oti", "Eastern"],
+        "bio": "Discover the natural beauty of the Volta region with me. From the Wli waterfalls to the monkey sanctuaries, I offer a peaceful and scenic travel experience away from the city hustle.",
+        "vehicle": "Kia Sportage (A/C)",
+        "whatsAppUrl": "https://wa.me/233200635250",
+        "image": "https://placehold.co/400x400.png",
+        "data-ai-hint": "woman travel"
+    }
+]

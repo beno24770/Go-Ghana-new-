@@ -7,41 +7,11 @@ import { ArrowLeft, UserPlus } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
+import drivers from '@/data/drivers.json';
 
 const DriverProfileCard = dynamic(() => import('@/components/driver-profile-card'), {
     suspense: true,
 });
-
-const drivers = [
-    {
-        name: "Jerome Evame",
-        regions: ["Greater Accra", "Central", "Eastern"],
-        bio: "With over 10 years of experience driving in Accra and the coastal regions, I know all the best spots, from historic landmarks to hidden gems. I ensure a safe, comfortable, and insightful journey.",
-        vehicle: "Toyota Corolla (A/C)",
-        whatsAppUrl: "https://wa.me/233200635250",
-    },
-    {
-        name: "Ama Serwaa",
-        regions: ["Ashanti", "Bono", "Ahafo"],
-        bio: "As a proud Ashanti native, I love sharing the rich culture of my homeland. From the bustling Kejetia market to serene craft villages, I'll guide you through the heart of Ghana with a smile.",
-        vehicle: "Hyundai Tucson (SUV)",
-        whatsAppUrl: "https://wa.me/233200635250",
-    },
-    {
-        name: "Yaw Asante",
-        regions: ["Northern", "Savannah", "North East"],
-        bio: "The northern regions are full of adventure! I specialize in wildlife tours to Mole National Park and exploring historic sites like the Larabanga Mosque. My 4x4 is ready for any road.",
-        vehicle: "Ford Ranger (4x4)",
-        whatsAppUrl: "https://wa.me/233200635250",
-    },
-    {
-        name: "Esi Badu",
-        regions: ["Volta", "Oti"],
-        bio: "Discover the natural beauty of the Volta region with me. From the Wli waterfalls to the monkey sanctuaries, I offer a peaceful and scenic travel experience away from the city hustle.",
-        vehicle: "Kia Sportage (A/C)",
-        whatsAppUrl: "https://wa.me/233200635250",
-    }
-];
 
 const DriverSkeleton = () => (
     <div className="flex flex-col space-y-3 rounded-lg border bg-card p-6">
@@ -85,7 +55,7 @@ export default function DriversPage() {
         </Button>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             {drivers.map(driver => (
-                <Suspense key={driver.name} fallback={<DriverSkeleton />}>
+                <Suspense key={driver.id} fallback={<DriverSkeleton />}>
                     <DriverProfileCard {...driver} />
                 </Suspense>
             ))}

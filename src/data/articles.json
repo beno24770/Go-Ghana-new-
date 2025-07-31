@@ -1,0 +1,44 @@
+{
+    "attractions": [
+        {
+            "name": "Kakum National Park",
+            "keywords": ["kakum", "canopy walk"],
+            "url": "https://www.letvisitghana.com/tourist-sites/kakum-national-park/"
+        },
+        {
+            "name": "Mole National Park",
+            "keywords": ["mole", "safari", "wildlife"],
+            "url": "https://www.letvisitghana.com/tourist-sites/mole-national-park/"
+        },
+        {
+            "name": "Cape Coast Castle",
+            "keywords": ["cape coast castle", "slave castle"],
+            "url": "https://www.letvisitghana.com/tourist-sites/cape-coast-castle/"
+        },
+        {
+            "name": "Elmina Castle",
+            "keywords": ["elmina castle", "slave castle"],
+            "url": "https://www.letvisitghana.com/tourist-sites/elmina-castle/"
+        },
+        {
+            "name": "Kwame Nkrumah Memorial Park",
+            "keywords": ["kwame nkrumah", "nkrumah memorial", "independence"],
+            "url": "https://www.letvisitghana.com/tourist-sites/kwame-nkrumah-mausoleum/"
+        },
+        {
+            "name": "W.E.B. Du Bois Centre",
+            "keywords": ["du bois", "pan africanism"],
+            "url": "https://www.letvisitghana.com/tourist-sites/web-dubois-centre-for-pan-african-culture/"
+        },
+        {
+            "name": "Jamestown Lighthouse",
+            "keywords": ["jamestown", "lighthouse"],
+            "url": "https://www.letvisitghana.com/tourist-sites/jamestown-lighthouse/"
+        },
+        {
+            "name": "Wli Waterfalls",
+            "keywords": ["wli", "waterfall", "volta"],
+            "url": "https://www.letvisitghana.com/tourist-sites/wli-waterfalls/"
+        }
+    ]
+}
