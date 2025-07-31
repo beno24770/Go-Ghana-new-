@@ -9,7 +9,7 @@ import BudgetForm from '@/components/budget-form';
 import BudgetResults from '@/components/budget-results';
 import TripPlanForm from '@/components/trip-plan-form';
 import TripPlanResults from '@/components/trip-plan-results';
-import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, PlanTripInputSchema, EstimateBudgetBaseSchema, PlanTripBaseSchema } from '@/ai/schemas';
+import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, PlanTripBaseSchema, EstimateBudgetBaseSchema } from '@/ai/schemas';
 import { getBudgetEstimate, getTripPlan } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from './ui/button';
@@ -27,6 +27,7 @@ type TripPlanData = {
 }
 
 // Zod schema for parsing budget data from URL search params
+// We use the base schema here because the refined schema causes issues with .extend() on SSR
 const budgetUrlSchema = EstimateBudgetBaseSchema.extend({
     duration: z.coerce.number(),
     numTravelers: z.coerce.number(),
@@ -98,6 +99,39 @@ function TripPlannerViewInternal() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { toast } = useToast();
+
+  const updateUrl = useCallback((tab: string, data: any, options?: { fromBudget?: boolean, generate?: boolean }) => {
+    startTransition(() => {
+        const params = new URLSearchParams();
+        params.set('tab', tab);
+        
+        const flatData = flattenObject(data);
+        
+        for (const key in flatData) {
+            const urlKey = key.replace('inputs.', '').replace('outputs.', 'outputs.');
+            const value = flatData[key];
+
+            if (key === 'inputs.region' || key === 'inputs.interests') {
+                if (Array.isArray(value)) {
+                    // clear old values first
+                    params.delete(urlKey);
+                    value.forEach((item: string) => params.append(urlKey, item));
+                }
+            } else if (value !== undefined && value !== null) {
+                 params.set(urlKey, String(value));
+            }
+        }
+
+        if (options?.fromBudget) {
+            params.set('fromBudget', 'true');
+        }
+        if (options?.generate) {
+            params.set('generate', 'true');
+        }
+
+        router.push(`/planner?${params.toString()}`, { scroll: false });
+    });
+  }, [router]);
 
   const handlePlan = useCallback(async (inputs: PlanTripInput) => {
     setIsLoading(true);
@@ -176,9 +210,10 @@ function TripPlannerViewInternal() {
                         },
                     });
                 }
-            } else if (params.has('generate')) { // Otherwise, if we have a generate flag, run the plan
-                const parsedInputs = PlanTripInputSchema.safeParse(data);
+            } else if (params.get('generate') === 'true') { // Otherwise, if we have a generate flag, run the plan
+                const parsedInputs = PlanTripBaseSchema.safeParse(data);
                  if (parsedInputs.success) {
+                    // @ts-ignore
                     handlePlan(parsedInputs.data);
                 }
             }
@@ -189,39 +224,6 @@ function TripPlannerViewInternal() {
   useEffect(() => {
     parseUrlParams();
   }, [parseUrlParams]);
-
-  const updateUrl = useCallback((tab: string, data: any, options?: { fromBudget?: boolean, generate?: boolean }) => {
-    startTransition(() => {
-        const params = new URLSearchParams();
-        params.set('tab', tab);
-        
-        const flatData = flattenObject(data);
-        
-        for (const key in flatData) {
-            const urlKey = key.replace('inputs.', '').replace('outputs.', 'outputs.');
-            const value = flatData[key];
-
-            if (key === 'inputs.region' || key === 'inputs.interests') {
-                if (Array.isArray(value)) {
-                    // clear old values first
-                    params.delete(urlKey);
-                    value.forEach((item: string) => params.append(urlKey, item));
-                }
-            } else if (value !== undefined && value !== null) {
-                 params.set(urlKey, String(value));
-            }
-        }
-
-        if (options?.fromBudget) {
-            params.set('fromBudget', 'true');
-        }
-        if (options?.generate) {
-            params.set('generate', 'true');
-        }
-
-        router.push(`/planner?${params.toString()}`, { scroll: false });
-    });
-  }, [router]);
 
   const handleEstimate = async (inputs: EstimateBudgetInput) => {
     setIsLoading(true);
@@ -368,5 +370,7 @@ export default function TripPlannerView() {
         </Suspense>
     )
 }
+
+    
 
     
