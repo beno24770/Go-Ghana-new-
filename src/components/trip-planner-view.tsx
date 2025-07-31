@@ -299,11 +299,12 @@ export default function TripPlannerView() {
           }
         } else {
           setTripPlanData(null);
-          setCameFromBudget(false);
           // Only clear budget data if we are not coming from a "back" action
-          if (!budgetData) {
-            router.push('/planner?tab=estimate', { scroll: false });
+          if (!cameFromBudget) {
+             setBudgetData(null);
           }
+          setCameFromBudget(false);
+          router.push('/planner?tab=estimate', { scroll: false });
         }
     });
   }
@@ -374,5 +375,3 @@ export default function TripPlannerView() {
       </main>
   );
 }
-
-    
