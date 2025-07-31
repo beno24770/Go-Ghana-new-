@@ -3,10 +3,10 @@
 
 import type { LucideProps } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import { ComponentType, Suspense } from 'react';
+import { Suspense } from 'react';
 import { Skeleton } from './ui/skeleton';
 
-const fallback = <Skeleton className="h-10 w-10 rounded-full" />
+const fallback = <Skeleton className="h-10 w-10 rounded-full" />;
 
 type IconName = 'Calculator' | 'Map' | 'Car' | 'Languages';
 
@@ -14,11 +14,11 @@ interface LazyIconProps extends LucideProps {
   name: IconName;
 }
 
-const iconComponents: { [key in IconName]: ComponentType<LucideProps> } = {
-  Calculator: dynamic(() => import('lucide-react').then(module => module.Calculator), { ssr: false }),
-  Map: dynamic(() => import('lucide-react').then(module => module.Map), { ssr: false }),
-  Car: dynamic(() => import('lucide-react').then(module => module.Car), { ssr: false }),
-  Languages: dynamic(() => import('lucide-react').then(module => module.Languages), { ssr: false }),
+const iconComponents = {
+  Calculator: dynamic(() => import('lucide-react').then(mod => mod.Calculator)),
+  Map: dynamic(() => import('lucide-react').then(mod => mod.Map)),
+  Car: dynamic(() => import('lucide-react').then(mod => mod.Car)),
+  Languages: dynamic(() => import('lucide-react').then(mod => mod.Languages)),
 };
 
 export function LazyIcon({ name, ...props }: LazyIconProps) {
