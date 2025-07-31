@@ -1,7 +1,6 @@
 
 'use client';
 
-import { motion } from 'framer-motion';
 import { Badge } from './ui/badge';
 import { Mountain, Utensils, BedDouble, MapPin, Mic } from 'lucide-react';
 
@@ -31,11 +30,8 @@ export function PhoneMockup() {
                         {itineraryItems.map((item, index) => {
                             const Icon = item.icon;
                             return (
-                                <motion.div
+                                <div
                                     key={index}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5, delay: index * 0.2 }}
                                     className="p-3 rounded-lg bg-muted/50"
                                 >
                                     <div className="flex items-center gap-3">
@@ -47,7 +43,7 @@ export function PhoneMockup() {
                                             <p className="text-xs text-muted-foreground">{item.details}</p>
                                         </div>
                                     </div>
-                                </motion.div>
+                                </div>
                             )
                         })}
                     </div>
