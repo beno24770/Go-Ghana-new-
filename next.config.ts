@@ -36,4 +36,6 @@ const nextConfig = {
   },
 };
 
-module.exports = withPWA(nextConfig);
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+module.exports = isDevelopment ? nextConfig : withPWA(nextConfig);
