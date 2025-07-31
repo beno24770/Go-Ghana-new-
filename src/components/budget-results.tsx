@@ -68,7 +68,7 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
   const renderLegend = useCallback((props: any) => {
     const { payload } = props;
 
-    if (!payload || !data) return null;
+    if (!payload || !data || !data.outputs) return null;
     
     return (
       <ul className="grid grid-cols-2 gap-x-6 gap-y-2 mt-4 text-sm">
