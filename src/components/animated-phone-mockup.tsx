@@ -24,6 +24,9 @@ const AnimatedPhoneMockup = () => {
     }, []);
 
     const currentTotal = items.slice(0, currentItem + 1).reduce((acc, item) => acc + parseFloat(item.amount), 0);
+    const dailyAverage = 65;
+    const totalBudget = 1000;
+    const dailyBudget = 100;
 
     return (
         <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-xl">
@@ -55,13 +58,13 @@ const AnimatedPhoneMockup = () => {
                     >
                         <div>
                             <p className="text-xs text-muted-foreground uppercase">Total Spent</p>
-                            <p className="font-bold text-xl">${currentTotal.toFixed(2)}<span className="text-xs text-muted-foreground">/1000</span></p>
-                            <Progress value={(currentTotal / 1000) * 100} className="h-1 mt-1 bg-muted/50" />
+                            <p className="font-bold text-xl">${currentTotal.toFixed(2)}<span className="text-xs text-muted-foreground">/{totalBudget}</span></p>
+                            <Progress value={(currentTotal / totalBudget) * 100} className="h-1 mt-1 bg-muted/50" />
                         </div>
                          <div>
                             <p className="text-xs text-muted-foreground uppercase">Daily Average</p>
-                            <p className="font-bold text-xl">$65<span className="text-xs text-muted-foreground">/100</span></p>
-                             <Progress value={(65/100) * 100} className="h-1 mt-1 bg-muted/50" />
+                            <p className="font-bold text-xl">${dailyAverage}<span className="text-xs text-muted-foreground">/{dailyBudget}</span></p>
+                             <Progress value={(dailyAverage/dailyBudget) * 100} className="h-1 mt-1 bg-muted/50" />
                         </div>
                     </motion.div>
 

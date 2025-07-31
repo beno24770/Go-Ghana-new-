@@ -20,7 +20,6 @@ import {
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import type { EstimateBudgetInput, EstimateBudgetOutput } from '@/ai/schemas';
-import { Progress } from './ui/progress';
 import { motion } from 'framer-motion';
 
 type BudgetData = {
