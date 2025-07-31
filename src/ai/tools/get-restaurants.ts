@@ -43,8 +43,6 @@ export const getRestaurants = ai.defineTool(
       return isInRegion && hasStyle;
     });
 
-    // Return a random subset to avoid overwhelming the user, max 5
-    const shuffled = relevantRestaurants.sort(() => 0.5 - Math.random());
-    return { restaurants: shuffled.slice(0, 5) };
+    return { restaurants: relevantRestaurants };
   }
 );
