@@ -38,11 +38,20 @@ export const getAccommodations = ai.defineTool(
   async (input) => {
     const { regions, travelStyle } = input;
 
-    const relevantAccommodations = accommodationsData.filter(accommodation => {
+    let relevantAccommodations = accommodationsData.filter(accommodation => {
       const isInRegion = regions.includes(accommodation.region);
       const hasStyle = accommodation.travelStyle.includes(travelStyle);
       return isInRegion && hasStyle;
     });
+
+    // If no accommodations are found for the specific region and style,
+    // broaden the search to any region with the correct style.
+    // This prevents the AI from failing if the user's selection is too narrow.
+    if (relevantAccommodations.length === 0) {
+      relevantAccommodations = accommodationsData.filter(accommodation => 
+        accommodation.travelStyle.includes(travelStyle)
+      );
+    }
 
     return { accommodations: relevantAccommodations };
   }

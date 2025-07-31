@@ -40,28 +40,37 @@ export const getRestaurants = ai.defineTool(
     // Map travel style to star ratings
     const allowedStyles: string[] = [];
     if (style === 'Budget') {
-        // "2 star and below"
         allowedStyles.push('1-star', '2-star', 'Fast Food', 'Local Dining', 'Home-style Dining');
     } else if (style === 'Mid-range') {
-        // "3 star"
         allowedStyles.push('3-star');
     } else if (style === 'Luxury') {
-        // "3 star and four star and above" -> The data only goes up to 3 stars, so we'll use that.
          allowedStyles.push('3-star', 'Fine Dining', 'Historic Dining');
     }
 
-    const relevantRestaurants = restaurantsData.filter(restaurant => {
+    let relevantRestaurants = restaurantsData.filter(restaurant => {
       const isInRegion = regions.includes(restaurant.region);
       
-      let hasStyle = true; // Default to true if no style is specified
+      let hasStyle = true;
       if (style && allowedStyles.length > 0) {
-        // Check if the restaurant's description contains any of the allowed star ratings/styles.
-        // E.g., "3-star restaurant..."
-        hasStyle = allowedStyles.some(allowed => restaurant.description.toLowerCase().includes(allowed.toLowerCase().replace('-star','')));
+        hasStyle = allowedStyles.some(allowed => 
+            restaurant.style.toLowerCase().includes(allowed.toLowerCase().replace('-star','')) ||
+            restaurant.description.toLowerCase().includes(allowed.toLowerCase().replace('-star',''))
+        );
       }
 
       return isInRegion && hasStyle;
     });
+
+    // If no restaurants are found for the specific region and style,
+    // broaden the search to any region with the correct style.
+    if (relevantRestaurants.length === 0 && style && allowedStyles.length > 0) {
+        relevantRestaurants = restaurantsData.filter(restaurant => {
+            return allowedStyles.some(allowed => 
+                restaurant.style.toLowerCase().includes(allowed.toLowerCase().replace('-star','')) ||
+                restaurant.description.toLowerCase().includes(allowed.toLowerCase().replace('-star',''))
+            );
+        });
+    }
 
     return { restaurants: relevantRestaurants };
   }
