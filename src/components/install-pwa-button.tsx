@@ -17,12 +17,19 @@ import {
 
 export function InstallPwaButton() {
   const [isIos, setIsIos] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     // This check runs only on the client-side
+    setIsClient(true);
     const userAgent = window.navigator.userAgent;
     setIsIos(/iPhone|iPad|iPod/.test(userAgent));
   }, []);
+
+  if (!isClient) {
+    // Render nothing on the server to prevent hydration mismatch
+    return null;
+  }
 
   return (
     <AlertDialog>
@@ -69,5 +76,3 @@ export function InstallPwaButton() {
     </AlertDialog>
   );
 }
-
-    
