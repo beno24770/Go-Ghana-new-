@@ -88,7 +88,7 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
   }
 
   const { inputs, outputs } = data;
-  const totalPerDay = outputs.total / inputs.duration;
+  const totalPerDay = outputs.total > 0 && inputs.duration > 0 ? outputs.total / inputs.duration : 0;
 
   return (
     <Card className="w-full">
@@ -111,7 +111,7 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
 
         <div className="space-y-4 pt-4">
              {(Object.keys(outputs) as CategoryKey[])
-              .filter(key => key !== 'total' && outputs[key].total > 0)
+              .filter(key => key !== 'total' && outputs[key] && outputs[key].total > 0)
               .map(key => (
                 <div key={key} className="space-y-2">
                     <div className="flex justify-between items-baseline">
