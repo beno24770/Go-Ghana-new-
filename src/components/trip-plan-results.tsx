@@ -28,6 +28,7 @@ import { Badge } from '@/components/ui/badge';
 import { useEffect, useState, useMemo, Suspense } from 'react';
 import { marked } from 'marked';
 import dynamic from 'next/dynamic';
+import { useSearchParams } from 'next/navigation';
 
 
 type TripPlanData = {
@@ -78,6 +79,7 @@ function PlanSection({ title, cost, description, icon, cta }: { title: string; c
 export default function TripPlanResults({ data, isLoading, onBack, showBackButton }: TripPlanResultsProps) {
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  
   const searchParams = useSearchParams();
   const initialTool = searchParams.get('tool');
 
@@ -191,5 +193,3 @@ export default function TripPlanResults({ data, isLoading, onBack, showBackButto
     </Card>
   );
 }
-
-    
