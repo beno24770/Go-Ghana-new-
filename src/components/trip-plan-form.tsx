@@ -149,7 +149,11 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                         <Calendar
                             mode="single"
                             selected={field.value ? parseDateWithOffset(field.value) : undefined}
-                            onSelect={(date) => field.onChange(date?.toISOString().split('T')[0])}
+                            onSelect={(date) => {
+                                if (date) {
+                                    field.onChange(format(date, 'yyyy-MM-dd'));
+                                }
+                            }}
                             disabled={(date) => date < new Date(new Date().setHours(0,0,0,0))}
                             initialFocus
                         />
