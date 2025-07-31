@@ -66,10 +66,10 @@ interface TripPlanResultsProps {
 }
 
 const categoryIcons = {
-  accommodation: <BedDouble className="h-6 w-6 text-muted-foreground" />,
-  food: <Utensils className="h-6 w-6 text-muted-foreground" />,
-  transportation: <Car className="h-6 w-6 text-muted-foreground" />,
-  activities: <Ticket className="h-6 w-6 text-muted-foreground" />,
+  accommodation: <BedDouble className="h-8 w-8 text-primary" />,
+  food: <Utensils className="h-8 w-8 text-primary" />,
+  transportation: <Car className="h-8 w-8 text-primary" />,
+  activities: <Ticket className="h-8 w-8 text-primary" />,
 };
 
 interface ItineraryDialogProps {
@@ -228,7 +228,7 @@ const ItineraryContent = ({
             const canvasHeight = canvas.height;
             const ratio = canvasWidth / canvasHeight;
             
-            const imgHeight = pdfWidth / ratio;
+            let imgHeight = pdfWidth / ratio;
             let heightLeft = imgHeight;
             let position = 0;
             
@@ -236,7 +236,7 @@ const ItineraryContent = ({
             heightLeft -= pdfHeight;
 
             while (heightLeft > 0) {
-                position = -pdfHeight + (position * -1);
+                position -= pdfHeight;
                 pdf.addPage();
                 pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
                 heightLeft -= pdfHeight;
@@ -293,7 +293,7 @@ const ItineraryContent = ({
                             <AccordionTrigger className="font-bold hover:no-underline text-left">{dayPlan.title}</AccordionTrigger>
                             <AccordionContent>
                             <div 
-                                className="prose dark:prose-invert max-w-none" 
+                                className="prose dark:prose-invert prose-p:text-foreground prose-strong:text-foreground max-w-none" 
                                 dangerouslySetInnerHTML={{ __html: marked.parse(dayPlan.details) as string }} 
                             />
                             </AccordionContent>
@@ -305,7 +305,7 @@ const ItineraryContent = ({
                         {chatHistory.map((chat, index) => (
                             <div key={index} className={`flex flex-col ${chat.role === 'user' ? 'items-end' : 'items-start'}`}>
                                 <div className={`rounded-lg px-4 py-2 ${chat.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
-                                    <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: marked.parse(chat.content) as string }} />
+                                    <div className="prose dark:prose-invert max-w-none prose-p:text-foreground" dangerouslySetInnerHTML={{ __html: marked.parse(chat.content) as string }} />
                                 </div>
                             </div>
                         ))}
@@ -539,7 +539,7 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-4xl max-h-[90svh] flex flex-col p-6">
                 <DialogHeader>
-                    <DialogTitle className="font-headline text-2xl">Your Trip Tools</DialogTitle>
+                    <DialogTitle className="text-2xl">Your Trip Tools</DialogTitle>
                     <DialogDescription>
                         Generate and customize a sample itinerary, packing list, and language guide for your trip.
                     </DialogDescription>
@@ -656,17 +656,21 @@ function ItineraryDialog({ planData, initialTool, open, onOpenChange }: Itinerar
 }
 
 function PlanSection({ title, cost, description, icon, cta }: { title: string; cost: number; description: string; icon: React.ReactNode, cta?: React.ReactNode }) {
+  const parsedDescription = useMemo(() => marked.parse(description), [description]);
+  
   return (
-    <div>
-        <div className="flex items-center gap-4">
+    <div className="grid grid-cols-[auto,1fr] gap-4 items-start">
+        <div className="bg-primary/10 p-3 rounded-full">
             {icon}
-            <div>
-                <h3 className="text-xl font-bold font-headline">{title}</h3>
-                <p className="text-lg font-semibold text-primary">${cost.toLocaleString()}</p>
-            </div>
         </div>
-      <p className="mt-2 text-muted-foreground">{description}</p>
-      {cta && <div className="mt-4">{cta}</div>}
+        <div>
+            <h3 className="text-xl font-bold">{title}</h3>
+            <p className="text-lg font-semibold text-primary">${cost.toLocaleString()}</p>
+            <div className="mt-2 text-muted-foreground prose prose-sm max-w-none prose-p:my-1 prose-ul:my-2 prose-li:my-0"
+              dangerouslySetInnerHTML={{ __html: parsedDescription as string }} 
+            />
+            {cta && <div className="mt-4">{cta}</div>}
+        </div>
     </div>
   );
 }
@@ -709,7 +713,7 @@ export default function TripPlanResults({ data, isLoading, initialTool, onBack, 
       <div className="flex h-full min-h-[500px] w-full items-center justify-center rounded-lg border border-dashed bg-muted/50 p-8">
         <div className="text-center">
             <Ticket className="h-16 w-16 mx-auto text-muted-foreground" />
-          <h3 className="font-headline text-2xl">Your Custom Trip Plan Awaits</h3>
+          <h3 className="text-2xl">Your Custom Trip Plan Awaits</h3>
           <p className="mt-2 text-muted-foreground">
             Fill out your budget details, and we'll craft a personalized travel plan for your Ghanaian adventure.
           </p>
@@ -719,16 +723,15 @@ export default function TripPlanResults({ data, isLoading, initialTool, onBack, 
   }
 
   const { inputs, outputs } = data;
-  const regionText = Array.isArray(inputs.region) ? inputs.region.join(', ') : inputs.region;
-
+  
   return (
     <Card className="w-full">
       <CardHeader>
         <div className="flex flex-wrap items-start justify-between gap-2">
             <div>
-                <CardTitle className="font-headline text-3xl">Your Trip Plan for Ghana</CardTitle>
+                <CardTitle className="text-3xl">Your Trip Plan for Ghana</CardTitle>
                 <CardDescription>
-                For a {inputs.duration}-day trip to {regionText} for {inputs.numTravelers} traveler(s), starting on {new Date(inputs.startDate).toLocaleDateString(undefined, { dateStyle: 'long', timeZone: 'UTC' })}.
+                For a {inputs.duration}-day trip to {inputs.region.join(', ')} for {inputs.numTravelers} traveler(s), starting on {new Date(inputs.startDate).toLocaleDateString(undefined, { dateStyle: 'long', timeZone: 'UTC' })}.
                 </CardDescription>
             </div>
             <Badge variant="outline" className="text-lg">
@@ -737,9 +740,9 @@ export default function TripPlanResults({ data, isLoading, initialTool, onBack, 
         </div>
       </CardHeader>
       <CardContent className="space-y-8">
-        <div className="rounded-lg bg-accent/20 p-4 text-center">
-            <p className="text-sm text-accent-foreground/80">Suggested Travel Style</p>
-            <p className="font-headline text-2xl font-bold text-accent-foreground">{outputs.suggestedTravelStyle}</p>
+        <div className="rounded-lg bg-secondary/20 p-4 text-center">
+            <p className="text-sm text-secondary-foreground/80">Suggested Travel Style</p>
+            <p className="text-2xl font-bold text-secondary-foreground">{outputs.suggestedTravelStyle}</p>
         </div>
 
         <div className="space-y-6">
@@ -748,14 +751,14 @@ export default function TripPlanResults({ data, isLoading, initialTool, onBack, 
             <PlanSection title="Transportation" cost={outputs.transportation.cost} description={outputs.transportation.description} icon={categoryIcons.transportation} />
             <PlanSection title="Activities" cost={outputs.activities.cost} description={outputs.activities.description} icon={categoryIcons.activities} cta={
                 <Button onClick={() => setIsDialogOpen(true)}>
-                    <Wand2 className="mr-2 h-4 w-4 shrink-0" /> Plan Details
+                    <Wand2 className="mr-2 h-4 w-4 shrink-0" /> View & Customize Itinerary
                 </Button>
             } />
         </div>
         
         <div className="text-center border-t pt-6">
           <p className="text-sm text-muted-foreground">Total Estimated Cost</p>
-          <p className="font-headline text-5xl font-bold tracking-tighter text-primary">
+          <p className="text-5xl font-bold tracking-tighter text-primary">
             ${outputs.total.toLocaleString()}
           </p>
         </div>

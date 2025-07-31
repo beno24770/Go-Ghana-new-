@@ -20,7 +20,13 @@ import {
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import type { EstimateBudgetInput, EstimateBudgetOutput } from '@/ai/schemas';
-import { motion } from 'framer-motion';
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartConfig,
+} from '@/components/ui/chart';
+import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 
 type BudgetData = {
   inputs: EstimateBudgetInput;
@@ -33,7 +39,6 @@ interface BudgetResultsProps {
   onPlanItinerary: (inputs: EstimateBudgetInput, total: number) => void;
 }
 
-
 const categoryIcons = {
   accommodation: <BedDouble className="h-6 w-6 text-muted-foreground" />,
   food: <Utensils className="h-6 w-6 text-muted-foreground" />,
@@ -43,19 +48,25 @@ const categoryIcons = {
 
 type CategoryKey = keyof Omit<EstimateBudgetOutput, 'total'>;
 
-const AnimatedBar = ({ value, maxValue, className }: { value: number, maxValue: number, className: string }) => {
-    const percentage = (value / maxValue) * 100;
-    return (
-        <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
-            <motion.div
-                className={`h-full rounded-full ${className}`}
-                initial={{ width: 0 }}
-                animate={{ width: `${percentage}%` }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-            />
-        </div>
-    )
-}
+const chartConfig = {
+  accommodation: {
+    label: 'Accommodation',
+    color: 'hsl(var(--chart-1))',
+  },
+  food: {
+    label: 'Food',
+    color: 'hsl(var(--chart-2))',
+  },
+  transportation: {
+    label: 'Transportation',
+    color: 'hsl(var(--chart-3))',
+  },
+  activities: {
+    label: 'Activities',
+    color: 'hsl(var(--chart-4))',
+  },
+} satisfies ChartConfig;
+
 
 export default function BudgetResults({ data, isLoading, onPlanItinerary }: BudgetResultsProps) {
   const { toast } = useToast();
@@ -103,46 +114,44 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
 
   const { inputs, outputs } = data;
   const chartData = (Object.keys(outputs) as CategoryKey[])
-    .filter(key => key !== 'total')
-    .map((key, index) => ({
-      name: key.charAt(0).toUpperCase() + key.slice(1),
+    .filter(key => key !== 'total' && outputs[key].total > 0)
+    .map(key => ({
+      name: key,
       value: outputs[key].total,
-      icon: categoryIcons[key],
-      colorClass: `bg-chart-${(index % 5) + 1}`
+      fill: `var(--color-${key})`,
     }));
-  
-  const regionText = Array.isArray(inputs.region) ? inputs.region.join(', ') : inputs.region;
+
+  const totalPerDay = outputs.total / inputs.duration;
 
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="font-headline text-3xl">Your Estimated Budget</CardTitle>
+        <CardTitle className="text-3xl">Your Estimated Budget</CardTitle>
         <CardDescription>
-          For a {inputs.duration}-day trip to {regionText} for {inputs.numTravelers} traveler(s) ({inputs.travelStyle} style).
+          For a {inputs.duration}-day trip to {inputs.region.join(', ')} for {inputs.numTravelers} traveler(s) ({inputs.travelStyle} style).
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="text-center">
           <p className="text-sm text-muted-foreground">Total Estimated Cost</p>
-          <p className="font-headline text-5xl font-bold tracking-tighter text-primary">
+          <p className="text-5xl font-bold tracking-tighter text-primary">
             ${outputs.total.toLocaleString()}
+          </p>
+          <p className="text-sm text-muted-foreground">
+            (${totalPerDay.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} / day)
           </p>
         </div>
 
-        <div className="space-y-4 rounded-lg border p-4">
-             {chartData.map((item) => (
-                <div key={item.name} className="space-y-2">
-                    <div className="flex justify-between items-center text-sm">
-                        <div className="flex items-center gap-2">
-                             {item.icon}
-                            <span className="font-medium">{item.name}</span>
-                        </div>
-                        <span className="font-bold">${item.value.toLocaleString()}</span>
-                    </div>
-                    <AnimatedBar value={item.value} maxValue={outputs.total} className={item.colorClass} />
-                </div>
-            ))}
-        </div>
+        <ChartContainer config={chartConfig} className="mx-auto aspect-square h-[250px]">
+          <PieChart>
+            <ChartTooltip content={<ChartTooltipContent nameKey="name" />} />
+            <Pie data={chartData} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5}>
+                {chartData.map((entry) => (
+                    <Cell key={`cell-${entry.name}`} fill={chartConfig[entry.name as keyof typeof chartConfig].color} />
+                ))}
+            </Pie>
+          </PieChart>
+        </ChartContainer>
         
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {(Object.keys(outputs) as CategoryKey[])

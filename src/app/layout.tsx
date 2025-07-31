@@ -38,14 +38,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body className={cn("font-body antialiased", ptSans.variable, playfairDisplay.variable)}>
         <div className="flex min-h-screen flex-col">
-           <header className="container mx-auto flex max-w-5xl items-center justify-between px-4 py-6">
+           <header className="container mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:py-6">
              <Link href="/">
                 <Logo />
              </Link>
-             <nav className="hidden items-center gap-4 sm:flex">
+             <nav className="hidden items-center gap-2 sm:flex">
                 <Button asChild variant="ghost">
                     <Link href="/">Home</Link>
                 </Button>
@@ -86,7 +86,7 @@ export default function RootLayout({
                 </Sheet>
              </div>
            </header>
-          {children}
+          <main className="flex-1">{children}</main>
           <footer className="container mx-auto max-w-5xl px-4 py-6 text-center text-sm text-muted-foreground">
             <p>&copy; {new Date().getFullYear()} GoGhana Planner. All rights reserved.</p>
           </footer>

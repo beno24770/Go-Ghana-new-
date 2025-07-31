@@ -4,47 +4,47 @@
 
 @layer base {
   :root {
-    --background: 222 47% 11%; /* Dark Blue */
-    --foreground: 210 40% 98%;
-    --card: 222 47% 11%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 47% 11%;
-    --popover-foreground: 210 40% 98%;
+    --background: 45 45% 90%; /* Sand Tan */
+    --foreground: 24 9.8% 10%;
+    --card: 45 45% 96%; /* Lighter Sand Tan for cards */
+    --card-foreground: 24 9.8% 10%;
+    --popover: 45 45% 96%;
+    --popover-foreground: 24 9.8% 10%;
     --primary: 0 72% 51%; /* Kente Red */
     --primary-foreground: 60 9.1% 97.8%;
     --secondary: 44 95% 60%; /* Royal Gold */
     --secondary-foreground: 24 9.8% 10%;
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 45 20% 80%;
+    --muted-foreground: 25 5.3% 44.7%;
     --accent: 44 95% 60%; /* Royal Gold */
     --accent-foreground: 24 9.8% 10%;
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 60 9.1% 97.8%;
-    --border: 217 33% 25%;
-    --input: 217 33% 25%;
+    --border: 45 20% 75%;
+    --input: 45 20% 85%;
     --ring: 0 72% 51%;
+    --radius: 0.5rem;
     --chart-1: 0 72% 51%;
     --chart-2: 44 95% 60%;
     --chart-3: 120 40% 50%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+    --chart-4: 25 84% 58%;
+    --chart-5: 220 83% 59%;
   }
 
   .dark {
-    --background: 222 47% 11%; /* Dark Blue */
+    --background: 222 47% 11%;
     --foreground: 210 40% 98%;
-    --card: 222 47% 11%;
+    --card: 222 47% 13%;
     --card-foreground: 210 40% 98%;
     --popover: 222 47% 11%;
     --popover-foreground: 210 40% 98%;
-    --primary: 0 72% 51%; /* Kente Red */
+    --primary: 0 72% 51%;
     --primary-foreground: 60 9.1% 97.8%;
-    --secondary: 44 95% 60%; /* Royal Gold */
+    --secondary: 44 95% 60%;
     --secondary-foreground: 24 9.8% 10%;
     --muted: 217 33% 17%;
     --muted-foreground: 215 20% 65%;
-    --accent: 44 95% 60%; /* Royal Gold */
+    --accent: 44 95% 60%;
     --accent-foreground: 24 9.8% 10%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 60 9.1% 97.8%;
@@ -66,5 +66,8 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'PT Sans', sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-headline;
   }
 }
