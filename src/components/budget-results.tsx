@@ -10,7 +10,7 @@ import {
   Utensils,
   Wand2,
 } from 'lucide-react';
-import { Pie, PieChart } from 'recharts';
+import { Pie, PieChart, Cell } from 'recharts';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -120,7 +120,7 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
     .map(key => ({
       name: key.charAt(0).toUpperCase() + key.slice(1),
       cost: outputs[key].total,
-      fill: `var(--color-${key})`,
+      fill: chartConfig[key]?.color,
     }));
   
   const regionText = Array.isArray(inputs.region) ? inputs.region.join(', ') : inputs.region;
@@ -152,7 +152,11 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
                 innerRadius={60}
                 strokeWidth={5}
                 labelLine={false}
-              />
+              >
+                {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                ))}
+              </Pie>
             </PieChart>
           </ChartContainer>
         </div>
