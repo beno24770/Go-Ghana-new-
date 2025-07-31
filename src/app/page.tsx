@@ -20,7 +20,7 @@ export default function Home() {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div className="space-y-6 text-center lg:text-left">
                     <h1 className="text-4xl font-bold text-foreground drop-shadow-md sm:text-5xl md:text-6xl">
-                        Real Plans. Real Prices. Real Ghana.
+                        Plan Your Dream Ghana Trip in Minutes
                     </h1>
                     <p className="text-lg text-muted-foreground">
                         Stop guessing. Get a realistic budget, a personalized itinerary, and connect with trusted local experts — all built on real data and insight from those who know Ghana best.
