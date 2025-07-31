@@ -38,11 +38,15 @@ export const getAccommodations = ai.defineTool(
   async (input) => {
     const { regions, travelStyle } = input;
 
-    const relevantAccommodations = accommodationsData.filter(accommodation => {
+    let relevantAccommodations = accommodationsData.filter(accommodation => {
       const isInRegion = regions.includes(accommodation.region);
       const hasStyle = accommodation.travelStyle.includes(travelStyle);
       return isInRegion && hasStyle;
     });
+
+    if (relevantAccommodations.length === 0) {
+      relevantAccommodations = accommodationsData;
+    }
 
     return { accommodations: relevantAccommodations };
   }
