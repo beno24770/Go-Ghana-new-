@@ -20,7 +20,8 @@ import {
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import type { EstimateBudgetInput, EstimateBudgetOutput } from '@/ai/schemas';
-import { Progress } from './ui/progress';
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useState } from 'react';
 
 type BudgetData = {
   inputs: EstimateBudgetInput;
@@ -33,11 +34,11 @@ interface BudgetResultsProps {
   onPlanItinerary: (inputs: EstimateBudgetInput, total: number) => void;
 }
 
-const categoryIcons = {
-  accommodation: <BedDouble className="h-6 w-6 text-muted-foreground" />,
-  food: <Utensils className="h-6 w-6 text-muted-foreground" />,
-  transportation: <Car className="h-6 w-6 text-muted-foreground" />,
-  activities: <Ticket className="h-6 w-6 text-muted-foreground" />,
+const categoryDetails = {
+  accommodation: { icon: <BedDouble className="h-5 w-5" />, color: 'hsl(var(--chart-1))' },
+  food: { icon: <Utensils className="h-5 w-5" />, color: 'hsl(var(--chart-2))' },
+  transportation: { icon: <Car className="h-5 w-5" />, color: 'hsl(var(--chart-3))' },
+  activities: { icon: <Ticket className="h-5 w-5" />, color: 'hsl(var(--chart-4))' },
 };
 
 type CategoryKey = keyof Omit<EstimateBudgetOutput, 'total'>;
@@ -45,6 +46,7 @@ type CategoryKey = keyof Omit<EstimateBudgetOutput, 'total'>;
 
 export default function BudgetResults({ data, isLoading, onPlanItinerary }: BudgetResultsProps) {
   const { toast } = useToast();
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const handleShare = () => {
     if (typeof window !== 'undefined') {
@@ -90,6 +92,52 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
   const { inputs, outputs } = data;
   const totalPerDay = outputs.total > 0 && inputs.duration > 0 ? outputs.total / inputs.duration : 0;
 
+  const chartData = (Object.keys(outputs) as CategoryKey[])
+    .filter(key => key !== 'total' && outputs[key] && outputs[key].total > 0)
+    .map(key => ({
+      name: key.charAt(0).toUpperCase() + key.slice(1),
+      value: outputs[key].total,
+      ...categoryDetails[key],
+  }));
+
+  const CustomTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      const percent = ((payload[0].value / outputs.total) * 100).toFixed(0);
+      return (
+        <div className="rounded-lg border bg-background p-2 shadow-sm">
+          <p className="font-bold">{`${payload[0].name}: $${payload[0].value.toLocaleString()} (${percent}%)`}</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const renderLegend = (props: any) => {
+    const { payload } = props;
+    return (
+      <ul className="grid grid-cols-2 gap-x-6 gap-y-2 mt-4 text-sm">
+        {
+          payload.map((entry: any, index: number) => {
+            const categoryKey = entry.value.toLowerCase() as CategoryKey;
+            const detail = categoryDetails[categoryKey];
+            return (
+              <li 
+                key={`item-${index}`}
+                onMouseEnter={() => setActiveIndex(index)}
+                onMouseLeave={() => setActiveIndex(null)}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <span className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.color }}></span>
+                <span className="capitalize text-muted-foreground">{entry.value}</span>
+                <span className="font-semibold ml-auto">${outputs[categoryKey].total.toLocaleString()}</span>
+              </li>
+            )
+          })
+        }
+      </ul>
+    );
+  }
+  
   return (
     <Card className="w-full">
       <CardHeader>
@@ -109,22 +157,39 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
           </p>
         </div>
 
-        <div className="space-y-4 pt-4">
-             {(Object.keys(outputs) as CategoryKey[])
-              .filter(key => key !== 'total' && outputs[key] && outputs[key].total > 0)
-              .map(key => (
-                <div key={key} className="space-y-2">
-                    <div className="flex justify-between items-baseline">
-                        <div className="flex items-center gap-2">
-                            {categoryIcons[key]}
-                            <span className="font-medium capitalize">{key}</span>
-                        </div>
-                        <span className="font-semibold text-lg">${outputs[key].total.toLocaleString()}</span>
-                    </div>
-                    <Progress value={(outputs[key].total / outputs.total) * 100} />
-                </div>
-            ))}
+        <div className="w-full h-[200px]">
+            <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                    <Tooltip content={<CustomTooltip />} />
+                    <Pie
+                        data={chartData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        outerRadius={80}
+                        innerRadius={50}
+                        paddingAngle={5}
+                        dataKey="value"
+                        isAnimationActive={true}
+                        activeIndex={activeIndex ?? -1}
+                        activeShape={(props: any) => {
+                            const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
+                            return (
+                                <g>
+                                    <path d={props.d} stroke={props.stroke} fill={fill} />
+                                </g>
+                            );
+                        }}
+                    >
+                    {chartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                    </Pie>
+                </PieChart>
+            </ResponsiveContainer>
         </div>
+
+        <Legend content={renderLegend} onMouseEnter={(e) => setActiveIndex(e.payload.index)} onMouseLeave={() => setActiveIndex(null)} />
         
         <div className="space-y-2 pt-4">
             <Button onClick={handlePlanClick} className="w-full" size="lg">
