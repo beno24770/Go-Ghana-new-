@@ -27,10 +27,12 @@ type TripPlanData = {
 }
 
 // Zod schema for parsing budget data from URL search params
+// We use the base schema here because the refined schema causes issues with .extend() on SSR
 const budgetUrlSchema = EstimateBudgetInputSchema.extend({
     duration: z.coerce.number(),
     numTravelers: z.coerce.number(),
     region: z.union([z.string(), z.array(z.string())]),
+    isNewToGhana: z.string().transform(v => v === 'true').optional(),
 }).merge(z.object({
     "outputs.accommodation.perDay": z.coerce.number(),
     "outputs.accommodation.total": z.coerce.number(),
@@ -44,12 +46,14 @@ const budgetUrlSchema = EstimateBudgetInputSchema.extend({
 }));
 
 // Zod schema for parsing trip plan data from URL search params
+// We use the base schema here because the refined schema causes issues with .extend() on SSR
 const planUrlSchema = PlanTripInputSchema.extend({
     duration: z.coerce.number(),
     numTravelers: z.coerce.number(),
     budget: z.coerce.number(),
     region: z.union([z.string(), z.array(z.string())]),
     interests: z.union([z.string(), z.array(z.string())]).optional(),
+    isNewToGhana: z.string().transform(v => v === 'true').optional(),
 }).merge(z.object({
     "outputs.suggestedTravelStyle": z.enum(['Budget', 'Mid-range', 'Luxury']),
     "outputs.accommodation.cost": z.coerce.number(),
@@ -63,6 +67,7 @@ const planUrlSchema = PlanTripInputSchema.extend({
     "outputs.total": z.coerce.number(),
     "fromBudget": z.string().optional(),
 }));
+
 
 // Helper to flatten object for URL params
 const flattenObject = (obj: any, prefix = '') => {
@@ -122,11 +127,11 @@ function TripPlannerViewInternal() {
     if (tab === 'estimate' && params.has('duration')) {
         const parsed = budgetUrlSchema.safeParse(Object.fromEntries(params));
         if (parsed.success) {
-            const { duration, region, travelStyle, numTravelers, startDate, ...rest } = parsed.data;
+            const { duration, region, travelStyle, numTravelers, startDate, isNewToGhana, ...rest } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
 
             setBudgetData({
-                inputs: { duration, region: regionArray, travelStyle, numTravelers, startDate },
+                inputs: { duration, region: regionArray, travelStyle, numTravelers, startDate, isNewToGhana },
                 outputs: {
                     accommodation: { perDay: rest['outputs.accommodation.perDay'], total: rest['outputs.accommodation.total'] },
                     food: { perDay: rest['outputs.food.perDay'], total: rest['outputs.food.total'] },
@@ -145,11 +150,11 @@ function TripPlannerViewInternal() {
             if (params.has('outputs.total')) {
                 const parsedPlan = planUrlSchema.safeParse(Object.fromEntries(params));
                 if (parsedPlan.success) {
-                    const { budget, duration, numTravelers, region, travelStyle, interests, startDate, fromBudget, ...rest } = parsedPlan.data;
+                    const { budget, duration, numTravelers, region, travelStyle, interests, startDate, isNewToGhana, fromBudget, ...rest } = parsedPlan.data;
                     const regionArray = Array.isArray(region) ? region : [region];
                     const interestsArray = Array.isArray(interests) ? interests : (interests ? [interests] : []);
                     setTripPlanData({
-                        inputs: { duration, region: regionArray, budget, numTravelers, travelStyle, interests: interestsArray, startDate },
+                        inputs: { duration, region: regionArray, budget, numTravelers, travelStyle, interests: interestsArray, startDate, isNewToGhana },
                         outputs: {
                             suggestedTravelStyle: rest['outputs.suggestedTravelStyle'],
                             accommodation: { cost: rest['outputs.accommodation.cost'], description: rest['outputs.accommodation.description'] },
@@ -192,7 +197,7 @@ function TripPlannerViewInternal() {
                     value.forEach((item: string) => params.append(urlKey, item));
                 }
             } else if (value !== undefined && value !== null) {
-                 params.set(urlKey, value);
+                 params.set(urlKey, String(value));
             }
         }
 
@@ -241,6 +246,7 @@ function TripPlannerViewInternal() {
         travelStyle: budgetInputs.travelStyle,
         interests: ['Culture', 'Heritage & History'],
         startDate: budgetInputs.startDate || new Date().toISOString().split('T')[0],
+        isNewToGhana: budgetInputs.isNewToGhana,
     };
     
     startTransition(() => {

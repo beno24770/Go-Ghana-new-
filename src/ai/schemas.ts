@@ -9,14 +9,18 @@ const CostBreakdownSchema = z.object({
   total: z.number().describe('Estimated total cost for this category for the entire trip.'),
 });
 
-export const EstimateBudgetInputSchema = z.object({
+// Base schema for budget estimation inputs
+const EstimateBudgetBaseSchema = z.object({
   duration: z.number().describe('The duration of the trip in days.'),
   region: z.array(z.string()).describe('The regions in Ghana the user will be visiting.'),
   travelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']).describe('The travel style of the user.'),
   numTravelers: z.number().describe('The number of travelers.'),
   startDate: z.string().optional().describe("The start date of the trip in YYYY-MM-DD format."),
   isNewToGhana: z.boolean().optional().describe("A flag indicating the user is new to Ghana and doesn't know which regions to pick."),
-}).superRefine((data, ctx) => {
+});
+
+// Schema for form validation, with superRefine
+export const EstimateBudgetInputSchema = EstimateBudgetBaseSchema.superRefine((data, ctx) => {
     if (!data.isNewToGhana && data.region.length === 0) {
         ctx.addIssue({
             code: z.ZodIssueCode.custom,
@@ -36,7 +40,8 @@ export const EstimateBudgetOutputSchema = z.object({
 });
 export type EstimateBudgetOutput = z.infer<typeof EstimateBudgetOutputSchema>;
 
-export const PlanTripInputSchema = z.object({
+// Base schema for trip planning inputs
+const PlanTripBaseSchema = z.object({
   duration: z.number().describe('The duration of the trip in days.'),
   region: z.array(z.string()).describe('The regions in Ghana the user will be visiting.'),
   budget: z.number().describe('The total budget for the trip in USD.'),
@@ -45,7 +50,10 @@ export const PlanTripInputSchema = z.object({
   interests: z.array(z.string()).optional().describe('The interests of the user, e.g., Culture, Heritage, Adventure.'),
   startDate: z.string().describe("The start date of the trip in YYYY-MM-DD format."),
   isNewToGhana: z.boolean().optional().describe("A flag indicating the user is new to Ghana and doesn't know which regions to pick."),
-}).superRefine((data, ctx) => {
+});
+
+// Schema for form validation, with superRefine
+export const PlanTripInputSchema = PlanTripBaseSchema.superRefine((data, ctx) => {
     if (!data.isNewToGhana && data.region.length === 0) {
         ctx.addIssue({
             code: z.ZodIssueCode.custom,
