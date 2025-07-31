@@ -60,6 +60,9 @@ export default function RootLayout({
                 <Button asChild variant="ghost">
                     <Link href="/drivers">Drivers</Link>
                 </Button>
+                <Button asChild variant="ghost">
+                    <Link href="https://letvisitghana.com" target="_blank">Learn About Ghana</Link>
+                </Button>
              </nav>
              <div className="sm:hidden">
                 <Sheet>
@@ -82,6 +85,9 @@ export default function RootLayout({
                             </SheetClose>
                             <SheetClose asChild>
                                 <Link href="/drivers">Drivers</Link>
+                            </SheetClose>
+                            <SheetClose asChild>
+                                <Link href="https://letvisitghana.com" target="_blank">Learn About Ghana</Link>
                             </SheetClose>
                         </nav>
                     </SheetContent>
