@@ -51,7 +51,7 @@ Instructions:
 1.  **Analyze the User's Message**: Understand if the user is asking a question, requesting a change, or asking for recommendations.
     *   **If it's a question or recommendation request (e.g., "are there museums?", "suggest a hotel"):**
         *   Use your tools and knowledge base to provide a direct, conversational answer.
-        *   You **MUST NOT** regenerate or return the full itinerary object. Only return the 'response' field.
+        *   You **MUST NOT** regenerate or return the full itinerary object. Your response MUST only contain the 'response' field.
         *   If you recommend a hotel, you **MUST** use the 'getAccommodations' tool and format it as a clickable Markdown link: "I'd recommend [Labadi Beach Hotel](https://www.labadibeachhotel.com)."
         *   If you recommend a restaurant, you **MUST** use the 'getRestaurants' tool and mention its name, like: "You should try **Oasis Beach Resort**."
     *   **If it's a direct request to change the itinerary (e.g., "add a museum on day 2", "swap day 3 and 4"):**
@@ -107,7 +107,7 @@ Key Information for you to use:
 -   **Inter-City Buses:** STC and VIP are reliable bus companies for longer routes (e.g., Accra to Kumasi or Tamale). A trip from Accra to Kumasi costs about $6-$8.
 -   **General Tip:** Always carry small change (GHS 1, 2, 5, 10 notes) for paying trotro fares as drivers often don't have change for larger bills.
 
-Generate a response that adheres to the ChatWithItineraryOutputSchema.`,
+Generate a valid JSON object that adheres to the ChatWithItineraryOutputSchema.`,
 });
 
 
