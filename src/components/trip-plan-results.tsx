@@ -188,8 +188,15 @@ const ItineraryContent = ({
 }) => {
     const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false);
     const itineraryRef = useRef<HTMLDivElement>(null);
+    const chatContainerRef = useRef<HTMLDivElement>(null);
     const { toast } = useToast();
     const [chatMessage, setChatMessage] = useState('');
+
+    useEffect(() => {
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+    }, [chatHistory]);
 
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -293,7 +300,7 @@ const ItineraryContent = ({
                     ))}
                 </Accordion>
                  {chatHistory.length > 0 && (
-                    <div className="mt-4 border-t pt-4 space-y-4">
+                    <div ref={chatContainerRef} className="mt-4 border-t pt-4 space-y-4 max-h-[200px] overflow-y-auto">
                         {chatHistory.map((chat, index) => (
                             <div key={index} className={`flex flex-col ${chat.role === 'user' ? 'items-end' : 'items-start'}`}>
                                 <div className={`rounded-lg px-4 py-2 ${chat.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
@@ -301,6 +308,13 @@ const ItineraryContent = ({
                                 </div>
                             </div>
                         ))}
+                         {isLoading && (
+                            <div className="flex items-start">
+                                <div className="rounded-lg px-4 py-2 bg-muted">
+                                    <LoaderCircle className="h-5 w-5 animate-spin" />
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
@@ -770,4 +784,3 @@ export default function TripPlanResults({ data, isLoading, initialTool, onBack, 
     </Card>
   );
 }
-

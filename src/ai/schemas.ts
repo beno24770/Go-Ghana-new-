@@ -149,6 +149,6 @@ export type ChatWithItineraryInput = z.infer<typeof ChatWithItineraryInputSchema
 
 export const ChatWithItineraryOutputSchema = z.object({
   response: z.string().describe('A conversational response to the user\'s message.'),
-  itinerary: z.array(DayItinerarySchema).describe('The updated day-by-day itinerary for the trip.'),
+  itinerary: z.array(DayItinerarySchema).optional().describe('The updated day-by-day itinerary for the trip. Only return this field if the user explicitly asks for a change to the itinerary.'),
 });
 export type ChatWithItineraryOutput = z.infer<typeof ChatWithItineraryOutputSchema>;
