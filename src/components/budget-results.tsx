@@ -65,6 +65,37 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
     }
   }
 
+  const renderLegend = useCallback((props: any) => {
+    const { payload } = props;
+
+    if (!payload || !data) return null;
+    
+    return (
+      <ul className="grid grid-cols-2 gap-x-6 gap-y-2 mt-4 text-sm">
+        {
+          payload.map((entry: any, index: number) => {
+            const categoryKey = entry.value.toLowerCase() as CategoryKey;
+            
+            if (!categoryDetails[categoryKey] || !data.outputs[categoryKey]) return null;
+
+            return (
+              <li 
+                key={`item-${index}`}
+                onMouseEnter={() => setActiveIndex(index)}
+                onMouseLeave={() => setActiveIndex(null)}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <span className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.color }}></span>
+                <span className="capitalize text-muted-foreground">{entry.value}</span>
+                <span className="font-semibold ml-auto">${data.outputs[categoryKey].total.toLocaleString()}</span>
+              </li>
+            )
+          })
+        }
+      </ul>
+    );
+  }, [data, setActiveIndex]);
+
   if (isLoading) {
     return (
       <div className="flex h-full min-h-[500px] w-full items-center justify-center rounded-lg border border-dashed">
@@ -112,37 +143,6 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
     return null;
   };
 
-  const renderLegend = useCallback((props: any) => {
-    const { payload } = props;
-
-    if (!payload) return null;
-    
-    return (
-      <ul className="grid grid-cols-2 gap-x-6 gap-y-2 mt-4 text-sm">
-        {
-          payload.map((entry: any, index: number) => {
-            const categoryKey = entry.value.toLowerCase() as CategoryKey;
-            
-            if (!categoryDetails[categoryKey] || !outputs[categoryKey]) return null;
-
-            return (
-              <li 
-                key={`item-${index}`}
-                onMouseEnter={() => setActiveIndex(index)}
-                onMouseLeave={() => setActiveIndex(null)}
-                className="flex items-center gap-2 cursor-pointer"
-              >
-                <span className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.color }}></span>
-                <span className="capitalize text-muted-foreground">{entry.value}</span>
-                <span className="font-semibold ml-auto">${outputs[categoryKey].total.toLocaleString()}</span>
-              </li>
-            )
-          })
-        }
-      </ul>
-    );
-  }, [outputs]);
-  
   return (
     <Card className="w-full">
       <CardHeader>
