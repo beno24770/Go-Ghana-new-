@@ -35,13 +35,21 @@ const nextConfig = {
     ],
   },
   experimental: {
-    // This is to allow cross-origin requests in the development environment.
-    allowedDevOrigins: [
-        'https://6000-firebase-studio-1753689056863.cluster-ikslh4rdsnbqsvu5nw3v4dqjj2.cloudworkstations.dev',
-    ],
+    // The `allowedDevOrigins` key is now at the top level.
   }
 };
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-module.exports = isDevelopment ? nextConfig : withPWA(nextConfig);
+const developmentConfig = {
+    ...nextConfig,
+    experimental: {
+        ...nextConfig.experimental,
+        // This is to allow cross-origin requests in the development environment.
+        allowedDevOrigins: [
+            'https://6000-firebase-studio-1753689056863.cluster-ikslh4rdsnbqsvu5nw3v4dqjj2.cloudworkstations.dev',
+        ],
+    }
+}
+
+module.exports = isDevelopment ? developmentConfig : withPWA(nextConfig);
