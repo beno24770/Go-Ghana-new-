@@ -88,7 +88,7 @@ export default function RootLayout({
            </header>
           <main className="flex-1">{children}</main>
           <footer className="container mx-auto max-w-5xl px-4 py-6 text-center text-sm text-muted-foreground">
-            <p>&copy; {new Date().getFullYear()} GoGhana Planner. All rights reserved.</p>
+            <p>© 2025 GoGhana Planner | Powered by LetVisitGhana.</p>
           </footer>
         </div>
         <Toaster />
