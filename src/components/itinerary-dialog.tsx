@@ -225,6 +225,7 @@ export function ItineraryDialog({ planData, initialTool, open, onOpenChange }: I
             activitiesBudget: planData.outputs.activities.cost,
             startDate: planData.inputs.startDate,
             interests: planData.inputs.interests,
+            isNewToGhana: planData.inputs.isNewToGhana,
         });
 
         if (result.success) {

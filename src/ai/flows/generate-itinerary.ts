@@ -40,7 +40,7 @@ const generateItineraryPrompt = ai.definePrompt({
 
 User Preferences:
 - Duration: {{duration}} days
-- Regions: {{#each region}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
+- Regions: {{#if isNewToGhana}}User is new to Ghana, please suggest regions.{{else}}{{#each region}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}
 - Travel Style: {{travelStyle}}
 - Activities Budget: \${{activitiesBudget}}
 - Trip Dates: {{startDate}} to {{endDate}}
@@ -49,22 +49,23 @@ User Preferences:
 {{/if}}
 
 Your Task:
-1.  **Check for Local Events**: Use the 'getLocalPulse' tool to check for any festivals or events happening in the user's selected regions during their travel dates.
-2.  **Check for Nightlife Events**: If the user's interests include 'Nightlife & Urban', you MUST use the 'getEntertainmentEvents' tool to find specific nightlife activities like live music or DJ sets for their evenings.
-3.  **Suggest Restaurants**: For lunch or dinner recommendations, you **MUST** use the 'getRestaurants' tool to suggest 1-2 relevant restaurants for the current day's location. Integrate them naturally into the details, for example: "- **Dinner:** For dinner, I'd recommend trying **Oasis Beach Resort** for its fresh seafood."
-4.  **Incorporate All Events**: Integrate any relevant events from all tools into the itinerary.
-5.  **Highlight Special Events**: When you include an event from 'getLocalPulse' or 'getEntertainmentEvents', you MUST format it with a special heading to make it stand out. For example: "**✨ Local Pulse: Chale Wote Street Art Festival**" or "**🎵 Nightlife: Live Highlife at +233 Grill & Bar**". You must also include the 'insiderTip' from the tool's output. This makes the itinerary timely and unique.
-6.  **Create a Day-by-Day Plan**: For each day of the trip, provide a 'title' and 'details'.
-7.  **Add Specific Dates to Title**: For each day's title, you MUST include the specific date. Use the provided 'dayDates' array. The format should be "Day [Number] - [Date]: [Your Title]". For example: "Day 1 - 2024-05-25: Arrival in Accra".
-8.  **Be Specific and Practical**: Suggest specific attractions, restaurants, and experiences. Consider the travel style and budget.
-9.  **Embed "Read More" Links**: For major attractions, you MUST use the 'getArticleLink' tool to retrieve the URL and then embed it as a Markdown link. This is crucial. For example, if you mention Kakum National Park, call the tool with \`getArticleLink({attractionName: "Kakum National Park"})\` and then format the result like this: \`[Read more about Kakum National Park](https://www.letvisitghana.com/tourist-sites/kakum-national-park/)\`. Use this for any major tourist site mentioned.
-10. **Logical Flow**: Ensure the itinerary is geographically and logistically sound. **IMPORTANT: Travel between Kumasi and Cape Coast is very difficult by public transport. Always route travel between these cities through Accra.**
-11. **Engaging Titles**: Make the title for each day interesting and descriptive.
-12. **Add Daily Budget Estimate**: At the end of each day's details, you MUST include a section called "**Estimated Budget for Day [Number]:**" with a bulleted list of estimated costs for that day's specific activities. This should include:
+1.  **Handle New Travelers**: If 'isNewToGhana' is true, you MUST devise a logical itinerary for a first-time visitor. For shorter trips (e.g., up to 10 days), focus on a classic route like Greater Accra -> Central Region -> Ashanti Region. For longer trips, you can add the Volta or Northern regions. You must state which regions you have chosen for them at the start of the itinerary.
+2.  **Check for Local Events**: Use the 'getLocalPulse' tool to check for any festivals or events happening in the user's selected regions (or the ones you suggest) during their travel dates.
+3.  **Check for Nightlife Events**: If the user's interests include 'Nightlife & Urban', you MUST use the 'getEntertainmentEvents' tool to find specific nightlife activities like live music or DJ sets for their evenings.
+4.  **Suggest Restaurants**: For lunch or dinner recommendations, you **MUST** use the 'getRestaurants' tool to suggest 1-2 relevant restaurants for the current day's location. Integrate them naturally into the details, for example: "- **Dinner:** For dinner, I'd recommend trying **Oasis Beach Resort** for its fresh seafood."
+5.  **Incorporate All Events**: Integrate any relevant events from all tools into the itinerary.
+6.  **Highlight Special Events**: When you include an event from 'getLocalPulse' or 'getEntertainmentEvents', you MUST format it with a special heading to make it stand out. For example: "**✨ Local Pulse: Chale Wote Street Art Festival**" or "**🎵 Nightlife: Live Highlife at +233 Grill & Bar**". You must also include the 'insiderTip' from the tool's output. This makes the itinerary timely and unique.
+7.  **Create a Day-by-Day Plan**: For each day of the trip, provide a 'title' and 'details'.
+8.  **Add Specific Dates to Title**: For each day's title, you MUST include the specific date. Use the provided 'dayDates' array. The format should be "Day [Number] - [Date]: [Your Title]". For example: "Day 1 - 2024-05-25: Arrival in Accra".
+9.  **Be Specific and Practical**: Suggest specific attractions, restaurants, and experiences. Consider the travel style and budget.
+10. **Embed "Read More" Links**: For major attractions, you MUST use the 'getArticleLink' tool to retrieve the URL and then embed it as a Markdown link. This is crucial. For example, if you mention Kakum National Park, call the tool with \`getArticleLink({attractionName: "Kakum National Park"})\` and then format the result like this: \`[Read more about Kakum National Park](https://www.letvisitghana.com/tourist-sites/kakum-national-park/)\`. Use this for any major tourist site mentioned.
+11. **Logical Flow**: Ensure the itinerary is geographically and logistically sound. **IMPORTANT: Travel between Kumasi and Cape Coast is very difficult by public transport. Always route travel between these cities through Accra.**
+12. **Engaging Titles**: Make the title for each day interesting and descriptive.
+13. **Add Daily Budget Estimate**: At the end of each day's details, you MUST include a section called "**Estimated Budget for Day [Number]:**" with a bulleted list of estimated costs for that day's specific activities. This should include:
     *   **Transportation**: Provide a realistic dollar amount. Use the 'Transportation Facts' below to make an intelligent choice.
-    *   **Entrance Fees**: Sum the known entrance fees for the day's attractions.
+    *   **Entrance Fees**: Sum the known entrance fees for the day's attractions. **CRITICAL: Assume a minimum of $10 per person for any major tourist site if the exact fee is not known.**
     *   **Food**: Estimate a reasonable daily food cost based on the travel style.
-13. **Format with Markdown**: Use Markdown for lists, bold text, and links in the 'details' field.
+14. **Format with Markdown**: Use Markdown for lists, bold text, and links in the 'details' field.
 
 **Knowledge Base of Ghanaian Destinations (use for suggestions):**
 

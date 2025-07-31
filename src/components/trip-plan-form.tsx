@@ -26,6 +26,7 @@ import { cn } from '@/lib/utils';
 import format from 'date-fns/format';
 import add from 'date-fns/add';
 import toDate from 'date-fns/toDate';
+import { useEffect } from 'react';
 
 const ghanaRegions = [
   "Ahafo", "Ashanti", "Bono", "Bono East", "Central", "Eastern",
@@ -75,9 +76,18 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
       travelStyle: 'Mid-range',
       interests: ['Culture', 'Heritage & History'],
       startDate: new Date().toISOString().split('T')[0],
+      isNewToGhana: false,
       ...defaultValues,
     },
   });
+
+    const isNewToGhana = form.watch('isNewToGhana');
+
+    useEffect(() => {
+        if (isNewToGhana) {
+            form.setValue('region', []);
+        }
+    }, [isNewToGhana, form]);
 
   return (
     <Form {...form}>
@@ -173,11 +183,30 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
           name="region"
           render={() => (
             <FormItem>
-              <FormLabel>Regions</FormLabel>
-              <Card>
+                <div className="flex justify-between items-center">
+                    <FormLabel>Regions</FormLabel>
+                    <FormField
+                        control={form.control}
+                        name="isNewToGhana"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                                <FormControl>
+                                    <Checkbox
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                                <FormLabel className="font-normal text-sm">
+                                    I'm new to Ghana
+                                </FormLabel>
+                            </FormItem>
+                        )}
+                    />
+                </div>
+              <Card className={cn(isNewToGhana && "bg-muted/50")}>
                 <CardContent className="p-4 pt-4">
                   <ScrollArea className="h-48">
-                    <div className="space-y-2">
+                    <div className={cn("space-y-2", isNewToGhana && "opacity-50")}>
                     {ghanaRegions.map((region) => (
                       <FormField
                         key={region}
@@ -196,6 +225,7 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                                     field.onChange(currentValue.filter((value) => value !== region));
                                   }
                                 }}
+                                disabled={isNewToGhana}
                               />
                             </FormControl>
                             <FormLabel className="font-normal">
@@ -209,6 +239,9 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                   </ScrollArea>
                 </CardContent>
               </Card>
+              <FormDescription>
+                Select the regions you want to visit, or let us suggest some if you're new!
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

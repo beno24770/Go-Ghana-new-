@@ -11,10 +11,19 @@ const CostBreakdownSchema = z.object({
 
 export const EstimateBudgetInputSchema = z.object({
   duration: z.number().describe('The duration of the trip in days.'),
-  region: z.array(z.string()).min(1, 'Please select at least one region.').describe('The regions in Ghana the user will be visiting.'),
+  region: z.array(z.string()).describe('The regions in Ghana the user will be visiting.'),
   travelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']).describe('The travel style of the user.'),
   numTravelers: z.number().describe('The number of travelers.'),
   startDate: z.string().optional().describe("The start date of the trip in YYYY-MM-DD format."),
+  isNewToGhana: z.boolean().optional().describe("A flag indicating the user is new to Ghana and doesn't know which regions to pick."),
+}).superRefine((data, ctx) => {
+    if (!data.isNewToGhana && data.region.length === 0) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['region'],
+            message: 'Please select at least one region, or check the "I\'m new to Ghana" box.',
+        });
+    }
 });
 export type EstimateBudgetInput = z.infer<typeof EstimateBudgetInputSchema>;
 
@@ -29,12 +38,21 @@ export type EstimateBudgetOutput = z.infer<typeof EstimateBudgetOutputSchema>;
 
 export const PlanTripInputSchema = z.object({
   duration: z.number().describe('The duration of the trip in days.'),
-  region: z.array(z.string()).min(1, 'Please select at least one region.').describe('The regions in Ghana the user will be visiting.'),
+  region: z.array(z.string()).describe('The regions in Ghana the user will be visiting.'),
   budget: z.number().describe('The total budget for the trip in USD.'),
   numTravelers: z.number().describe('The number of travelers.'),
   travelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']).describe('The travel style of the user.'),
   interests: z.array(z.string()).optional().describe('The interests of the user, e.g., Culture, Heritage, Adventure.'),
   startDate: z.string().describe("The start date of the trip in YYYY-MM-DD format."),
+  isNewToGhana: z.boolean().optional().describe("A flag indicating the user is new to Ghana and doesn't know which regions to pick."),
+}).superRefine((data, ctx) => {
+    if (!data.isNewToGhana && data.region.length === 0) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['region'],
+            message: 'Please select at least one region, or check the "I\'m new to Ghana" box.',
+        });
+    }
 });
 export type PlanTripInput = z.infer<typeof PlanTripInputSchema>;
 
@@ -67,6 +85,7 @@ export const GenerateItineraryInputSchema = z.object({
     activitiesBudget: z.number().describe('The budget allocated for activities.'),
     startDate: z.string().describe("The start date of the trip in YYYY-MM-DD format."),
     interests: z.array(z.string()).optional().describe('The interests of the user, e.g., Culture, Heritage, Adventure.'),
+    isNewToGhana: z.boolean().optional().describe("A flag indicating the user is new to Ghana and doesn't know which regions to pick."),
 });
 export type GenerateItineraryInput = z.infer<typeof GenerateItineraryInputSchema>;
 
