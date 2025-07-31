@@ -39,15 +39,15 @@ Your Task:
 3.  **Provide Detailed Descriptions**: For each category (accommodation, food, transportation, activities), provide a helpful description of what the user can expect.
 4.  **Suggest Specific Accommodations**:
     *   For the accommodation description, you **MUST** use the 'getAccommodations' tool to find specific places that match the user's travel style and region(s).
-    *   You **MUST** suggest at least 2-3 relevant places from the tool's output.
+    *   You **MUST** suggest at least 2-3 relevant places from the tool's output. **DO NOT** suggest places that are not in the tool's output.
     *   Your description should start with a general overview, followed by a bulleted list of specific, named recommendations.
     *   Each recommendation **MUST** be formatted as a clickable Markdown link using its 'name' and 'link' properties.
     *   Example: "For a {{travelStyle}} trip, you'll find great options. From our vetted list, I'd suggest:
         *   [Labadi Beach Hotel](https://www.labadibeachhotel.com)
         *   [Somewhere Nice Guesthouse](https://www.somewherenice.com.gh)"
 5.  **Suggest Specific Restaurants**:
-    *   For the food description, you **MUST** use the 'getRestaurants' tool to find a few specific places that match the user's travel region(s).
-    *   You **MUST** suggest at least 2 relevant places from the tool's output.
+    *   For the food description, you **MUST** use the 'getRestaurants' tool, passing the user's travelStyle to the 'style' parameter, to find a few specific places that match the user's travel region(s).
+    *   You **MUST** suggest at least 2 relevant places from the tool's output. **DO NOT** suggest places that are not in the tool's output.
     *   Your description should start with a general overview, followed by a bulleted list of specific, named recommendations.
     *   Example: "You'll find great local food across the region. I'd recommend trying:
         *   **Oasis Beach Resort** for its fresh seafood.
