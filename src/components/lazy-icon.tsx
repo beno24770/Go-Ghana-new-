@@ -15,10 +15,10 @@ interface LazyIconProps extends LucideProps {
 }
 
 const iconComponents = {
-  Calculator: dynamic(() => import('lucide-react').then(mod => mod.Calculator)),
-  Map: dynamic(() => import('lucide-react').then(mod => mod.Map)),
-  Car: dynamic(() => import('lucide-react').then(mod => mod.Car)),
-  Languages: dynamic(() => import('lucide-react').then(mod => mod.Languages)),
+  Calculator: dynamic(() => import('lucide-react').then(mod => mod.Calculator), { ssr: false }),
+  Map: dynamic(() => import('lucide-react').then(mod => mod.Map), { ssr: false }),
+  Car: dynamic(() => import('lucide-react').then(mod => mod.Car), { ssr: false }),
+  Languages: dynamic(() => import('lucide-react').then(mod => mod.Languages), { ssr: false }),
 };
 
 export function LazyIcon({ name, ...props }: LazyIconProps) {

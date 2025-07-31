@@ -5,7 +5,6 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Wand2 } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import { LazyIcon } from "@/components/lazy-icon";
 import { Skeleton } from "@/components/ui/skeleton";
 import dynamic from "next/dynamic";
 
