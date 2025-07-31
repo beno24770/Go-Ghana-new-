@@ -13,7 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Button } from './ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 
 type BudgetData = {
