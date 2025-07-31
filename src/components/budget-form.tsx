@@ -24,9 +24,7 @@ import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Calendar } from './ui/calendar';
 import { cn } from '@/lib/utils';
 import format from 'date-fns/format';
-import add from 'date-fns/add';
-import toDate from 'date-fns/toDate';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const ghanaRegions = [
   "Ahafo", "Ashanti", "Bono", "Bono East", "Central", "Eastern",
@@ -46,16 +44,12 @@ interface BudgetFormProps {
   defaultValues?: Partial<EstimateBudgetInput>;
 }
 
-const parseDateWithOffset = (dateString?: string) => {
-    if (!dateString) return undefined;
-    const date = toDate(new Date(dateString));
-    if (isNaN(date.getTime())) return undefined;
-    // Dates from the form are already in local time (YYYY-MM-DD), which JS interprets as UTC.
-    // We add the timezone offset to treat it as a local date, preventing one-day shifts.
-    return add(date, { minutes: date.getTimezoneOffset() });
-};
-
 export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: BudgetFormProps) {
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const form = useForm<EstimateBudgetInput>({
     resolver: zodResolver(EstimateBudgetInputSchema),
     defaultValues: {
@@ -76,6 +70,15 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
       form.setValue('region', []);
     }
   }, [isNewToGhana, form]);
+
+  const selectedDate = form.watch('startDate');
+  const dateForPicker = selectedDate ? new Date(selectedDate) : undefined;
+  // This adjustment prevents a hydration error where the server and client might interpret
+  // a "YYYY-MM-DD" string in different timezones, leading to a one-day difference.
+  if (dateForPicker) {
+      dateForPicker.setMinutes(dateForPicker.getMinutes() + dateForPicker.getTimezoneOffset());
+  }
+
 
   return (
     <Form {...form}>
@@ -124,8 +127,8 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
                             !field.value && "text-muted-foreground"
                         )}
                         >
-                        {field.value ? (
-                            format(parseDateWithOffset(field.value) || new Date(), "PPP")
+                        {isClient && field.value ? (
+                            format(dateForPicker || new Date(), "PPP")
                         ) : (
                             <span>Pick a date</span>
                         )}
@@ -136,7 +139,7 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
                     <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                         mode="single"
-                        selected={parseDateWithOffset(field.value)}
+                        selected={dateForPicker}
                         onSelect={(date) => {
                             if (date) {
                                 field.onChange(format(date, 'yyyy-MM-dd'));

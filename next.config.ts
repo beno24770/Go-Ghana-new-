@@ -34,24 +34,17 @@ const baseConfig = {
       }
     ],
   },
-  experimental: {
-    // This experimental object is kept for future configurations if needed.
-  }
 };
 
-const isDevelopment = process.env.NODE_ENV === 'development';
-
-const developmentConfig = {
-    ...baseConfig,
+const nextConfig = {
+  ...baseConfig,
+  ...(process.env.NODE_ENV === 'development' && {
     experimental: {
-        ...baseConfig.experimental,
-        // This is to allow cross-origin requests in the development environment.
-        allowedDevOrigins: [
-            'https://6000-firebase-studio-1753689056863.cluster-ikslh4rdsnbqsvu5nw3v4dqjj2.cloudworkstations.dev',
-        ],
-    }
-}
+      allowedDevOrigins: [
+        'https://6000-firebase-studio-1753689056863.cluster-ikslh4rdsnbqsvu5nw3v4dqjj2.cloudworkstations.dev',
+      ],
+    },
+  }),
+};
 
-const productionConfig = withPWA(baseConfig);
-
-module.exports = isDevelopment ? developmentConfig : productionConfig;
+module.exports = withPWA(nextConfig);

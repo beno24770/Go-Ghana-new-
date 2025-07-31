@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import type { GenerateItineraryOutput, GenerateLanguageGuideOutput, GeneratePackingListOutput, PackingListItemSchema, PlanTripInput, PlanTripOutput } from '@/ai/schemas';
 import { getAudio, getItinerary, getLanguageGuide, getPackingList, postItineraryChat, regenerateItinerary } from '@/app/actions';
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import Link from 'next/link';
@@ -31,6 +31,13 @@ type TripPlanData = {
   inputs: PlanTripInput;
   outputs: PlanTripOutput;
 };
+
+// Simple in-memory cache
+const toolCache = new Map<string, any>();
+function getCacheKey(planData: TripPlanData, tool: string) {
+    return `${JSON.stringify(planData.inputs)}-${tool}`;
+}
+
 
 interface ItineraryDialogProps {
     planData: TripPlanData;
@@ -203,17 +210,13 @@ export function ItineraryDialog({ planData, initialTool, open, onOpenChange }: I
         return itinerary.itinerary.map(day => `### ${day.title}\n\n${day.details}`).join('\n\n');
     }, [itinerary]);
     
-    useEffect(() => {
-        if (open) {
-            setActiveTab(initialTool || 'itinerary');
-            if (!itinerary) {
-                handleGenerateItinerary();
-            }
+     const handleGenerateItinerary = useCallback(async () => {
+        const cacheKey = getCacheKey(planData, 'itinerary');
+        if (toolCache.has(cacheKey)) {
+            setItinerary(toolCache.get(cacheKey));
+            return;
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [open, initialTool]);
 
-    const handleGenerateItinerary = async () => {
         setIsLoading(prev => ({...prev, itinerary: true, chat: false}));
         setItinerary(null);
         setChatHistory([]);
@@ -230,11 +233,22 @@ export function ItineraryDialog({ planData, initialTool, open, onOpenChange }: I
 
         if (result.success) {
             setItinerary(result.data);
+            toolCache.set(cacheKey, result.data);
         } else {
             toast({ variant: 'destructive', title: 'Error', description: result.error });
         }
         setIsLoading(prev => ({...prev, itinerary: false}));
-    }
+    }, [planData, toast]);
+
+    useEffect(() => {
+        if (open) {
+            const newActiveTab = initialTool || 'itinerary';
+            setActiveTab(newActiveTab);
+            if (newActiveTab === 'itinerary' && !itinerary) {
+                handleGenerateItinerary();
+            }
+        }
+    }, [open, initialTool, itinerary, handleGenerateItinerary]);
 
     useEffect(() => {
         if (itineraryAsMarkdown) {
@@ -253,6 +267,7 @@ export function ItineraryDialog({ planData, initialTool, open, onOpenChange }: I
         });
         if (result.success) {
             setItinerary(result.data);
+            toolCache.set(getCacheKey(planData, 'itinerary'), result.data); // Update cache
             setIsEditing(false);
         } else {
             toast({ variant: 'destructive', title: 'Error', description: result.error });
@@ -279,7 +294,9 @@ export function ItineraryDialog({ planData, initialTool, open, onOpenChange }: I
         if (result.success) {
             setChatHistory(prev => [...prev, {role: 'model', content: result.data.response}]);
             if (result.data.itinerary) {
-                setItinerary({ itinerary: result.data.itinerary });
+                const newItinerary = { itinerary: result.data.itinerary };
+                setItinerary(newItinerary);
+                toolCache.set(getCacheKey(planData, 'itinerary'), newItinerary); // Update cache
             }
         } else {
             toast({ variant: 'destructive', title: 'Error', description: result.error });
@@ -289,6 +306,11 @@ export function ItineraryDialog({ planData, initialTool, open, onOpenChange }: I
     }
 
     const handleGeneratePackingList = async () => {
+        const cacheKey = getCacheKey(planData, 'packingList');
+        if (toolCache.has(cacheKey)) {
+            setPackingList(toolCache.get(cacheKey));
+            return;
+        }
         setIsLoading(prev => ({...prev, packingList: true}));
         setPackingList(null);
         const result = await getPackingList({
@@ -299,6 +321,7 @@ export function ItineraryDialog({ planData, initialTool, open, onOpenChange }: I
 
         if (result.success) {
             setPackingList(result.data);
+            toolCache.set(cacheKey, result.data);
         } else {
             toast({ variant: 'destructive', title: 'Error', description: result.error });
         }
@@ -306,12 +329,19 @@ export function ItineraryDialog({ planData, initialTool, open, onOpenChange }: I
     }
 
     const handleGenerateLanguageGuide = async () => {
+        const cacheKey = getCacheKey(planData, 'languageGuide');
+        if (toolCache.has(cacheKey)) {
+            setLanguageGuide(toolCache.get(cacheKey));
+            return;
+        }
+
         setIsLoading(prev => ({...prev, languageGuide: true}));
         setLanguageGuide(null);
         const result = await getLanguageGuide({ region: planData.inputs.region });
 
         if (result.success) {
             setLanguageGuide(result.data);
+            toolCache.set(cacheKey, result.data);
         } else {
             toast({ variant: 'destructive', title: 'Error', description: result.error });
         }
