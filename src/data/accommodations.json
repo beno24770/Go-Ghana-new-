@@ -211,94 +211,14 @@
         "link": "#"
     },
     {
-        "id": "kumasi-luxury-golden-tulip",
-        "name": "Golden Tulip Kumasi City",
-        "region": "Ashanti",
-        "location": "Kumasi",
+        "id": "volta-luxury-volta-serene",
+        "name": "Volta Serene",
+        "region": "Volta",
+        "location": "Ho",
         "travelStyle": ["Luxury", "Mid-range"],
-        "description": "A well-regarded 4-star hotel in Kumasi known for its excellent service and facilities.",
+        "description": "The premier hotel in Ho, offering upscale rooms and great service.",
         "image": "https://placehold.co/600x400.png",
-        "link": "#"
-    },
-    {
-        "id": "kumasi-midrange-fredericka",
-        "name": "Fredericka Hotel",
-        "region": "Ashanti",
-        "location": "Kumasi",
-        "travelStyle": ["Mid-range"],
-        "description": "A popular 3-star hotel with good amenities and a convenient location in Kumasi.",
-        "image": "https://placehold.co/600x400.png",
-        "link": "#"
-    },
-    {
-        "id": "kumasi-budget-tumi",
-        "name": "Tumi Hostel",
-        "region": "Ashanti",
-        "location": "Kumasi",
-        "travelStyle": ["Budget"],
-        "description": "A friendly hostel in Kumasi, offering affordable dorms and private rooms for travelers.",
-        "image": "https://placehold.co/600x400.png",
-        "link": "#"
-    },
-    {
-        "id": "cape-coast-luxury-coconut-grove",
-        "name": "Coconut Grove Bridge House",
-        "region": "Central",
-        "location": "Cape Coast",
-        "travelStyle": ["Luxury", "Mid-range"],
-        "description": "A historic hotel with modern comforts, located near Cape Coast Castle with ocean views.",
-        "image": "https://placehold.co/600x400.png",
-        "link": "#"
-    },
-    {
-        "id": "cape-coast-midrange-orange-beach",
-        "name": "Orange Beach Resort",
-        "region": "Central",
-        "location": "Cape Coast",
-        "travelStyle": ["Mid-range"],
-        "description": "A beachfront resort offering comfortable accommodations and a relaxing atmosphere.",
-        "image": "https://placehold.co/600x400.png",
-        "link": "#"
-    },
-    {
-        "id": "cape-coast-budget-oasis-beach",
-        "name": "Oasis Beach Resort",
-        "region": "Central",
-        "location": "Cape Coast",
-        "travelStyle": ["Budget"],
-        "description": "A popular beachfront spot for budget travelers, known for its lively atmosphere and dormitory options.",
-        "image": "https://placehold.co/600x400.png",
-        "link": "#"
-    },
-    {
-        "id": "tamale-luxury-zaina-lodge",
-        "name": "Zaina Lodge",
-        "region": "Northern",
-        "location": "Mole National Park",
-        "travelStyle": ["Luxury"],
-        "description": "West Africa's first luxury safari lodge, offering stunning views and safari experiences.",
-        "image": "https://placehold.co/600x400.png",
-        "link": "#"
-    },
-    {
-        "id": "tamale-midrange-mole-motel",
-        "name": "Mole Motel",
-        "region": "Northern",
-        "location": "Mole National Park",
-        "travelStyle": ["Mid-range", "Budget"],
-        "description": "Located inside Mole National Park, offering basic but convenient lodging for safari-goers.",
-        "image": "https://placehold.co/600x400.png",
-        "link": "#"
-    },
-    {
-        "id": "tamale-budget-hic-salam",
-        "name": "Hic-salam Guesthouse",
-        "region": "Northern",
-        "location": "Tamale",
-        "travelStyle": ["Budget"],
-        "description": "A clean and friendly guesthouse in Tamale, offering great value for budget travelers.",
-        "image": "https://placehold.co/600x400.png",
-        "link": "#"
+        "link": "https://www.voltaserenehotel.com/"
     },
     {
         "id": "volta-midrange-chances-hotel",
@@ -309,6 +229,16 @@
         "description": "A popular and reliable hotel in Ho, often used as a base for exploring the region.",
         "image": "https://placehold.co/600x400.png",
         "link": "https://chanceshotel.com/"
+    },
+    {
+        "id": "volta-midrange-freedom-hotel",
+        "name": "Freedom Hotel",
+        "region": "Volta",
+        "location": "Ho",
+        "travelStyle": ["Mid-range"],
+        "description": "A well-known hotel in Ho with a lively atmosphere and conference facilities.",
+        "image": "https://placehold.co/600x400.png",
+        "link": "http://www.freedomhotelgh.com/"
     },
     {
         "id": "volta-budget-biakpa-mountain-paradise",
@@ -327,26 +257,6 @@
         "location": "Wli",
         "travelStyle": ["Budget"],
         "description": "Simple guesthouse very close to the Wli waterfalls, perfect for early morning hikes.",
-        "image": "https://placehold.co/600x400.png",
-        "link": "#"
-    },
-    {
-        "id": "volta-luxury-volta-serene",
-        "name": "Volta Serene",
-        "region": "Volta",
-        "location": "Ho",
-        "travelStyle": ["Luxury", "Mid-range"],
-        "description": "The premier hotel in Ho, offering upscale rooms and great service.",
-        "image": "https://placehold.co/600x400.png",
-        "link": "https://www.voltaserenehotel.com/"
-    },
-    {
-        "id": "volta-midrange-freedom-hotel",
-        "name": "Freedom Hotel",
-        "region": "Volta",
-        "location": "Ho",
-        "travelStyle": ["Mid-range"],
-        "description": "A well-known hotel in Ho with a lively atmosphere and conference facilities.",
         "image": "https://placehold.co/600x400.png",
         "link": "#"
     }
