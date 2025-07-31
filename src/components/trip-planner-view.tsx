@@ -99,6 +99,21 @@ function TripPlannerViewInternal() {
   const router = useRouter();
   const { toast } = useToast();
 
+  const handlePlan = useCallback(async (inputs: PlanTripInput) => {
+    setIsLoading(true);
+    setTripPlanData(null);
+    const result = await getTripPlan(inputs);
+    if (result.success) {
+        const newTripPlanData = { inputs, outputs: result.data };
+        setTripPlanData(newTripPlanData);
+        // We remove the `generate` param here so it doesn't run again on refresh
+        updateUrl('plan', newTripPlanData, { fromBudget: cameFromBudget, generate: false });
+    } else {
+        toast({ variant: 'destructive', title: 'Error', description: result.error });
+    }
+    setIsLoading(false);
+  }, [toast, updateUrl, cameFromBudget]);
+
   const parseUrlParams = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString());
     const tab = params.get('tab') || 'estimate';
@@ -161,7 +176,7 @@ function TripPlannerViewInternal() {
                         },
                     });
                 }
-            } else { // Otherwise, we have inputs and need to generate a plan
+            } else if (params.has('generate')) { // Otherwise, if we have a generate flag, run the plan
                 const parsedInputs = PlanTripInputSchema.safeParse(data);
                  if (parsedInputs.success) {
                     handlePlan(parsedInputs.data);
@@ -169,13 +184,13 @@ function TripPlannerViewInternal() {
             }
         }
     }
-  }, [searchParams]);
+  }, [searchParams, handlePlan]);
 
   useEffect(() => {
     parseUrlParams();
   }, [parseUrlParams]);
 
-  const updateUrl = useCallback((tab: string, data: any, options?: { fromBudget?: boolean }) => {
+  const updateUrl = useCallback((tab: string, data: any, options?: { fromBudget?: boolean, generate?: boolean }) => {
     startTransition(() => {
         const params = new URLSearchParams();
         params.set('tab', tab);
@@ -200,6 +215,9 @@ function TripPlannerViewInternal() {
         if (options?.fromBudget) {
             params.set('fromBudget', 'true');
         }
+        if (options?.generate) {
+            params.set('generate', 'true');
+        }
 
         router.push(`/planner?${params.toString()}`, { scroll: false });
     });
@@ -218,20 +236,6 @@ function TripPlannerViewInternal() {
     }
     setIsLoading(false);
   };
-  
-  const handlePlan = useCallback(async (inputs: PlanTripInput) => {
-    setIsLoading(true);
-    setTripPlanData(null);
-    const result = await getTripPlan(inputs);
-    if (result.success) {
-        const newTripPlanData = { inputs, outputs: result.data };
-        setTripPlanData(newTripPlanData);
-        updateUrl('plan', newTripPlanData, { fromBudget: cameFromBudget });
-    } else {
-        toast({ variant: 'destructive', title: 'Error', description: result.error });
-    }
-    setIsLoading(false);
-  }, [toast, updateUrl, cameFromBudget]);
 
   const handlePlanFromBudget = useCallback((budgetInputs: EstimateBudgetInput, totalBudget: number) => {
     const planInputs: PlanTripInput = {
@@ -245,20 +249,9 @@ function TripPlannerViewInternal() {
         isNewToGhana: budgetInputs.isNewToGhana,
     };
     
-    startTransition(() => {
-      const params = new URLSearchParams();
-      params.set('tab', 'plan');
-      params.set('fromBudget', 'true');
-       Object.entries(planInputs).forEach(([key, value]) => {
-            if (Array.isArray(value)) {
-                value.forEach(v => params.append(key, v.toString()));
-            } else if (value !== undefined && value !== null) {
-                params.set(key, value.toString());
-            }
-        });
-      router.push(`/planner?${params.toString()}`, { scroll: false });
-    });
-  }, [router]);
+    // We navigate to the URL with the `generate` param to trigger the plan creation
+    updateUrl('plan', { inputs: planInputs }, { fromBudget: true, generate: true });
+  }, [updateUrl]);
 
   const handleBackToBudget = () => {
     if (budgetData) {
@@ -375,3 +368,5 @@ export default function TripPlannerView() {
         </Suspense>
     )
 }
+
+    
