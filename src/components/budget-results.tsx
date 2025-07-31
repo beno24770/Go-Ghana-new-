@@ -10,7 +10,6 @@ import {
   Utensils,
   Wand2,
 } from 'lucide-react';
-import { Pie, PieChart, Cell } from 'recharts';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -19,14 +18,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  type ChartConfig,
-} from '@/components/ui/chart';
 import { useToast } from '@/hooks/use-toast';
 import type { EstimateBudgetInput, EstimateBudgetOutput } from '@/ai/schemas';
+import { Progress } from './ui/progress';
+import { motion } from 'framer-motion';
 
 type BudgetData = {
   inputs: EstimateBudgetInput;
@@ -39,27 +34,6 @@ interface BudgetResultsProps {
   onPlanItinerary: (inputs: EstimateBudgetInput, total: number) => void;
 }
 
-const chartConfig = {
-  cost: {
-    label: 'Cost (USD)',
-  },
-  accommodation: {
-    label: 'Accommodation',
-    color: 'hsl(var(--chart-1))',
-  },
-  food: {
-    label: 'Food',
-    color: 'hsl(var(--chart-2))',
-  },
-  transportation: {
-    label: 'Transportation',
-    color: 'hsl(var(--chart-3))',
-  },
-  activities: {
-    label: 'Activities',
-    color: 'hsl(var(--chart-4))',
-  },
-} satisfies ChartConfig;
 
 const categoryIcons = {
   accommodation: <BedDouble className="h-6 w-6 text-muted-foreground" />,
@@ -69,6 +43,20 @@ const categoryIcons = {
 };
 
 type CategoryKey = keyof Omit<EstimateBudgetOutput, 'total'>;
+
+const AnimatedBar = ({ value, maxValue, className }: { value: number, maxValue: number, className: string }) => {
+    const percentage = (value / maxValue) * 100;
+    return (
+        <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+            <motion.div
+                className={`h-full rounded-full ${className}`}
+                initial={{ width: 0 }}
+                animate={{ width: `${percentage}%` }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+            />
+        </div>
+    )
+}
 
 export default function BudgetResults({ data, isLoading, onPlanItinerary }: BudgetResultsProps) {
   const { toast } = useToast();
@@ -117,10 +105,11 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
   const { inputs, outputs } = data;
   const chartData = (Object.keys(outputs) as CategoryKey[])
     .filter(key => key !== 'total')
-    .map(key => ({
+    .map((key, index) => ({
       name: key.charAt(0).toUpperCase() + key.slice(1),
-      cost: outputs[key].total,
-      fill: chartConfig[key]?.color,
+      value: outputs[key].total,
+      icon: categoryIcons[key],
+      colorClass: `bg-chart-${(index % 5) + 1}`
     }));
   
   const regionText = Array.isArray(inputs.region) ? inputs.region.join(', ') : inputs.region;
@@ -141,24 +130,19 @@ export default function BudgetResults({ data, isLoading, onPlanItinerary }: Budg
           </p>
         </div>
 
-        <div className="h-[250px] w-full">
-          <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
-            <PieChart>
-              <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-              <Pie
-                data={chartData}
-                dataKey="cost"
-                nameKey="name"
-                innerRadius={60}
-                strokeWidth={5}
-                labelLine={false}
-              >
-                {chartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.fill} />
-                ))}
-              </Pie>
-            </PieChart>
-          </ChartContainer>
+        <div className="space-y-4 rounded-lg border p-4">
+             {chartData.map((item) => (
+                <div key={item.name} className="space-y-2">
+                    <div className="flex justify-between items-center text-sm">
+                        <div className="flex items-center gap-2">
+                             {item.icon}
+                            <span className="font-medium">{item.name}</span>
+                        </div>
+                        <span className="font-bold">${item.value.toLocaleString()}</span>
+                    </div>
+                    <AnimatedBar value={item.value} maxValue={outputs.total} className={item.colorClass} />
+                </div>
+            ))}
         </div>
         
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
