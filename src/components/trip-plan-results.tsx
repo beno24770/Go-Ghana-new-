@@ -223,22 +223,23 @@ const ItineraryContent = ({
             });
 
             const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
             const canvasWidth = canvas.width;
             const canvasHeight = canvas.height;
             const ratio = canvasWidth / canvasHeight;
-            const pdfHeight = pdfWidth / ratio;
-
-            let heightLeft = canvasHeight;
+            
+            const imgHeight = pdfWidth / ratio;
+            let heightLeft = imgHeight;
             let position = 0;
             
-            pdf.addImage(canvas, 'PNG', 0, position, pdfWidth, pdfHeight);
-            heightLeft -= pdf.internal.pageSize.getHeight() * (canvasWidth / pdfWidth);
+            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+            heightLeft -= pdfHeight;
 
             while (heightLeft > 0) {
-                position -= pdf.internal.pageSize.getHeight() * (canvasWidth / pdfWidth);
+                position = -pdfHeight + (position * -1);
                 pdf.addPage();
-                pdf.addImage(canvas, 'PNG', 0, position, pdfWidth, pdfHeight);
-                heightLeft -= pdf.internal.pageSize.getHeight() * (canvasWidth / pdfWidth);
+                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+                heightLeft -= pdfHeight;
             }
             
             pdf.save('goghana-itinerary.pdf');
