@@ -8,8 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import BudgetForm from '@/components/budget-form';
 import BudgetResults from '@/components/budget-results';
 import TripPlanForm from '@/components/trip-plan-form';
-import TripPlanResults from '@/components/trip-plan-results';
-import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, EstimateBudgetInputSchema, PlanTripInputSchema } from '@/ai/schemas';
+import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, EstimateBudgetInputSchema, PlanTripInputSchema, EstimateBudgetBaseSchema, PlanTripBaseSchema } from '@/ai/schemas';
 import { getBudgetEstimate, getTripPlan } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from './ui/button';
@@ -28,7 +27,7 @@ type TripPlanData = {
 
 // Zod schema for parsing budget data from URL search params
 // We use the base schema here because the refined schema causes issues with .extend() on SSR
-const budgetUrlSchema = EstimateBudgetInputSchema.extend({
+const budgetUrlSchema = EstimateBudgetBaseSchema.extend({
     duration: z.coerce.number(),
     numTravelers: z.coerce.number(),
     region: z.union([z.string(), z.array(z.string())]),
@@ -47,7 +46,7 @@ const budgetUrlSchema = EstimateBudgetInputSchema.extend({
 
 // Zod schema for parsing trip plan data from URL search params
 // We use the base schema here because the refined schema causes issues with .extend() on SSR
-const planUrlSchema = PlanTripInputSchema.extend({
+const planUrlSchema = PlanTripBaseSchema.extend({
     duration: z.coerce.number(),
     numTravelers: z.coerce.number(),
     budget: z.coerce.number(),

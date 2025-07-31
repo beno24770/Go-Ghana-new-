@@ -10,7 +10,7 @@ const CostBreakdownSchema = z.object({
 });
 
 // Base schema for budget estimation inputs
-const EstimateBudgetBaseSchema = z.object({
+export const EstimateBudgetBaseSchema = z.object({
   duration: z.number().describe('The duration of the trip in days.'),
   region: z.array(z.string()).describe('The regions in Ghana the user will be visiting.'),
   travelStyle: z.enum(['Budget', 'Mid-range', 'Luxury']).describe('The travel style of the user.'),
@@ -41,7 +41,7 @@ export const EstimateBudgetOutputSchema = z.object({
 export type EstimateBudgetOutput = z.infer<typeof EstimateBudgetOutputSchema>;
 
 // Base schema for trip planning inputs
-const PlanTripBaseSchema = z.object({
+export const PlanTripBaseSchema = z.object({
   duration: z.number().describe('The duration of the trip in days.'),
   region: z.array(z.string()).describe('The regions in Ghana the user will be visiting.'),
   budget: z.number().describe('The total budget for the trip in USD.'),
