@@ -27,7 +27,6 @@ type TripPlanData = {
 }
 
 // Zod schema for parsing budget data from URL search params
-// We use the base schema here because the refined schema causes issues with .extend() on SSR
 const budgetUrlSchema = EstimateBudgetBaseSchema.extend({
     duration: z.coerce.number(),
     numTravelers: z.coerce.number(),
@@ -340,3 +339,5 @@ export default function TripPlannerView() {
         </Suspense>
     )
 }
+
+    
