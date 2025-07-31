@@ -20,7 +20,7 @@ export function ItineraryLoader() {
     useEffect(() => {
         const interval = setInterval(() => {
             setIndex((prevIndex) => (prevIndex + 1) % loadingSteps.length);
-        }, 2500); // Change step every 2.5 seconds
+        }, 2500); 
 
         return () => clearInterval(interval);
     }, []);
