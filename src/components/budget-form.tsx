@@ -24,7 +24,8 @@ import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Calendar } from './ui/calendar';
 import { cn } from '@/lib/utils';
 import format from 'date-fns/format';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+import { Slider } from './ui/slider';
 
 const ghanaRegions = [
   "Ahafo", "Ashanti", "Bono", "Bono East", "Central", "Eastern",
@@ -32,10 +33,10 @@ const ghanaRegions = [
   "Upper East", "Upper West", "Volta", "Western", "Western North"
 ];
 
-const travelStyles: { name: EstimateBudgetInput['travelStyle'], description: string }[] = [
-    { name: 'Budget', description: '(approx. $60-140/day)' },
-    { name: 'Mid-range', description: '(approx. $150-500/day)' },
-    { name: 'Luxury', description: '(approx. $400+/day)' },
+const travelStyles: { name: EstimateBudgetInput['travelStyle'], description: string, range: [number, number] }[] = [
+    { name: 'Budget', description: '($60 - $140/day)', range: [60, 140] },
+    { name: 'Mid-range', description: '($150 - $320/day)', range: [150, 320] },
+    { name: 'Luxury', description: '($400 - $1000+/day)', range: [400, 1000] },
 ];
 
 interface BudgetFormProps {
@@ -59,11 +60,17 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
       numTravelers: 1,
       startDate: new Date().toISOString().split('T')[0],
       isNewToGhana: false,
+      dailyBudget: 235,
       ...defaultValues
     },
   });
 
   const isNewToGhana = form.watch('isNewToGhana');
+  const travelStyle = form.watch('travelStyle');
+  const dailyBudget = form.watch('dailyBudget');
+
+  const selectedStyleConfig = useMemo(() => travelStyles.find(s => s.name === travelStyle), [travelStyle]);
+
 
   useEffect(() => {
     if (isNewToGhana) {
@@ -71,10 +78,17 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
     }
   }, [isNewToGhana, form]);
 
+  useEffect(() => {
+    if (selectedStyleConfig) {
+      // Set default daily budget to the middle of the range when style changes
+      const [min, max] = selectedStyleConfig.range;
+      const middle = Math.round((min + max) / 2);
+      form.setValue('dailyBudget', middle);
+    }
+  }, [travelStyle, selectedStyleConfig, form]);
+
   const selectedDate = form.watch('startDate');
   const dateForPicker = selectedDate ? new Date(selectedDate) : undefined;
-  // This adjustment prevents a hydration error where the server and client might interpret
-  // a "YYYY-MM-DD" string in different timezones, leading to a one-day difference.
   if (dateForPicker) {
       dateForPicker.setMinutes(dateForPicker.getMinutes() + dateForPicker.getTimezoneOffset());
   }
@@ -255,6 +269,39 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
             </FormItem>
           )}
         />
+
+        {selectedStyleConfig && (
+            <FormField
+                control={form.control}
+                name="dailyBudget"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Daily Budget (per person)</FormLabel>
+                        <div className="flex items-center gap-4">
+                            <FormControl>
+                                <Slider
+                                    min={selectedStyleConfig.range[0]}
+                                    max={selectedStyleConfig.range[1]}
+                                    step={5}
+                                    value={[field.value ?? 0]}
+                                    onValueChange={(value) => field.onChange(value[0])}
+                                    className="flex-1"
+                                />
+                            </FormControl>
+                            <div className="font-bold text-lg w-24 text-right text-primary">
+                                ${dailyBudget?.toLocaleString()}
+                            </div>
+                        </div>
+                        <FormDescription>
+                            Fine-tune your daily spending within the {travelStyle} range.
+                        </FormDescription>
+                        <FormMessage />
+                    </FormItem>
+                )}
+            />
+        )}
+
+
         <Button type="submit" disabled={isSubmitting} className="w-full" size="lg">
           {isSubmitting ? (
             <LoaderCircle className="animate-spin" />

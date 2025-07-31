@@ -26,12 +26,18 @@ Duration: {{duration}} days
 Regions: {{#each region}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
 Travel Style: {{travelStyle}}
 Number of Travelers: {{numTravelers}}
+{{#if dailyBudget}}
+Specified Daily Budget per Person: \${{dailyBudget}}
+{{/if}}
 
 Your Task:
-1.  **Calculate Per-Day Costs**: For each category (accommodation, food, transportation, activities), calculate the average per-day cost based on the travel style.
-2.  **Calculate Total Costs**: Multiply the per-day cost by the duration of the trip to get the total for each category.
-3.  **Calculate Grand Total**: Sum the total costs of all categories to get the grand total for the trip.
-4.  **Format the Output**: Provide the breakdown in the specified JSON schema format, including both 'perDay' and 'total' for each category.
+1.  **Determine Daily Cost**:
+    *   **If a 'dailyBudget' is specified**: Use this value as the total per-person, per-day cost. You MUST then allocate this amount across the four categories (accommodation, food, transportation, activities) in a way that is logical for the specified 'travelStyle'.
+    *   **If no 'dailyBudget' is specified**: Use the 'travelStyle' to determine an average per-person, per-day cost from the ranges below.
+2.  **Calculate Per-Day Costs**: For each category, determine the per-day cost.
+3.  **Calculate Total Costs**: Multiply the per-day cost by the duration of the trip to get the total for each category.
+4.  **Calculate Grand Total**: Sum the total costs of all categories to get the grand total for the trip. The total per-day cost should match the user's specified 'dailyBudget' if it was provided.
+5.  **Format the Output**: Provide the breakdown in the specified JSON schema format, including both 'perDay' and 'total' for each category.
 
 Cost Ranges (per person, per day in USD):
 Budget:

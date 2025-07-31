@@ -2,7 +2,6 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useTransition } from 'react';
-import { z } from 'zod';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import BudgetForm from '@/components/budget-form';
 import BudgetResults from '@/components/budget-results';
@@ -14,6 +13,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Button } from './ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { z } from 'zod';
 
 type BudgetData = {
   inputs: EstimateBudgetInput;
@@ -79,29 +80,30 @@ export default function TripPlannerView() {
         travelStyle: budgetInputs.travelStyle,
         interests: ['Culture', 'Heritage & History'],
         startDate: budgetInputs.startDate || new Date().toISOString().split('T')[0],
-        isNewToGhana: budgetInputs.isNewToGhana,
+        isNewToGhana: budgetInputs.isNewToGhana || false,
     };
     
-    setActiveTab('plan');
-    setPlanTriggerData(planInputs);
+    startTransition(() => {
+        setActiveTab('plan');
+        setPlanTriggerData(planInputs);
+    });
   }, []);
 
   const handleBackToBudget = () => {
-    onTabChange('estimate');
-    setTripPlanData(null);
+    startTransition(() => {
+        setActiveTab('estimate');
+        setTripPlanData(null);
+    });
   };
 
   const onTabChange = (value: string) => {
     startTransition(() => {
-        if (value === 'plan') {
-          // When user manually clicks "Plan a Trip" tab, clear everything.
-          setBudgetData(null);
+        if (value === 'plan' && activeTab === 'estimate') {
+          // When user manually clicks "Plan a Trip" tab, clear previous results
           setTripPlanData(null);
-
-        } else if (value === 'estimate') {
-          // When user clicks "Estimate Budget", clear everything.
+        } else if (value === 'estimate' && activeTab === 'plan') {
+          // When user clicks "Estimate Budget", clear previous results
            setBudgetData(null);
-           setTripPlanData(null);
         }
         setActiveTab(value);
     });
@@ -119,8 +121,8 @@ export default function TripPlannerView() {
         </div>
         <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="estimate">Estimate Budget</TabsTrigger>
-                <TabsTrigger value="plan">Plan a Trip</TabsTrigger>
+                <TabsTrigger value="estimate">1. Estimate Budget</TabsTrigger>
+                <TabsTrigger value="plan">2. Plan a Trip</TabsTrigger>
             </TabsList>
             <TabsContent value="estimate">
                 <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-2">
@@ -154,7 +156,7 @@ export default function TripPlannerView() {
                         <TripPlanForm
                             onSubmit={handlePlan}
                             isSubmitting={isLoading && activeTab === 'plan'}
-                            defaultValues={tripPlanData?.inputs}
+                            defaultValues={tripPlanData?.inputs || planTriggerData || undefined}
                         />
                     </div>
                     <div className="relative">
