@@ -4,15 +4,13 @@
 import {
   ArrowLeft,
   BedDouble,
-  Briefcase,
   Car,
   Copy,
-  Languages,
+  Share2,
   Ticket,
   Utensils,
   Wallet,
   Wand2,
-  Share2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -25,11 +23,14 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import type { PlanTripInput, PlanTripOutput } from '@/ai/schemas';
 import { Badge } from '@/components/ui/badge';
-import { useEffect, useState, useMemo, Suspense } from 'react';
+import { useMemo, Suspense, useState } from 'react';
 import { marked } from 'marked';
 import dynamic from 'next/dynamic';
-import { useSearchParams } from 'next/navigation';
 
+const ItineraryDialog = dynamic(() => import('./itinerary-dialog').then(mod => mod.ItineraryDialog), {
+    ssr: false,
+    loading: () => <div className="p-4 text-center">Loading Tools...</div>
+});
 
 type TripPlanData = {
   inputs: PlanTripInput;
@@ -50,10 +51,26 @@ const categoryIcons = {
   activities: <Ticket className="h-8 w-8 text-primary" />,
 };
 
-const ItineraryDialog = dynamic(() => import('./itinerary-dialog').then(mod => mod.ItineraryDialog), {
-    ssr: false,
-    loading: () => <div className="p-4 text-center">Loading Tools...</div>
-});
+// New client component to handle state and actions
+function TripPlanActions({ planData }: { planData: TripPlanData }) {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+    return (
+        <>
+            <Button onClick={() => setIsDialogOpen(true)}>
+                <Wand2 className="mr-2 h-4 w-4 shrink-0" /> View & Customize Itinerary
+            </Button>
+            <Suspense fallback={<div>Loading...</div>}>
+                <ItineraryDialog 
+                    planData={planData} 
+                    open={isDialogOpen}
+                    onOpenChange={setIsDialogOpen}
+                />
+            </Suspense>
+        </>
+    );
+}
+
 
 function PlanSection({ title, cost, description, icon, cta }: { title: string; cost: number; description: string; icon: React.ReactNode, cta?: React.ReactNode }) {
   const parsedDescription = useMemo(() => marked.parse(description), [description]);
@@ -78,17 +95,7 @@ function PlanSection({ title, cost, description, icon, cta }: { title: string; c
 
 export default function TripPlanResults({ data, isLoading, onBack, showBackButton }: TripPlanResultsProps) {
   const { toast } = useToast();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   
-  const searchParams = useSearchParams();
-  const initialTool = searchParams.get('tool');
-
-  useEffect(() => {
-    if (initialTool && data) {
-      setIsDialogOpen(true);
-    }
-  }, [initialTool, data]);
-
   const handleShare = () => {
     if (typeof window !== 'undefined') {
       navigator.clipboard.writeText(window.location.href);
@@ -153,9 +160,7 @@ export default function TripPlanResults({ data, isLoading, onBack, showBackButto
             <PlanSection title="Food" cost={outputs.food.cost} description={outputs.food.description} icon={categoryIcons.food} />
             <PlanSection title="Transportation" cost={outputs.transportation.cost} description={outputs.transportation.description} icon={categoryIcons.transportation} />
             <PlanSection title="Activities" cost={outputs.activities.cost} description={outputs.activities.description} icon={categoryIcons.activities} cta={
-                <Button onClick={() => setIsDialogOpen(true)}>
-                    <Wand2 className="mr-2 h-4 w-4 shrink-0" /> View & Customize Itinerary
-                </Button>
+                <TripPlanActions planData={data} />
             } />
         </div>
         
@@ -180,16 +185,6 @@ export default function TripPlanResults({ data, isLoading, onBack, showBackButto
         </div>
 
       </CardContent>
-      {data && (
-        <Suspense fallback={<div>Loading...</div>}>
-            <ItineraryDialog 
-                planData={data} 
-                initialTool={initialTool} 
-                open={isDialogOpen}
-                onOpenChange={setIsDialogOpen}
-            />
-        </Suspense>
-      )}
     </Card>
   );
 }
