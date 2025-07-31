@@ -34,6 +34,12 @@ const nextConfig = {
       }
     ],
   },
+  experimental: {
+    // This is to allow cross-origin requests in the development environment.
+    allowedDevOrigins: [
+        'https://6000-firebase-studio-1753689056863.cluster-ikslh4rdsnbqsvu5nw3v4dqjj2.cloudworkstations.dev',
+    ],
+  }
 };
 
 const isDevelopment = process.env.NODE_ENV === 'development';
