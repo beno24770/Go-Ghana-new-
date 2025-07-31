@@ -1,0 +1,561 @@
+
+[
+    {
+        "id": "central-elmina-afrikan-pot",
+        "name": "Afrikan Pot Restaurant",
+        "region": "Central",
+        "location": "Elmina",
+        "style": "Local Dining",
+        "description": "2-star restaurant in Elmina",
+        "link": "Box 327, Elmina"
+    },
+    {
+        "id": "central-elmina-elmina-castle-restaurant",
+        "name": "Elmina Castle Restaurant",
+        "region": "Central",
+        "location": "Elmina Castle",
+        "style": "Historic Dining",
+        "description": "2-star restaurant near Elmina Castle",
+        "link": "Tel: 0243-175296"
+    },
+    {
+        "id": "central-agyim-friends-gardens",
+        "name": "Friends Gardens Bar & Restaurant",
+        "region": "Central",
+        "location": "Agyim, Swedru",
+        "style": "Garden Restaurant",
+        "description": "2-star restaurant in Agyim, Swedru",
+        "link": "Tel: 0244-802528 / 070-8767441"
+    },
+    {
+        "id": "central-cape-coast-oasis",
+        "name": "Oasis Beach Resort",
+        "region": "Central",
+        "location": "Cape Coast",
+        "style": "Bar & Grill",
+        "description": "2-star restaurant in Cape Coast",
+        "link": "Tel: 020-8180252"
+    },
+    {
+        "id": "central-cape-coast-huz-deric",
+        "name": "Huz D'Eric Restaurant",
+        "region": "Central",
+        "location": "Winneba Junction",
+        "style": "Local Dining",
+        "description": "2-star restaurant in Winneba Junction",
+        "link": "Tel: 0243-175296 / 0276-832641"
+    },
+    {
+        "id": "central-cape-coast-sally",
+        "name": "Sally Restaurant",
+        "region": "Central",
+        "location": "Cape Coast",
+        "style": "Family Restaurant",
+        "description": "2-star restaurant in Cape Coast",
+        "link": "Tel: 042-34168 / 2"
+    },
+    {
+        "id": "central-winneba-the-stage",
+        "name": "The Stage Restaurant",
+        "region": "Central",
+        "location": "Winneba",
+        "style": "Grill & Lounge",
+        "description": "2-star restaurant in Winneba",
+        "link": "Tel: 0422-22063"
+    },
+    {
+        "id": "central-cape-coast-blue-cheese",
+        "name": "Blue Cheese Fast Food",
+        "region": "Central",
+        "location": "Cape Coast",
+        "style": "Fast Food",
+        "description": "3-star fast food in Cape Coast",
+        "link": "Tel: 0242-707983"
+    },
+    {
+        "id": "central-cape-coast-cape-cafe",
+        "name": "Cape Cafe",
+        "region": "Central",
+        "location": "Cape Coast",
+        "style": "Cafe",
+        "description": "3-star cafe in Cape Coast",
+        "link": "jacobumson@hotmail.com"
+    },
+    {
+        "id": "central-cape-coast-cape-coast-castle",
+        "name": "Cape Coast Castle Restaurant",
+        "region": "Central",
+        "location": "Cape Coast Castle",
+        "style": "Historic Dining",
+        "description": "3-star restaurant at Cape Coast Castle",
+        "link": "Tel: 042-32751"
+    },
+    {
+        "id": "central-cape-coast-court-cantoon",
+        "name": "Court Cantoon",
+        "region": "Central",
+        "location": "Cape Coast",
+        "style": "Cantoon Dining",
+        "description": "3-star restaurant in Cape Coast",
+        "link": "Tel: 0244-879701"
+    },
+    {
+        "id": "central-elmina-elmina-castle",
+        "name": "Elmina Castle Restaurant",
+        "region": "Central",
+        "location": "Elmina Castle",
+        "style": "Heritage Dining",
+        "description": "3-star restaurant in Elmina Castle",
+        "link": "Box 199, Elmina"
+    },
+    {
+        "id": "central-cape-coast-golf-restaurant",
+        "name": "Golf Restaurant",
+        "region": "Central",
+        "location": "Cape Coast",
+        "style": "Casual Dining",
+        "description": "3-star restaurant in Cape Coast",
+        "link": "Tel: 042-33510, 13"
+    },
+    {
+        "id": "central-cape-coast-new-age",
+        "name": "New Age Restaurant",
+        "region": "Central",
+        "location": "Cape Coast",
+        "style": "Contemporary Dining",
+        "description": "3-star restaurant in Cape Coast",
+        "link": "Tel: 042-37489"
+    },
+    {
+        "id": "central-brem-asiyim-ocean-style",
+        "name": "Ocean Style Restaurant",
+        "region": "Central",
+        "location": "Brem Asiyim",
+        "style": "Oceanside Dining",
+        "description": "3-star restaurant in Brem Asiyim",
+        "link": "oceangroupgh@yahoo.co.uk"
+    },
+    {
+        "id": "central-kakum-rainforest",
+        "name": "Rainforest Cafe",
+        "region": "Central",
+        "location": "Kakum Park",
+        "style": "Nature-Themed Dining",
+        "description": "3-star restaurant in Kakum Park",
+        "link": "Tel: 0244-721163"
+    },
+    {
+        "id": "central-cape-coast-styces-home",
+        "name": "Styces Home Touch UCC",
+        "region": "Central",
+        "location": "Cape Coast",
+        "style": "Homestyle Dining",
+        "description": "3-star restaurant at UCC, Cape Coast",
+        "link": "mafestyce2004@yahoo.co.uk"
+    },
+    {
+        "id": "central-cape-coast-tine-taven",
+        "name": "Tine Taven Restaurant",
+        "region": "Central",
+        "location": "Cape Coast",
+        "style": "Tavern Dining",
+        "description": "3-star restaurant in Cape Coast",
+        "link": "Tel: 042-30564"
+    },
+    {
+        "id": "ashanti-manhyia-food-inn",
+        "name": "Food Inn Gh. Ltd.",
+        "region": "Ashanti",
+        "location": "Manhyia",
+        "style": "Fast Food",
+        "description": "Fast food restaurant in Manhyia",
+        "link": "Tel: 051-46664"
+    },
+    {
+        "id": "ashanti-dichemso-josel-catering",
+        "name": "Josel Catering Services",
+        "region": "Ashanti",
+        "location": "Dichemso",
+        "style": "Catering Service",
+        "description": "1-star catering service",
+        "link": "infosjose@gmail.com"
+    },
+    {
+        "id": "ashanti-danyame-moti-mahal",
+        "name": "Moti Mahal Restaurant",
+        "region": "Ashanti",
+        "location": "Danyame",
+        "style": "Indian Cuisine",
+        "description": "1-star restaurant in Danyame",
+        "link": "Tel: 051-29608"
+    },
+    {
+        "id": "ashanti-adum-queens-gate",
+        "name": "Queens Gate Restaurant",
+        "region": "Ashanti",
+        "location": "Adum",
+        "style": "Local Dining",
+        "description": "1-star restaurant in Adum",
+        "link": "Tel: 051-29683"
+    },
+    {
+        "id": "ashanti-adum-santora",
+        "name": "Santora Restaurant",
+        "region": "Ashanti",
+        "location": "Adum",
+        "style": "Local Dining",
+        "description": "1-star restaurant in Adum",
+        "link": "Tel: 051-31260"
+    },
+    {
+        "id": "ashanti-danyame-abovus",
+        "name": "Abovus Restaurant",
+        "region": "Ashanti",
+        "location": "Danyame",
+        "style": "Local Dining",
+        "description": "2-star restaurant in Danyame",
+        "link": "Tel: 051-26959/26944"
+    },
+    {
+        "id": "ashanti-asokwa-big-daddys",
+        "name": "Big Daddy's Fast Food",
+        "region": "Ashanti",
+        "location": "Asokwa",
+        "style": "Fast Food",
+        "description": "2-star restaurant in Asokwa",
+        "link": "bigdaddysghana@yahoo.com"
+    },
+    {
+        "id": "ashanti-south-junction-cassies-gardens",
+        "name": "Cassie's Gardens",
+        "region": "Ashanti",
+        "location": "South Junction",
+        "style": "Garden Restaurant",
+        "description": "2-star restaurant in South Junction",
+        "link": "Tel: 051-27139"
+    },
+    {
+        "id": "ashanti-obuasi-furbies",
+        "name": "Furbies Restaurant",
+        "region": "Ashanti",
+        "location": "Obuasi",
+        "style": "Casual Dining",
+        "description": "2-star restaurant in Obuasi",
+        "link": "Tel: 0582-24866"
+    },
+    {
+        "id": "ashanti-obuasi-goldfinger",
+        "name": "Goldfinger Restaurant",
+        "region": "Ashanti",
+        "location": "Obuasi",
+        "style": "Local Dining",
+        "description": "2-star restaurant in Obuasi",
+        "link": "Tel: 051-40365"
+    },
+    {
+        "id": "ashanti-ashtown-its-my-kitchen",
+        "name": "It's My Kitchen Restaurant",
+        "region": "Ashanti",
+        "location": "Ashtown",
+        "style": "Home-style Dining",
+        "description": "2-star restaurant in Ashtown",
+        "link": "Tel: 0244-688944"
+    },
+    {
+        "id": "ashanti-obuasi-karnay",
+        "name": "Karnay Restaurant",
+        "region": "Ashanti",
+        "location": "Obuasi",
+        "style": "Local Dining",
+        "description": "2-star restaurant in Obuasi",
+        "link": "Tel: 0582-42924"
+    },
+    {
+        "id": "ashanti-bantama-monique-gold",
+        "name": "Monique Gold",
+        "region": "Ashanti",
+        "location": "Bantama",
+        "style": "Local Dining",
+        "description": "2-star restaurant in Bantama",
+        "link": "Tel: 0244-430707"
+    },
+    {
+        "id": "ashanti-abobo-quik-bite-annes",
+        "name": "Quik Bite Restaurant (Annes)",
+        "region": "Ashanti",
+        "location": "Abobo",
+        "style": "Fast Food",
+        "description": "2-star restaurant in Abobo",
+        "link": "Tel: 051-24029 / 0244-259363"
+    },
+    {
+        "id": "ashanti-ahodwo-soft-bite",
+        "name": "Soft Bite Restaurant",
+        "region": "Ashanti",
+        "location": "Ahodwo",
+        "style": "Fast Food",
+        "description": "2-star restaurant in Ahodwo",
+        "link": "Tel: 0244-283333"
+    },
+    {
+        "id": "ashanti-danyame-sweet-roses",
+        "name": "Sweet Roses Restaurant",
+        "region": "Ashanti",
+        "location": "Danyame",
+        "style": "Casual Dining",
+        "description": "2-star restaurant in Danyame",
+        "link": "Tel: 051-20662"
+    },
+    {
+        "id": "ashanti-adum-vic-babos",
+        "name": "Vic Baboo's Cafe",
+        "region": "Ashanti",
+        "location": "Adum",
+        "style": "Cafe",
+        "description": "2-star cafe in Adum",
+        "link": "Tel: 051-27667"
+    },
+    {
+        "id": "ashanti-amokom-anony-fast-food",
+        "name": "Anony Fast Food",
+        "region": "Ashanti",
+        "location": "Amokom",
+        "style": "Fast Food",
+        "description": "3-star fast food in Amokom",
+        "link": "Tel: 051-47998"
+    },
+    {
+        "id": "ashanti-anylaeso-bermay-queen",
+        "name": "Bermay Queen Kitchen",
+        "region": "Ashanti",
+        "location": "Anwylaeso",
+        "style": "Home-style Dining",
+        "description": "3-star restaurant in Anwylaeso",
+        "link": "Tel: 0744-228481"
+    },
+    {
+        "id": "ashanti-asokwa-big-ben",
+        "name": "Big Ben Fast Food",
+        "region": "Ashanti",
+        "location": "Asokwa",
+        "style": "Fast Food",
+        "description": "3-star fast food in Asokwa",
+        "link": "Tel: 051-42004"
+    },
+    {
+        "id": "ashanti-bantama-blue-berry",
+        "name": "Blue Berry Restaurant",
+        "region": "Ashanti",
+        "location": "Bantama",
+        "style": "Contemporary",
+        "description": "3-star restaurant in Bantama",
+        "link": "Box KS 8919, Adum"
+    },
+    {
+        "id": "ashanti-asafo-chinese",
+        "name": "Chinese Restaurant",
+        "region": "Ashanti",
+        "location": "Asafo",
+        "style": "Chinese Cuisine",
+        "description": "3-star restaurant in Asafo",
+        "link": "Tel: 051-37123"
+    },
+    {
+        "id": "ashanti-alonsu-chocolate-city",
+        "name": "Chocolate City Restaurant",
+        "region": "Ashanti",
+        "location": "Alonsu",
+        "style": "Dessert Spot",
+        "description": "3-star restaurant in Alonsu",
+        "link": "Tel: 0244-463690"
+    },
+    {
+        "id": "ashanti-dadiesoaba-club-62",
+        "name": "Club 62 Restaurant",
+        "region": "Ashanti",
+        "location": "Dadiesoaba",
+        "style": "Bar & Grill",
+        "description": "3-star restaurant in Dadiesoaba",
+        "link": "Tel: 051-41742 / 41773"
+    },
+    {
+        "id": "ashanti-adum-cumber-land",
+        "name": "Cumber Land Restaurant",
+        "region": "Ashanti",
+        "location": "Adum",
+        "style": "Romantic Dining",
+        "description": "3-star restaurant in Adum",
+        "link": "Tel: 051-24383"
+    },
+    {
+        "id": "ashanti-bantama-cumine-chips",
+        "name": "Cumine Chips",
+        "region": "Ashanti",
+        "location": "Bantama",
+        "style": "Fast Food",
+        "description": "3-star fast food in Bantama",
+        "link": "Tel: 051-22779"
+    },
+    {
+        "id": "ashanti-knust-eye-adom",
+        "name": "Eye Adom Fast Foods",
+        "region": "Ashanti",
+        "location": "KNUST",
+        "style": "Campus Dining",
+        "description": "3-star fast food at KNUST",
+        "link": "Tel: 0244-610666"
+    },
+    {
+        "id": "ashanti-stc-yard-freewinmo",
+        "name": "Freewinmo Restaurant",
+        "region": "Ashanti",
+        "location": "STC Yard",
+        "style": "Quick Bite",
+        "description": "3-star restaurant at STC Yard",
+        "link": "Tel: 051-27063"
+    },
+    {
+        "id": "ashanti-ayigya-genesis",
+        "name": "Genesis Restaurant",
+        "region": "Ashanti",
+        "location": "Ayigya, Kumasi",
+        "style": "Fast Food",
+        "description": "3-star fast food in Ayigya, Kumasi",
+        "link": "Tel: 051-70284"
+    },
+    {
+        "id": "ashanti-dichemso-h-plus",
+        "name": "H-Plus Restaurant",
+        "region": "Ashanti",
+        "location": "Dichemso",
+        "style": "Home-style Dining",
+        "description": "3-star restaurant in Dichemso",
+        "link": "Tel: 020-8110786"
+    },
+    {
+        "id": "ashanti-kwadaso-hanis",
+        "name": "Hanis Restaurant",
+        "region": "Ashanti",
+        "location": "Kwadaso, Nsuom",
+        "style": "Continental Cuisine",
+        "description": "3-star restaurant in Kwadaso",
+        "link": "Tel: 0531-24651 / 0243-380838"
+    },
+    {
+        "id": "ashanti-adum-kenjojes",
+        "name": "Kenjojes Fast Food",
+        "region": "Ashanti",
+        "location": "Adum",
+        "style": "Fast Food",
+        "description": "3-star fast food in Adum",
+        "link": "Tel: 051-31498"
+    },
+    {
+        "id": "ashanti-bantama-kentish-kitchen",
+        "name": "Kentish Kitchen",
+        "region": "Ashanti",
+        "location": "Bantama",
+        "style": "Contemporary Dining",
+        "description": "3-star restaurant in Bantama",
+        "link": "kentishkitchen@yahoo.com"
+    },
+    {
+        "id": "ashanti-asokwa-mascarpony",
+        "name": "Mascarpony Fast Food",
+        "region": "Ashanti",
+        "location": "Asokwa",
+        "style": "Fast Food",
+        "description": "3-star fast food in Asokwa",
+        "link": "Tel: 051-46166"
+    },
+    {
+        "id": "ashanti-asokwa-mckwason",
+        "name": "Mckwason Restaurant",
+        "region": "Ashanti",
+        "location": "Asokwa",
+        "style": "Casual Dining",
+        "description": "3-star restaurant in Asokwa",
+        "link": "Tel: 051-29667"
+    },
+    {
+        "id": "ashanti-offinso-offinso-fast-food",
+        "name": "Offinso Fast Food",
+        "region": "Ashanti",
+        "location": "Offinso",
+        "style": "Fast Food",
+        "description": "3-star fast food in Offinso",
+        "link": "Tel: 031-214544"
+    },
+    {
+        "id": "ashanti-abobo-quikbite",
+        "name": "Quikbite Fast Food",
+        "region": "Ashanti",
+        "location": "Abobo",
+        "style": "Fast Food",
+        "description": "3-star fast food in Abobo",
+        "link": "Tel: 051-24029"
+    },
+    {
+        "id": "ashanti-ahodwo-roza",
+        "name": "Roza Fast Food",
+        "region": "Ashanti",
+        "location": "Ahodwo",
+        "style": "Fast Food",
+        "description": "3-star fast food in Ahodwo",
+        "link": "Tel: 024-283333"
+    },
+    {
+        "id": "ashanti-bekwai-rd-rosejoy",
+        "name": "Rosejoy Fast Food & Restaurant",
+        "region": "Ashanti",
+        "location": "Bekwai Rd",
+        "style": "Family Dining",
+        "description": "3-star restaurant at Bekwai Roundabout",
+        "link": "Tel: 0244-380104 / 051-26638"
+    },
+    {
+        "id": "ashanti-adum-rosejoy",
+        "name": "Rosejoy Restaurant & Fast Food",
+        "region": "Ashanti",
+        "location": "Adum",
+        "style": "Family Dining",
+        "description": "3-star restaurant in Adum",
+        "link": "Tel: 0246-300140 / 020-8211234"
+    },
+    {
+        "id": "ashanti-asokwa-s-bar",
+        "name": "S Bar & Catering Services",
+        "region": "Ashanti",
+        "location": "Asokwa",
+        "style": "Bar & Catering",
+        "description": "3-star restaurant in Asokwa",
+        "link": "Box 8075, Kumasi"
+    },
+    {
+        "id": "ashanti-bantama-the-dish",
+        "name": "The Dish Restaurant",
+        "region": "Ashanti",
+        "location": "Bantama",
+        "style": "Local Dining",
+        "description": "3-star restaurant in Bantama",
+        "link": "Tel: 051-30983 / 020-124301"
+    },
+    {
+        "id": "ashanti-stadium-kiravi-night-club",
+        "name": "Kiravi Night Club & Restaurant",
+        "region": "Ashanti",
+        "location": "Stadium",
+        "style": "Night Club",
+        "description": "Nightlife restaurant near Kumasi Stadium",
+        "link": "Tel: 0244-377502"
+    },
+    {
+        "id": "ashanti-nhyiaeso-nkosuo",
+        "name": "Nkosuo Restaurant",
+        "region": "Ashanti",
+        "location": "Nhyiaeso",
+        "style": "Local Dining",
+        "description": "Nightlife restaurant in Nhyiaeso",
+        "link": "Tel: 051-27815"
+    }
+]
