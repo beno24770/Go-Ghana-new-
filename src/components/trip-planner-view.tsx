@@ -89,7 +89,6 @@ function TripPlannerViewInternal() {
   const [isLoading, setIsLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [initialTool, setInitialTool] = useState<string | null>(null);
-  const [planTriggerData, setPlanTriggerData] = useState<PlanTripInput | null>(null);
   const [cameFromBudget, setCameFromBudget] = useState(false);
 
 
@@ -105,6 +104,8 @@ function TripPlannerViewInternal() {
 
     const data: { [key: string]: any } = {};
     for(const [key, value] of params.entries()) {
+        // Don't include output data in the re-parsed data for planning
+        if (tab === 'plan' && key.startsWith('outputs.')) continue;
         data[key] = value;
     }
 
@@ -118,8 +119,8 @@ function TripPlannerViewInternal() {
         data.interests = [];
     }
 
-    if (tab === 'estimate' && params.get('duration')) {
-        const parsed = budgetUrlSchema.safeParse(data);
+    if (tab === 'estimate' && params.has('duration')) {
+        const parsed = budgetUrlSchema.safeParse(Object.fromEntries(params));
         if (parsed.success) {
             const { duration, region, travelStyle, numTravelers, startDate, ...rest } = parsed.data;
             const regionArray = Array.isArray(region) ? region : [region];
@@ -135,28 +136,36 @@ function TripPlannerViewInternal() {
                 },
             });
         }
-    } else if (tab === 'plan' && params.get('budget')) {
-        const parsed = planUrlSchema.safeParse(data);
-        if (parsed.success) {
-            const { budget, duration, numTravelers, region, travelStyle, interests, startDate, fromBudget, ...rest } = parsed.data;
-            const regionArray = Array.isArray(region) ? region : [region];
-            const interestsArray = Array.isArray(interests) ? interests : (interests ? [interests] : []);
-
-            if (fromBudget) {
-              setCameFromBudget(true);
+    } else if (tab === 'plan') {
+         if (params.has('fromBudget')) {
+            setCameFromBudget(true);
+        }
+        if (params.has('budget')) {
+            // If we have output data, it means we have a full plan to display
+            if (params.has('outputs.total')) {
+                const parsedPlan = planUrlSchema.safeParse(Object.fromEntries(params));
+                if (parsedPlan.success) {
+                    const { budget, duration, numTravelers, region, travelStyle, interests, startDate, fromBudget, ...rest } = parsedPlan.data;
+                    const regionArray = Array.isArray(region) ? region : [region];
+                    const interestsArray = Array.isArray(interests) ? interests : (interests ? [interests] : []);
+                    setTripPlanData({
+                        inputs: { duration, region: regionArray, budget, numTravelers, travelStyle, interests: interestsArray, startDate },
+                        outputs: {
+                            suggestedTravelStyle: rest['outputs.suggestedTravelStyle'],
+                            accommodation: { cost: rest['outputs.accommodation.cost'], description: rest['outputs.accommodation.description'] },
+                            food: { cost: rest['outputs.food.cost'], description: rest['outputs.food.description'] },
+                            transportation: { cost: rest['outputs.transportation.cost'], description: rest['outputs.transportation.description'] },
+                            activities: { cost: rest['outputs.activities.cost'], description: rest['outputs.activities.description'] },
+                            total: rest['outputs.total'],
+                        },
+                    });
+                }
+            } else { // Otherwise, we have inputs and need to generate a plan
+                const parsedInputs = PlanTripInputSchema.safeParse(data);
+                 if (parsedInputs.success) {
+                    handlePlan(parsedInputs.data);
+                }
             }
-
-            setTripPlanData({
-                inputs: { duration, region: regionArray, budget, numTravelers, travelStyle, interests: interestsArray, startDate },
-                outputs: {
-                    suggestedTravelStyle: rest['outputs.suggestedTravelStyle'],
-                    accommodation: { cost: rest['outputs.accommodation.cost'], description: rest['outputs.accommodation.description'] },
-                    food: { cost: rest['outputs.food.cost'], description: rest['outputs.food.description'] },
-                    transportation: { cost: rest['outputs.transportation.cost'], description: rest['outputs.transportation.description'] },
-                    activities: { cost: rest['outputs.activities.cost'], description: rest['outputs.activities.description'] },
-                    total: rest['outputs.total'],
-                },
-            });
         }
     }
   }, [searchParams]);
@@ -223,13 +232,6 @@ function TripPlannerViewInternal() {
     setIsLoading(false);
   }, [toast, updateUrl, cameFromBudget]);
 
-  useEffect(() => {
-    if (planTriggerData && activeTab === 'plan') {
-      handlePlan(planTriggerData);
-      setPlanTriggerData(null);
-    }
-  }, [planTriggerData, activeTab, handlePlan]);
-
   const handlePlanFromBudget = useCallback((budgetInputs: EstimateBudgetInput, totalBudget: number) => {
     const planInputs: PlanTripInput = {
         duration: budgetInputs.duration,
@@ -241,10 +243,20 @@ function TripPlannerViewInternal() {
         startDate: budgetInputs.startDate || new Date().toISOString().split('T')[0],
     };
     
-    onTabChange('plan', { fromBudget: true });
-    setTripPlanData(null); 
-    setPlanTriggerData(planInputs);
-  }, []);
+    startTransition(() => {
+      const params = new URLSearchParams();
+      params.set('tab', 'plan');
+      params.set('fromBudget', 'true');
+       Object.entries(planInputs).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+                value.forEach(v => params.append(key, v.toString()));
+            } else if (value) {
+                params.set(key, value.toString());
+            }
+        });
+      router.push(`/planner?${params.toString()}`, { scroll: false });
+    });
+  }, [router]);
 
   const handleBackToBudget = () => {
     if (budgetData) {
@@ -259,15 +271,13 @@ function TripPlannerViewInternal() {
     }
   };
 
-  const onTabChange = (value: string, options?: {fromBudget: boolean}) => {
+  const onTabChange = (value: string) => {
     startTransition(() => {
         const params = new URLSearchParams(searchParams.toString());
         params.set('tab', value);
 
         if (value === 'plan') {
-            if (options?.fromBudget) {
-                setCameFromBudget(true);
-            } else {
+             if (!params.has('fromBudget')) {
                 setBudgetData(null);
                 setTripPlanData(null);
                 setCameFromBudget(false);
@@ -337,7 +347,7 @@ function TripPlannerViewInternal() {
                         <TripPlanForm
                             onSubmit={handlePlan}
                             isSubmitting={isLoading && activeTab === 'plan'}
-                            defaultValues={tripPlanData?.inputs || planTriggerData || undefined}
+                            defaultValues={tripPlanData?.inputs}
                         />
                     </div>
                     <div className="relative">
