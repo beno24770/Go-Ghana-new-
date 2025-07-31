@@ -123,7 +123,7 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
                     <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                         mode="single"
-                        selected={field.value ? toDate(field.value) : undefined}
+                        selected={field.value ? parseDateWithOffset(field.value) : undefined}
                         onSelect={(date) => field.onChange(date?.toISOString().split('T')[0])}
                         disabled={(date) => date < new Date(new Date().setHours(0,0,0,0))}
                         initialFocus

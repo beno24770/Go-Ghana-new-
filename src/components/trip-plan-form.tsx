@@ -148,7 +148,7 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                         <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
                             mode="single"
-                            selected={field.value ? toDate(field.value) : undefined}
+                            selected={field.value ? parseDateWithOffset(field.value) : undefined}
                             onSelect={(date) => field.onChange(date?.toISOString().split('T')[0])}
                             disabled={(date) => date < new Date(new Date().setHours(0,0,0,0))}
                             initialFocus
@@ -230,13 +230,13 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
                                 checked={field.value?.includes(interest.id)}
                                 onCheckedChange={(checked) => {
                                   const currentValue = field.value || [];
-                                  if (checked) {
-                                    field.onChange([...currentValue, interest.id]);
-                                  } else {
-                                    field.onChange(
-                                      currentValue.filter((value) => value !== interest.id)
-                                    );
-                                  }
+                                  return checked
+                                    ? field.onChange([...currentValue, interest.id])
+                                    : field.onChange(
+                                        currentValue.filter(
+                                          (value) => value !== interest.id
+                                        )
+                                      );
                                 }}
                               />
                             </FormControl>
