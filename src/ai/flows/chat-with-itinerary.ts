@@ -16,6 +16,7 @@ import format from 'date-fns/format';
 import { z } from 'zod';
 import { getAccommodations } from '../tools/get-accommodations';
 import { getRestaurants } from '../tools/get-restaurants';
+import { getArticleLink } from '../tools/get-article-link';
 
 export async function chatWithItinerary(input: ChatWithItineraryInput): Promise<ChatWithItineraryOutput> {
     const endDate = addDays(new Date(input.startDate), input.duration - 1);
@@ -51,7 +52,7 @@ const chatItineraryPrompt = ai.definePrompt({
         itinerarySummary: z.string(),
     }) },
     output: { schema: ChatWithItineraryOutputSchema },
-    tools: [getLocalPulse, getEntertainmentEvents, getAccommodations, getRestaurants],
+    tools: [getLocalPulse, getEntertainmentEvents, getAccommodations, getRestaurants, getArticleLink],
     prompt: `You are a friendly and expert Ghanaian travel assistant for letvisitghana.com. A user is asking a question or requesting a change to their travel itinerary.
 
 Your primary goal is to be fast and responsive.
@@ -74,7 +75,7 @@ Your primary goal is to be fast and responsive.
         *   Only in this case should you perform the more complex task of regenerating the plan.
         *   Provide a conversational response confirming the change (e.g., "Sure, I've updated your plan to include a visit to the National Museum on Day 2.").
         *   Regenerate the *entire* itinerary object based on the **full original itinerary** provided below, incorporating the user's changes. Ensure it is logistically sound.
-        *   Use your tools ('getLocalPulse', 'getEntertainmentEvents', etc.) to enhance the new plan.
+        *   Use your tools ('getLocalPulse', 'getEntertainmentEvents', 'getArticleLink', etc.) to enhance the new plan.
         *   The final output **MUST** include both the 'response' text and the full, updated 'itinerary' object.
 
 **Full Original Itinerary (ONLY for making changes):**

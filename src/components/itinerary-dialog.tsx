@@ -5,10 +5,8 @@ import {
   Briefcase,
   Car,
   Check,
-  Download,
   Languages,
   LoaderCircle,
-  MoreVertical,
   Pencil,
   Send,
   Volume2,
@@ -19,8 +17,7 @@ import { useToast } from '@/hooks/use-toast';
 import type { GenerateItineraryOutput, GenerateLanguageGuideOutput, GeneratePackingListOutput, PackingListItemSchema, PlanTripInput, PlanTripOutput } from '@/ai/schemas';
 import { getAudio, getItinerary, getLanguageGuide, getPackingList, postItineraryChat, regenerateItinerary } from '@/app/actions';
 import { useEffect, useState, useMemo, useRef } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import Link from 'next/link';
 import { marked } from 'marked';
@@ -29,9 +26,6 @@ import { z } from 'zod';
 import { Textarea } from './ui/textarea';
 import { Input } from './ui/input';
 import { ItineraryLoader } from './itinerary-loader';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 
 type TripPlanData = {
   inputs: PlanTripInput;
@@ -220,7 +214,7 @@ export function ItineraryDialog({ planData, initialTool, open, onOpenChange }: I
     }, [open, initialTool]);
 
     const handleGenerateItinerary = async () => {
-        setIsLoading(prev => ({...prev, itinerary: true}));
+        setIsLoading(prev => ({...prev, itinerary: true, chat: false}));
         setItinerary(null);
         setChatHistory([]);
         setIsEditing(false);
@@ -248,7 +242,7 @@ export function ItineraryDialog({ planData, initialTool, open, onOpenChange }: I
     }, [itineraryAsMarkdown]);
 
     const handleRegenerateItinerary = async () => {
-        setIsLoading(prev => ({ ...prev, itinerary: true }));
+        setIsLoading(prev => ({ ...prev, itinerary: true, chat: false }));
         setItinerary(null);
         const result = await regenerateItinerary({ 
             notes: editedItinerary,
@@ -268,7 +262,7 @@ export function ItineraryDialog({ planData, initialTool, open, onOpenChange }: I
     const handleChatSubmit = async (message: string) => {
         if (!itinerary) return;
 
-        setIsLoading(prev => ({...prev, chat: true}));
+        setIsLoading(prev => ({...prev, chat: true, itinerary: false}));
         setChatHistory(prev => [...prev, {role: 'user', content: message}]);
         
         const currentItineraryMd = itineraryAsMarkdown;

@@ -27,7 +27,7 @@ export const getArticleLink = ai.defineTool(
     const lowerCaseAttraction = attractionName.toLowerCase();
 
     const article = articlesData.attractions.find(attraction => 
-      attraction.keywords.some(keyword => lowerCaseAttraction.includes(keyword))
+      attraction.keywords.some(keyword => lowerCaseAttraction.includes(keyword.toLowerCase()))
     );
 
     return { url: article ? article.url : 'https://www.letvisitghana.com' };
