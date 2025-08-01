@@ -10,8 +10,7 @@ import { Suspense, useState, useMemo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { TourItineraryDialog } from '@/components/tour-itinerary-dialog';
 import type { Tour } from '@/lib/types';
-import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
 
 const TourSkeleton = () => (
     <div className="flex flex-col rounded-lg border bg-card shadow-sm p-6 space-y-4">
