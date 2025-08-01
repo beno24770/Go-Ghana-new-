@@ -26,6 +26,7 @@ import { Badge } from '@/components/ui/badge';
 import { useMemo, Suspense, useState } from 'react';
 import { marked } from 'marked';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
 
 const ItineraryDialog = dynamic(() => import('./itinerary-dialog').then(mod => mod.ItineraryDialog), {
     ssr: false,
@@ -95,10 +96,21 @@ function PlanSection({ title, cost, description, icon, cta }: { title: string; c
 
 export default function TripPlanResults({ data, isLoading, onBack, showBackButton }: TripPlanResultsProps) {
   const { toast } = useToast();
+  const router = useRouter();
   
   const handleShare = () => {
-    if (typeof window !== 'undefined') {
-      navigator.clipboard.writeText(window.location.href);
+    if (typeof window !== 'undefined' && data) {
+      const url = new URL(window.location.href);
+      const params = new URLSearchParams();
+      Object.entries(data.inputs).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+            value.forEach(v => params.append(key, v));
+        } else if (value !== undefined && value !== null) {
+            params.append(key, String(value));
+        }
+      });
+      url.search = params.toString();
+      navigator.clipboard.writeText(url.toString());
       toast({
         title: 'Copied to Clipboard',
         description: 'The link to your trip plan has been copied.',
@@ -188,3 +200,5 @@ export default function TripPlanResults({ data, isLoading, onBack, showBackButto
     </Card>
   );
 }
+
+    

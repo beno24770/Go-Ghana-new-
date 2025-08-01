@@ -1,20 +1,20 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback, useTransition } from 'react';
+import React, { useState, useEffect, useCallback, useTransition, Suspense } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import BudgetForm from '@/components/budget-form';
 import BudgetResults from '@/components/budget-results';
 import TripPlanForm from '@/components/trip-plan-form';
 import TripPlanResults from '@/components/trip-plan-results';
-import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput } from '@/ai/schemas';
+import { type EstimateBudgetInput, type EstimateBudgetOutput, type PlanTripInput, type PlanTripOutput, PlanTripInputSchema } from '@/ai/schemas';
 import { getBudgetEstimate, getTripPlan } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from './ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { z } from 'zod';
+import { useSearchParams } from 'next/navigation';
+import { Skeleton } from './ui/skeleton';
 
 type BudgetData = {
   inputs: EstimateBudgetInput;
@@ -26,7 +26,28 @@ type TripPlanData = {
     outputs: PlanTripOutput;
 }
 
-export default function TripPlannerView() {
+function TripPlannerFallback() {
+    return (
+        <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-2">
+            <div className="space-y-6">
+                <Skeleton className="h-10 w-3/4" />
+                <Skeleton className="h-6 w-full" />
+                <div className="space-y-8 pt-4">
+                    <Skeleton className="h-16 w-full" />
+                    <Skeleton className="h-48 w-full" />
+                    <Skeleton className="h-24 w-full" />
+                    <Skeleton className="h-12 w-full" />
+                </div>
+            </div>
+            <div className="relative">
+                <Skeleton className="h-full min-h-[600px] w-full" />
+            </div>
+        </div>
+    )
+}
+
+function TripPlannerViewInternal() {
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState('estimate');
   const [budgetData, setBudgetData] = useState<BudgetData | null>(null);
   const [tripPlanData, setTripPlanData] = useState<TripPlanData | null>(null);
@@ -69,6 +90,28 @@ export default function TripPlannerView() {
       setPlanTriggerData(null); 
     }
   }, [planTriggerData, handlePlan]);
+
+  // Effect to parse URL params and pre-fill the form
+    useEffect(() => {
+        const params = new URLSearchParams(searchParams.toString());
+        if (params.has('duration') && params.has('budget')) {
+            const parsed = PlanTripInputSchema.safeParse({
+                duration: Number(params.get('duration')),
+                region: params.getAll('region'),
+                budget: Number(params.get('budget')),
+                numTravelers: Number(params.get('numTravelers')),
+                travelStyle: params.get('travelStyle') || 'Mid-range',
+                interests: params.getAll('interests'),
+                startDate: params.get('startDate'),
+                isNewToGhana: params.get('isNewToGhana') === 'true',
+            });
+            
+            if (parsed.success) {
+                setActiveTab('plan');
+                handlePlan(parsed.data);
+            }
+        }
+    }, [searchParams, handlePlan]);
 
 
   const handlePlanFromBudget = useCallback((budgetInputs: EstimateBudgetInput, totalBudget: number) => {
@@ -173,3 +216,14 @@ export default function TripPlannerView() {
       </main>
   );
 }
+
+
+export default function TripPlannerView() {
+    return (
+        <Suspense fallback={<TripPlannerFallback />}>
+            <TripPlannerViewInternal />
+        </Suspense>
+    )
+}
+
+    

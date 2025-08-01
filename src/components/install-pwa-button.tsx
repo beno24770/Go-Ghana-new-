@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from './ui/button';
+import { Button, ButtonProps } from './ui/button';
 import { Download } from 'lucide-react';
 import {
   AlertDialog,
@@ -15,7 +15,11 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 
-export function InstallPwaButton() {
+interface InstallPwaButtonProps extends ButtonProps {
+    // No new props, just inheriting from ButtonProps
+}
+
+export function InstallPwaButton({ className, variant, ...props }: InstallPwaButtonProps) {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -32,10 +36,13 @@ export function InstallPwaButton() {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
-          className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg"
-          aria-label="Install App"
+            variant={variant}
+            className={className}
+            aria-label="Install App"
+            {...props}
         >
-          <Download className="h-6 w-6" />
+          <Download className="h-4 w-4" />
+           <span className="ml-2">Download App</span>
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -62,3 +69,5 @@ export function InstallPwaButton() {
     </AlertDialog>
   );
 }
+
+    

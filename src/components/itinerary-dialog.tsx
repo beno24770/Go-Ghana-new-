@@ -5,8 +5,10 @@ import {
   Briefcase,
   Car,
   Check,
+  Download,
   Languages,
   LoaderCircle,
+  MessageSquare,
   Pencil,
   Send,
   Volume2,
@@ -26,6 +28,7 @@ import { z } from 'zod';
 import { Textarea } from './ui/textarea';
 import { Input } from './ui/input';
 import { ItineraryLoader } from './itinerary-loader';
+import { InstallPwaButton } from './install-pwa-button';
 
 type TripPlanData = {
   inputs: PlanTripInput;
@@ -41,7 +44,6 @@ function getCacheKey(planData: TripPlanData, tool: string) {
 
 interface ItineraryDialogProps {
     planData: TripPlanData;
-    initialTool?: string | null;
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }
@@ -181,18 +183,21 @@ const ItineraryContent = ({
                             <Car className="shrink-0" /> <span className="ml-2">Find a Driver</span>
                         </Link>
                     </Button>
-                    <Button asChild variant="secondary">
-                        <Link href="https://letvisitghanatours.com" target="_blank">
-                            <Briefcase className="shrink-0" /> <span className="ml-2">Book a Tour</span>
+                    <Button asChild variant="outline">
+                        <Link href="https://wa.me/233200635250" target="_blank">
+                           <MessageSquare className="shrink-0" /> <span className="ml-2">Talk to a Planner</span>
                         </Link>
                     </Button>
+                     <div className="hidden sm:block">
+                        <InstallPwaButton variant="outline" />
+                    </div>
                 </div>
             </div>
         </div>
     )
 }
 
-export function ItineraryDialog({ planData, initialTool, open, onOpenChange }: ItineraryDialogProps) {
+export function ItineraryDialog({ planData, open, onOpenChange }: ItineraryDialogProps) {
     const [isLoading, setIsLoading] = useState({ itinerary: false, packingList: false, languageGuide: false, audio: '', chat: false });
     const [itinerary, setItinerary] = useState<GenerateItineraryOutput | null>(null);
     const [packingList, setPackingList] = useState<GeneratePackingListOutput | null>(null);
@@ -242,13 +247,13 @@ export function ItineraryDialog({ planData, initialTool, open, onOpenChange }: I
 
     useEffect(() => {
         if (open) {
-            const newActiveTab = initialTool || 'itinerary';
+            const newActiveTab = 'itinerary';
             setActiveTab(newActiveTab);
             if (newActiveTab === 'itinerary' && !itinerary) {
                 handleGenerateItinerary();
             }
         }
-    }, [open, initialTool, itinerary, handleGenerateItinerary]);
+    }, [open, itinerary, handleGenerateItinerary]);
 
     useEffect(() => {
         if (itineraryAsMarkdown) {
@@ -507,3 +512,5 @@ export function ItineraryDialog({ planData, initialTool, open, onOpenChange }: I
         </Dialog>
     )
 }
+
+    
