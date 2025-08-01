@@ -91,6 +91,71 @@
         ]
     },
     {
+        "id": "coastal-heritage-7-day",
+        "title": "Coastal Heritage & Culture",
+        "duration": "7 Days",
+        "price": "$850",
+        "priceValue": 850,
+        "description": "A week-long immersive journey into Ghana's coastal history and vibrant culture, from Accra to the poignant slave castles.",
+        "bookingUrl": "https://wa.me/233200635250",
+        "data-ai-hint": "beach village",
+        "itinerary": [
+            { "day": 1, "title": "Arrival in Accra", "details": "*   Airport pickup and transfer to your hotel.\n*   Welcome drink and briefing on the upcoming tour.\n*   Depending on arrival time, a short orientation of the neighborhood.", "overnight": "Accra Hotel" },
+            { "day": 2, "title": "Accra City Tour", "details": "*   Explore historic Accra, visiting Independence Square, Kwame Nkrumah Memorial Park, and the W.E.B. Du Bois Centre for Pan-African Culture.\n*   Experience the vibrant energy of Jamestown and its iconic lighthouse.", "overnight": "Accra Hotel" },
+            { "day": 3, "title": "Journey to Cape Coast & Kakum", "details": "*   Drive from Accra to the Central Region.\n*   Visit Kakum National Park for an exhilarating walk on the canopy walkway high above the rainforest.", "overnight": "Cape Coast/Elmina Hotel" },
+            { "day": 4, "title": "The Slave Castles", "details": "*   A sobering and educational day visiting both Cape Coast Castle and Elmina Castle.\n*   Learn about the history of the transatlantic slave trade from knowledgeable local guides.", "overnight": "Cape Coast/Elmina Hotel" },
+            { "day": 5, "title": "Assin Manso & Reflection", "details": "*   Journey to Assin Manso, the site of the 'Last Bath' where enslaved Africans were prepared for their journey.\n*   A day for reflection and understanding the historical significance of the region.", "overnight": "Cape Coast/Elmina Hotel" },
+            { "day": 6, "title": "Beach Leisure Day", "details": "*   Relax and rejuvenate on the beautiful beaches of the Central Region.\n*   Enjoy the sea breeze, swim, or simply relax at a beachfront restaurant.", "overnight": "Cape Coast/Elmina Hotel" },
+            { "day": 7, "title": "Return to Accra & Departure", "details": "*   Enjoy a final coastal breakfast before driving back to Accra.\n*   Last-minute souvenir shopping at the Arts Centre.\n*   Transfer to the airport for your departure.", "overnight": "N/A" }
+        ]
+    },
+    {
+        "id": "ultimate-ghana-10-day",
+        "title": "Ultimate Ghana Experience",
+        "duration": "10 Days",
+        "price": "$1200",
+        "priceValue": 1200,
+        "description": "The complete package. A comprehensive tour covering Ghana's diverse landscapes, from northern safaris to the cultural heartlands and coastal castles.",
+        "bookingUrl": "https://wa.me/233200635250",
+        "data-ai-hint": "ghana map",
+        "itinerary": [
+            { "day": 1, "title": "Arrival & Welcome", "details": "Arrive at Kotoka Airport, Accra. Transfer to your hotel for a welcome briefing and dinner.", "overnight": "Accra" },
+            { "day": 2, "title": "Fly to Tamale & Mole Safari", "details": "Take a domestic flight to Tamale. Drive to Mole National Park and enjoy an afternoon jeep safari.", "overnight": "Mole Park" },
+            { "day": 3, "title": "Journey to Ashanti Kingdom", "details": "Morning safari at Mole. Depart for Kumasi, stopping at the beautiful Kintampo Waterfalls en route.", "overnight": "Kumasi" },
+            { "day": 4, "title": "Ashanti Craft Villages", "details": "Explore the rich culture of the Ashanti people by visiting the Kente weaving village of Adanwomase and the Adinkra stamping village of Ntonso.", "overnight": "Kumasi" },
+            { "day": 5, "title": "Kumasi City Tour", "details": "Visit the Manhyia Palace Museum (former home of the Ashanti King), the Okomfo Anokye Sword site, and the bustling Kejetia Market.", "overnight": "Kumasi" },
+            { "day": 6, "title": "Drive to the Coast", "details": "A scenic drive from Kumasi to Cape Coast. Check into your hotel and relax by the ocean.", "overnight": "Cape Coast" },
+            { "day": 7, "title": "Kakum & Cape Coast Castle", "details": "Experience the Kakum National Park canopy walk in the morning. In the afternoon, take a powerful tour of the Cape Coast Castle.", "overnight": "Cape Coast" },
+            { "day": 8, "title": "Elmina Castle & Return to Accra", "details": "Visit the historic Elmina Castle. Afterward, begin the drive back to Accra.", "overnight": "Accra" },
+            { "day": 9, "title": "Accra Leisure & Arts", "details": "A relaxed day in Accra. Visit the Arts Centre for souvenir shopping or explore the trendy neighborhood of Osu.", "overnight": "Accra" },
+            { "day": 10, "title": "Departure", "details": "Enjoy a final Ghanaian breakfast before being transferred to the airport for your flight home.", "overnight": "N/A" }
+        ]
+    },
+    {
+        "id": "grand-festivals-12-day",
+        "title": "Grand Festivals of Ghana",
+        "duration": "12 Days",
+        "price": "$1500",
+        "priceValue": 1500,
+        "description": "An incredible cultural immersion timed with Ghana's most vibrant festivals. Experience the art of Chale Wote and the royal traditions of Akwasidae.",
+        "bookingUrl": "https://wa.me/233200635250",
+        "data-ai-hint": "festival dancers",
+        "itinerary": [
+            { "day": 1, "title": "Arrival in Accra", "details": "Welcome to Ghana! Settle into your hotel and prepare for an amazing cultural journey.", "overnight": "Accra" },
+            { "day": 2, "title": "Accra City Exploration", "details": "Tour of Accra's key historical sites, including Jamestown and the Du Bois Centre, to set the cultural context.", "overnight": "Accra" },
+            { "day": 3, "title": "Chale Wote Street Art Festival", "details": "Spend the day immersed in the vibrant Chale Wote festival in Jamestown. Experience street art, music, dance, and fashion.", "overnight": "Accra" },
+            { "day": 4, "title": "Journey to Kumasi", "details": "Travel to Kumasi, the heart of the Ashanti Kingdom. Check into your hotel and relax.", "overnight": "Kumasi" },
+            { "day": 5, "title": "Akwasidae Festival", "details": "Witness the splendor of the Akwasidae festival at Manhyia Palace, where the Ashanti King sits in state and receives homage from his sub-chiefs.", "overnight": "Kumasi" },
+            { "day": 6, "title": "Ashanti Craft Villages", "details": "Explore the craft villages of Adanwomase (Kente) and Ntonso (Adinkra), learning the traditional crafts firsthand.", "overnight": "Kumasi" },
+            { "day": 7, "title": "Drive to Cape Coast", "details": "Travel from the Ashanti heartland to the historic coast. Settle into your hotel with views of the Atlantic.", "overnight": "Cape Coast" },
+            { "day": 8, "title": "Cape Coast Castle", "details": "Take a deeply moving tour of the Cape Coast Castle to understand its pivotal role in the history of the region.", "overnight": "Cape Coast" },
+            { "day": 9, "title": "Kakum National Park", "details": "Walk among the treetops on the Kakum National Park canopy walk, a nature-filled adventure.", "overnight": "Cape Coast" },
+            { "day": 10, "title": "Return to Accra", "details": "Leisurely drive back to Accra. Enjoy a farewell dinner at a restaurant with live Ghanaian music.", "overnight": "Accra" },
+            { "day": 11, "title": "Art & Shopping", "details": "Visit a local art gallery and spend time at the Arts Centre for last-minute souvenir shopping.", "overnight": "Accra" },
+            { "day": 12, "title": "Departure", "details": "Enjoy a final breakfast and transfer to the airport for your departure.", "overnight": "N/A" }
+        ]
+    },
+    {
         "id": "accra-city-tour",
         "title": "Accra City Vibe Tour",
         "duration": "1 Day",
