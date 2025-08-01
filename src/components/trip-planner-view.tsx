@@ -53,7 +53,7 @@ function TripPlannerViewInternal() {
   const [tripPlanData, setTripPlanData] = useState<TripPlanData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const [planTriggerData, setPlanTriggerData] = useState<PlanTripInput | null>(null);
+  const [planTriggerData, setPlanTriggerData] = useState<Partial<PlanTripInput> | null>(null);
 
   const { toast } = useToast();
 
@@ -83,53 +83,54 @@ function TripPlannerViewInternal() {
     setIsLoading(false);
   }, [toast]);
 
-  // Effect to run plan generation when triggered from budget results
+  // Effect to run plan generation when triggered
   useEffect(() => {
     if (planTriggerData) {
-      handlePlan(planTriggerData);
-      setPlanTriggerData(null); 
+        // Validate that we have enough data to make a plan
+        const validated = PlanTripInputSchema.safeParse(planTriggerData);
+        if (validated.success) {
+            handlePlan(validated.data);
+        }
+        setPlanTriggerData(null); 
     }
   }, [planTriggerData, handlePlan]);
 
   // Effect to parse URL params and pre-fill the form
     useEffect(() => {
         const params = new URLSearchParams(searchParams.toString());
-        if (params.has('duration')) { // A simple check for any relevant param
-            const parsed = PlanTripInputSchema.safeParse({
-                duration: Number(params.get('duration')),
-                region: params.getAll('interests'), // Note: this is likely a bug in original logic, should be region
-                budget: Number(params.get('budget')),
-                numTravelers: Number(params.get('numTravelers')),
-                travelStyle: params.get('travelStyle') || 'Mid-range',
-                interests: params.getAll('interests'),
-                startDate: params.get('startDate'),
-                isNewToGhana: params.get('isNewToGhana') === 'true',
-            });
+        if (params.has('duration')) {
+            const interests = params.get('interests');
+            const planDefaults: Partial<PlanTripInput> = {
+                duration: params.get('duration') ? Number(params.get('duration')) : undefined,
+                interests: interests ? interests.split(',') : undefined,
+                budget: params.get('budget') ? Number(params.get('budget')) : undefined,
+                numTravelers: params.get('numTravelers') ? Number(params.get('numTravelers')) : undefined,
+                travelStyle: params.get('travelStyle') as any,
+            };
+
+            const budgetDefaults: Partial<EstimateBudgetInput> = {
+                duration: planDefaults.duration,
+                interests: planDefaults.interests,
+                travelStyle: planDefaults.travelStyle,
+            }
             
-            if (parsed.success) {
-                startTransition(() => {
-                    setActiveTab('plan');
-                    setPlanTriggerData(parsed.data);
-                });
-            } else {
-                 // Pre-fill budget form instead if plan params are incomplete
-                const budgetDefaults = {
-                    duration: params.get('duration') ? Number(params.get('duration')) : 7,
-                    region: params.getAll('region').length > 0 ? params.getAll('region') : ['Greater Accra'],
-                    interests: params.getAll('interests'),
-                    travelStyle: params.get('travelStyle') as any || 'Mid-range',
-                };
+            startTransition(() => {
+                setActiveTab('plan');
+                setTripPlanData(null); // Clear previous plan results
+                // Set defaults for the form. It will be re-validated on submit.
+                setPlanTriggerData(planDefaults);
+                 // Also set defaults for the budget form in case user switches back
                 setBudgetData(prev => ({
                     ...prev,
                     inputs: { ...prev?.inputs, ...budgetDefaults, numTravelers: 1 } as EstimateBudgetInput
                 }));
-            }
+            });
         }
     }, [searchParams]);
 
 
   const handlePlanFromBudget = useCallback((budgetInputs: EstimateBudgetInput, totalBudget: number) => {
-    const planInputs: PlanTripInput = {
+    const planInputs: Partial<PlanTripInput> = {
         duration: budgetInputs.duration,
         region: budgetInputs.region,
         numTravelers: budgetInputs.numTravelers,
@@ -142,6 +143,7 @@ function TripPlannerViewInternal() {
     
     startTransition(() => {
         setActiveTab('plan');
+        setTripPlanData(null); // Clear old plan results
         setPlanTriggerData(planInputs);
     });
   }, []);

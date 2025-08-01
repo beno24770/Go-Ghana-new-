@@ -2,7 +2,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ArrowRight, Calendar, Clock, Tag } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Clock, Tag } from 'lucide-react';
 import Link from 'next/link';
 import sampleItineraries from '@/data/sample-itineraries.json';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,10 +13,15 @@ export default function TripIdeasPage() {
     const router = useRouter();
 
     const handleCustomize = (itinerary: typeof sampleItineraries[0]) => {
+        // Provide a sensible default budget based on duration ($200/day mid-range estimate)
+        const defaultBudget = itinerary.duration * 200;
+
         const query = new URLSearchParams({
             duration: String(itinerary.duration),
-            ...(itinerary.style && { interests: itinerary.style }),
-            // You can pre-fill other fields here if needed, like a default budget or travel style
+            interests: itinerary.style.join(','),
+            budget: String(defaultBudget),
+            numTravelers: '1', // Default to 1 traveler
+            travelStyle: 'Mid-range', // Default to mid-range
         }).toString();
         router.push(`/planner?${query}`);
     };
