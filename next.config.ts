@@ -1,3 +1,4 @@
+
 /** @type {import('next').NextConfig} */
 const withPWA = require('@ducanh2912/next-pwa').default({
   dest: 'public',
@@ -38,13 +39,6 @@ const baseConfig = {
 
 const nextConfig = {
   ...baseConfig,
-  ...(process.env.NODE_ENV === 'development' && {
-    experimental: {
-      allowedDevOrigins: [
-        'https://6000-firebase-studio-1753689056863.cluster-ikslh4rdsnbqsvu5nw3v4dqjj2.cloudworkstations.dev',
-      ],
-    },
-  }),
 };
 
 module.exports = withPWA(nextConfig);

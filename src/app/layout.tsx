@@ -28,8 +28,6 @@ export const metadata: Metadata = {
   description: 'Your trusted guide to Ghana, powered by local expertise. Get realistic budgets, authentic itineraries, and travel tips from a real Ghanaian perspective.',
   manifest: '/manifest.json',
   icons: {
-    icon: '/icon.png',
-    shortcut: '/icon.png',
     apple: '/icon.png',
   },
 };
