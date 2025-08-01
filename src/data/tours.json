@@ -1,0 +1,43 @@
+
+[
+    {
+        "id": "wli-adventure",
+        "title": "Wli Waterfalls & Mountain Adventure",
+        "duration": "2 Days",
+        "price": "$250",
+        "description": "An exciting two-day trip to the Volta Region to hike to Ghana's highest waterfalls and explore the beautiful mountain scenery.",
+        "image": "https://placehold.co/600x400.png",
+        "bookingUrl": "https://letvisitghanatours.com/wli-adventure",
+        "data-ai-hint": "waterfall jungle"
+    },
+    {
+        "id": "cape-coast-history",
+        "title": "Cape Coast & Elmina History Tour",
+        "duration": "3 Days",
+        "price": "$380",
+        "description": "A profound journey into Ghana's past. Visit the historic slave castles of Cape Coast and Elmina, and walk the Kakum canopy.",
+        "image": "https://placehold.co/600x400.png",
+        "bookingUrl": "https://letvisitghanatours.com/cape-coast-history",
+        "data-ai-hint": "castle ocean"
+    },
+    {
+        "id": "mole-safari",
+        "title": "Mole National Park Safari",
+        "duration": "4 Days",
+        "price": "$650",
+        "description": "Experience the thrill of a safari in Ghana's largest wildlife refuge. See elephants, antelopes, and hundreds of bird species.",
+        "image": "https://placehold.co/600x400.png",
+        "bookingUrl": "https://letvisitghanatours.com/mole-safari",
+        "data-ai-hint": "elephant safari"
+    },
+    {
+        "id": "accra-city-tour",
+        "title": "Accra City Vibe Tour",
+        "duration": "1 Day",
+        "price": "$120",
+        "description": "Discover the vibrant heart of Ghana's capital. Explore bustling markets, historical landmarks, and the trendy arts scene of Accra.",
+        "image": "https://placehold.co/600x400.png",
+        "bookingUrl": "https://letvisitghanatours.com/accra-city-tour",
+        "data-ai-hint": "city market"
+    }
+]
