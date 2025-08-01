@@ -33,8 +33,8 @@ export default function Home() {
                             </Link>
                         </Button>
                         <Button asChild variant="ghost" size="lg">
-                            <Link href="/events">
-                                See Local Events <ArrowRight />
+                            <Link href="/ideas">
+                                See Trip Ideas <ArrowRight />
                             </Link>
                         </Button>
                     </div>
@@ -51,5 +51,3 @@ export default function Home() {
     </div>
   );
 }
-
-    

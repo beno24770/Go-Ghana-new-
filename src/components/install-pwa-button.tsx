@@ -36,20 +36,20 @@ export function InstallPwaButton({ className, variant, ...props }: InstallPwaBut
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
-            variant={variant}
+            variant={variant || "default"}
+            size="icon"
             className={className}
             aria-label="Install App"
             {...props}
         >
-          <Download className="h-4 w-4" />
-           <span className="ml-2">Download App</span>
+          <Download className="h-6 w-6" />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="font-headline">Install GoGhana Planner</AlertDialogTitle>
           <AlertDialogDescription>
-            For the best experience, add this app to your home screen for quick access.
+            For the best experience, add this app to your home screen for quick access and offline use.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div className="space-y-4">
@@ -69,5 +69,3 @@ export function InstallPwaButton({ className, variant, ...props }: InstallPwaBut
     </AlertDialog>
   );
 }
-
-    
