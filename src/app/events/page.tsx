@@ -45,7 +45,7 @@ const EventSkeleton = () => (
 export default function EventsPage() {
     const [date, setDate] = useState<DateRange | undefined>(undefined);
 
-    const dayMap = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const dayMap = useMemo(() => ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], []);
 
     const filteredFestivals = useMemo(() => {
         if (!date?.from || !date?.to) return localPulseData;
@@ -103,7 +103,7 @@ export default function EventsPage() {
                                 id="date"
                                 variant={"outline"}
                                 className={cn(
-                                    "w-[300px] justify-start text-left font-normal",
+                                    "w-full sm:w-[300px] justify-start text-left font-normal",
                                     !date && "text-muted-foreground"
                                 )}
                                 >
@@ -142,22 +142,22 @@ export default function EventsPage() {
                         <TabsTrigger value="festivals">Annual Festivals</TabsTrigger>
                         <TabsTrigger value="entertainment">Regular Entertainment</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="festivals">
-                         <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                    <TabsContent value="festivals" className="mt-8">
+                         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                             {filteredFestivals.length > 0 ? filteredFestivals.map(event => (
                                 <Suspense key={event.id} fallback={<EventSkeleton />}>
                                     <EventCard event={event} />
                                 </Suspense>
-                            )) : <p className="col-span-3 text-center text-muted-foreground">No festivals found for the selected date range.</p>}
+                            )) : <p className="col-span-1 md:col-span-2 lg:col-span-3 text-center text-muted-foreground py-8">No festivals found for the selected date range.</p>}
                         </div>
                     </TabsContent>
-                    <TabsContent value="entertainment">
-                        <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                    <TabsContent value="entertainment" className="mt-8">
+                        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                              {filteredEntertainment.length > 0 ? filteredEntertainment.map(event => (
                                 <Suspense key={event.id} fallback={<EventSkeleton />}>
                                     <EventCard event={event} />
                                 </Suspense>
-                            )): <p className="col-span-3 text-center text-muted-foreground">No regular entertainment found for the selected days.</p>}
+                            )): <p className="col-span-1 md:col-span-2 lg:col-span-3 text-center text-muted-foreground py-8">No regular entertainment found for the selected days.</p>}
                         </div>
                     </TabsContent>
                 </Tabs>

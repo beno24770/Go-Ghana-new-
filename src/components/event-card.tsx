@@ -9,15 +9,13 @@ import { format, parseISO } from 'date-fns';
 export default function EventCard({ event }: { event: any }) {
     
     const displayDate = () => {
-        if (event.startDate) {
+        if (event.startDate && event.endDate) {
             try {
                 const start = parseISO(event.startDate);
                 const end = parseISO(event.endDate);
-                const startFormatted = format(start, 'MMMM d');
-                const endFormatted = format(end, 'MMMM d, yyyy');
                 
                 if (format(start, 'yyyy-MM-dd') === format(end, 'yyyy-MM-dd')) {
-                    return endFormatted;
+                    return format(end, 'MMMM d, yyyy');
                 }
                 if (start.getFullYear() !== end.getFullYear()) {
                      return `${format(start, 'MMM d, yyyy')} - ${format(end, 'MMM d, yyyy')}`;
@@ -25,7 +23,7 @@ export default function EventCard({ event }: { event: any }) {
                  if (start.getMonth() !== end.getMonth()) {
                     return `${format(start, 'MMM d')} - ${format(end, 'MMM d, yyyy')}`;
                 }
-                return `${startFormatted} - ${endFormatted}`;
+                return `${format(start, 'MMMM d')} - ${format(end, 'd, yyyy')}`;
             } catch (error) {
                 console.error("Invalid date format:", event.startDate, event.endDate);
                 return "Date not available";
@@ -48,7 +46,7 @@ export default function EventCard({ event }: { event: any }) {
                 </div>
             </CardHeader>
             <CardContent className="flex flex-col flex-grow justify-between">
-                <p className="text-muted-foreground">{event.description}</p>
+                <p className="text-muted-foreground flex-grow">{event.description}</p>
                 <div className="space-y-3 pt-6 text-sm">
                     <div className="flex items-start gap-2">
                         <MapPin className="h-4 w-4 text-primary shrink-0 mt-1" />
