@@ -44,14 +44,23 @@ export const getAccommodations = ai.defineTool(
       return isInRegion && hasStyle;
     });
 
-    // If no accommodations are found for the specific region and style,
-    // broaden the search to any region with the correct style.
-    // This prevents the AI from failing if the user's selection is too narrow.
-    if (relevantAccommodations.length === 0) {
+    // Fallback 1: If no accommodations match both region and style,
+    // find any accommodation in the selected region(s), regardless of style.
+    // This prevents suggesting hotels from the wrong part of the country.
+    if (relevantAccommodations.length === 0 && regions.length > 0) {
       relevantAccommodations = accommodationsData.filter(accommodation => 
+        regions.includes(accommodation.region)
+      );
+    }
+    
+    // Fallback 2: If still no results (e.g., an invalid region was passed),
+    // find any accommodation that matches the travel style, as a last resort.
+    if (relevantAccommodations.length === 0) {
+      relevantAccommodations = accommodationsData.filter(accommodation =>
         accommodation.travelStyle.includes(travelStyle)
       );
     }
+
 
     return { accommodations: relevantAccommodations };
   }
