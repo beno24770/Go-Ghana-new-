@@ -1,0 +1,129 @@
+
+[
+    {
+        "id": "safari-wildlife-3-day",
+        "title": "3-Day Safari and Wildlife",
+        "description": "A quick but thrilling trip to Ghana's premier wildlife park, Mole, for an unforgettable safari experience.",
+        "duration": 3,
+        "style": ["Safari", "Wildlife", "Adventure"],
+        "itinerary": [
+            {
+                "day": 1,
+                "location": "Accra -> Tamale -> Mole",
+                "activities": "Morning flight to Tamale and pick-up; city orientation tour in Tamale; drive to Mole National Park; check-in at Mole Motel; afternoon safari (walking or driving, 15:30-17:30).",
+                "overnight": "Mole Motel",
+                "driveTime": "Approx. 2 hrs drive from Tamale to Mole"
+            },
+            {
+                "day": 2,
+                "location": "Mole -> Larabanga -> Tamale",
+                "activities": "Early morning safari (walking, 07:00-09:00); visit to Larabanga Mosque; drive to Tamale.",
+                "overnight": "Hotel in Tamale"
+            },
+            {
+                "day": 3,
+                "location": "Tamale -> Accra",
+                "activities": "Early morning private driving safari; visit to Larabanga Mosque; drive to Tamale Airport for return flight to Accra.",
+                "driveTime": "Approx. 2 hrs drive"
+            }
+        ]
+    },
+    {
+        "id": "adventure-2-day-volta",
+        "title": "2-Day Volta Adventure",
+        "description": "A short adventure to the lush Volta Region, featuring Ghana's highest waterfall and a monkey sanctuary.",
+        "duration": 2,
+        "style": ["Adventure", "Nature", "Hiking"],
+        "itinerary": [
+            {
+                "day": 1,
+                "location": "Accra -> Ho -> Wli",
+                "activities": "Morning pickup in Accra; drive to Ho for a short stop; continue to Wli Waterfalls; hike to the upper falls.",
+                "overnight": "Guesthouse in Wli",
+                "driveTime": "Approx. 5-6 hrs drive"
+            },
+            {
+                "day": 2,
+                "location": "Wli -> Tafi Atome -> Accra",
+                "activities": "Morning short hike to Wli waterfalls; visit Tafi Atome Monkey Sanctuary to interact with Mona monkeys; drive back to Accra with drop off.",
+                "overnight": "N/A",
+                "driveTime": "Approx. 5-6 hrs drive"
+            }
+        ]
+    },
+    {
+        "id": "nature-1-day-shai-hills",
+        "title": "1-Day Shai Hills Nature Tour",
+        "description": "A quick escape from Accra to the Shai Hills Resource Reserve for wildlife viewing and cave exploration.",
+        "duration": 1,
+        "style": ["Nature", "Wildlife", "Day Trip"],
+        "itinerary": [
+            {
+                "day": 1,
+                "location": "Accra -> Shai Hills",
+                "activities": "Pickup in Accra; drive to Shai Hills Resource Reserve (approx. 1 hr); wildlife viewing (baboons, antelope, zebras, ostriches); explore bat caves, hiking trails, and rock climbing; return to Accra for drop-off at your choice of location.",
+                "overnight": "N/A",
+                "driveTime": "Approx. 2 hrs total"
+            }
+        ]
+    },
+    {
+        "id": "culture-history-10-day-tour",
+        "title": "10-Day Ghana Wildlife, Culture & History",
+        "description": "A comprehensive tour covering Ghana's diverse landscapes, from coastal slave castles to northern safaris and cultural heartlands.",
+        "duration": 10,
+        "style": ["Wildlife", "Culture", "History", "Adventure"],
+        "itinerary": [
+            { "day": 1, "location": "Accra", "activities": "Arrival at Kotoka Airport, support to request needed foreign exchange; transfer to hotel; neighborhood orientation; dinner.", "overnight": "Accra" },
+            { "day": 2, "location": "Accra -> Tamale -> Mole", "activities": "Domestic flight to Tamale; visit Larabanga Mosque; afternoon safari walk at Mole National Park.", "overnight": "Mole", "driveTime": "1 hr flight, 2 hrs drive" },
+            { "day": 3, "location": "Mole -> Kintampo -> Techiman", "activities": "Morning safari at Mole; depart for Techiman; visit Kintampo Waterfalls; scenic drive.", "overnight": "Techiman", "driveTime": "5-6 hrs drive" },
+            { "day": 4, "location": "Techiman -> Kumasi", "activities": "Visit Boabeng-Fiema Monkey Sanctuary; continue to Kumasi, the capital of the Ashanti Kingdom.", "overnight": "Kumasi", "driveTime": "3-4 hrs drive" },
+            { "day": 5, "location": "Kumasi Region", "activities": "Visit Adanwomase (Kente weaving) and Ntonso (Adinkra stamping) craft villages.", "overnight": "Kumasi" },
+            { "day": 6, "location": "Kumasi -> Cape Coast -> Elmina", "activities": "Drive from Kumasi via Accra to Cape Coast; visit Cape Coast Castle.", "overnight": "Elmina", "driveTime": "7-8 hrs drive" },
+            { "day": 7, "location": "Elmina -> Kakum -> Elmina", "activities": "Visit Kakum National Park for the canopy walk; return to Elmina to visit Elmina Castle.", "overnight": "Elmina", "driveTime": "2 hrs drive" },
+            { "day": 8, "location": "Elmina -> Accra", "activities": "Depart for Accra; visit Independence Square, Nkrumah Memorial Park, and Jamestown.", "overnight": "Accra", "driveTime": "3.5 hrs drive" },
+            { "day": 9, "location": "Accra", "activities": "Leisure day for relaxation, shopping at the Arts Centre, or exploring on your own.", "overnight": "Accra" },
+            { "day": 10, "location": "Accra -> Departure", "activities": "Enjoy a final Ghanaian breakfast; transfer to Kotoka Airport for departure.", "overnight": "N/A" }
+        ]
+    },
+    {
+        "id": "festival-10-day-panafest",
+        "title": "Panafest and Asa-Ankos Festival Tour",
+        "description": "Experience Ghana's most profound cultural festivals, Panafest and Emancipation Day, with this immersive cultural journey.",
+        "duration": 10,
+        "style": ["Festival", "Culture", "History", "Heritage"],
+        "itinerary": [
+            { "day": 1, "location": "Accra (Teshie)", "activities": "Airport pickup; hotel check-in; welcome cocktail; optional city orientation." },
+            { "day": 2, "location": "Accra", "activities": "Wreath-laying ceremony at W.E.B. Du Bois Centre, Nkrumah Memorial Park; visit Independence Square." },
+            { "day": 3, "location": "Accra -> Cape Coast", "activities": "Traditional naming ceremony; Tour of Forts/Castles; 'River Pra' for first leg 'Akwaaba' ceremony." },
+            { "day": 4, "location": "Cape Coast", "activities": "Grand durbar of Chiefs; Cultural performance; Opening of Panafest proper; Queen's Day procession." },
+            { "day": 5, "location": "Cape Coast/Elmina", "activities": "Visit Assin Manso Slave River Site; Reverential night; Batakari Day; Durbar of Chiefs; Cultural performance." },
+            { "day": 6, "location": "Cape Coast", "activities": "Colloquium at University of Cape Coast; Reggae/Highlife night with international artists." },
+            { "day": 7, "location": "Cape Coast -> Elmina", "activities": "Visit Elmina Castle; World-of-the-Living-and-Ancestors-Meet-at-the-Bridge Day; Candlelit procession." },
+            { "day": 8, "location": "Cape Coast", "activities": "Emancipation Day; Grand durbar at Jubilee Park; Inter-faith gathering; games; visit Bakatue Lagoon." },
+            { "day": 9, "location": "Accra", "activities": "Morning travel to Accra; Visit Arts Centre; farewell dinner with traditional performance; awards." },
+            { "day": 10, "location": "Accra -> Aburi", "activities": "Relax at resort pool; horseback riding; Return to Accra; shopping; African Ancestors Day; Airport drop-off." }
+        ]
+    },
+     {
+        "id": "festival-12-day-chale-wote",
+        "title": "Chale Wote, Akwasidae, and Odwira Festival Tour",
+        "description": "A deep dive into Ghana's vibrant art scene and rich royal traditions, timed with three major cultural events.",
+        "duration": 12,
+        "style": ["Festival", "Culture", "Art", "History"],
+        "itinerary": [
+            { "day": 1, "location": "Accra (Teshie)", "activities": "Airport pickup; Hotel check-in; Optional neighborhood or city orientation." },
+            { "day": 2, "location": "Accra", "activities": "Guided Tour: Kejetia Market, Manhyia Palace Museum, Okomfo Anokye Sword, Cultural Centre, Jamestown, Du Bois Centre, Oxford Street in Osu." },
+            { "day": 3, "location": "Accra", "activities": "Full day at Chale Wote Street Art Festival in James Town, exploring installations and performances." },
+            { "day": 4, "location": "Accra -> Kumasi", "activities": "Travel to Kumasi; check in; visit Adinkra and Kente craft villages." },
+            { "day": 5, "location": "Kumasi", "activities": "Attend the Akwasidae Festival at Manhyia Palace; witness the grand durbar of the Ashanti King." },
+            { "day": 6, "location": "Kumasi -> Mole", "activities": "Hike at Mole Forest Reserve; family lunch; monkey/birdlife sanctuary." },
+            { "day": 7, "location": "Mole", "activities": "Full day safari at Mole National Park (walking and jeep safaris); visit Larabanga Mosque." },
+            { "day": 8, "location": "Mole -> Akropong", "activities": "Travel to Akropong in the Eastern Region; check in and relax." },
+            { "day": 9, "location": "Akropong", "activities": "Witness the Odwira Festival, a spiritual cleansing ceremony with a grand durbar of chiefs." },
+            { "day": 10, "location": "Akropong -> Accra", "activities": "Morning in Akropong; drive to Accra; visit Aburi Botanical Gardens en route." },
+            { "day": 11, "location": "Accra", "activities": "Leisure day; Visit a family compound; Farewell dinner; Additional dancing, drumming, libation." },
+            { "day": 12, "location": "Accra", "activities": "Departure day; Falls and cool climate; last minute souvenir shopping; transfer to airport." }
+        ]
+    }
+]
