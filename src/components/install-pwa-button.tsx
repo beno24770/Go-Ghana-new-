@@ -32,6 +32,9 @@ export function InstallPwaButton({ className, variant, ...props }: InstallPwaBut
     return null;
   }
 
+  // A more robust check for PWA installability could be added here in the future.
+  // For now, we assume it's generally available on mobile.
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -49,19 +52,9 @@ export function InstallPwaButton({ className, variant, ...props }: InstallPwaBut
         <AlertDialogHeader>
           <AlertDialogTitle className="font-headline">Install GoGhana Planner</AlertDialogTitle>
           <AlertDialogDescription>
-            For the best experience, add this app to your home screen for quick access and offline use.
+            For the best experience, add this app to your home screen for quick access and offline use. Your browser should prompt you to install.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <div className="space-y-4">
-          <div>
-            <h3 className="font-bold">Installation Steps:</h3>
-            <ol className="list-decimal pl-5 text-sm text-muted-foreground">
-              <li>Open your browser's menu (usually three dots or a share icon).</li>
-              <li>Look for an option like <span className="font-bold">'Add to Home Screen'</span> or <span className="font-bold">'Install app'</span>.</li>
-              <li>Follow the on-screen prompts to confirm.</li>
-            </ol>
-          </div>
-        </div>
         <AlertDialogFooter>
           <AlertDialogAction>Got it!</AlertDialogAction>
         </AlertDialogFooter>
