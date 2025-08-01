@@ -201,4 +201,3 @@ export default function TripPlanResults({ data, isLoading, onBack, showBackButto
   );
 }
 
-    

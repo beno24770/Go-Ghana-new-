@@ -75,6 +75,23 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
     },
   });
 
+  useEffect(() => {
+    if (defaultValues) {
+      form.reset({
+        duration: 7,
+        region: ['Greater Accra'],
+        budget: 1000,
+        numTravelers: 1,
+        travelStyle: 'Mid-range',
+        interests: ['Culture', 'Heritage & History'],
+        startDate: new Date().toISOString().split('T')[0],
+        isNewToGhana: false,
+        ...defaultValues
+      });
+    }
+  }, [defaultValues, form]);
+
+
     const isNewToGhana = form.watch('isNewToGhana');
 
     useEffect(() => {

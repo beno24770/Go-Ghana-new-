@@ -145,8 +145,7 @@ function TripPlannerViewInternal() {
           // When user manually clicks "Plan a Trip" tab, clear previous results
           setTripPlanData(null);
         } else if (value === 'estimate' && activeTab === 'plan') {
-          // When user clicks "Estimate Budget", clear previous results
-           setBudgetData(null);
+          // When user clicks "Estimate Budget", don't clear results to allow editing
         }
         setActiveTab(value);
     });
@@ -199,7 +198,7 @@ function TripPlannerViewInternal() {
                         <TripPlanForm
                             onSubmit={handlePlan}
                             isSubmitting={isLoading && activeTab === 'plan'}
-                            defaultValues={tripPlanData?.inputs || planTriggerData || undefined}
+                            defaultValues={tripPlanData?.inputs || planTriggerData || budgetData?.inputs}
                         />
                     </div>
                     <div className="relative">
@@ -225,5 +224,3 @@ export default function TripPlannerView() {
         </Suspense>
     )
 }
-
-    
