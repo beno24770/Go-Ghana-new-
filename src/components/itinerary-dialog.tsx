@@ -2,6 +2,27 @@
 'use client';
 
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { getAudio, getItinerary, getLanguageGuide, getPackingList, postItineraryChat, regenerateItinerary } from '@/app/actions';
+import type { DayItinerarySchema as DayItinerary, GenerateItineraryOutput, GenerateLanguageGuideOutput, GeneratePackingListOutput, PackingListItemSchema, PlanTripInput, PlanTripOutput } from '@/ai/schemas';
+import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
+import {
   Briefcase,
   Car,
   Check,
@@ -14,36 +35,20 @@ import {
   Volume2,
   Wand2,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
-import type { DayItinerarySchema as DayItinerary, GenerateItineraryOutput, GenerateLanguageGuideOutput, GeneratePackingListOutput, PackingListItemSchema, PlanTripInput, PlanTripOutput } from '@/ai/schemas';
-import { getAudio, getItinerary, getLanguageGuide, getPackingList, postItineraryChat, regenerateItinerary } from '@/app/actions';
-import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import Link from 'next/link';
 import { marked } from 'marked';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { z } from 'zod';
-import { Textarea } from './ui/textarea';
+import { Button } from './ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
 import { Input } from './ui/input';
 import { ItineraryLoader } from './itinerary-loader';
-import { Logo } from './logo';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { Textarea } from './ui/textarea';
+import Link from 'next/link';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { Logo } from './logo';
 import { Label } from './ui/label';
-import { cn } from '@/lib/utils';
-
 
 type TripPlanData = {
   inputs: PlanTripInput;
@@ -229,7 +234,7 @@ const ItineraryContent = ({
     if (!itinerary) {
          return (
             <div className="text-center p-8 flex flex-col items-center justify-center h-full min-h-[400px]">
-                <p className="mb-4 text-muted-foreground">Click the button to generate an itinerary for your trip.</p>
+                <p className="mb-4 text-muted-foreground">Something went wrong. Please try generating the itinerary again.</p>
             </div>
         )
     }
@@ -260,15 +265,41 @@ const ItineraryContent = ({
                 {itinerary && <ItineraryForPDF itinerary={itinerary} tripData={planData} />}
             </div>
             <div className="flex-grow overflow-y-auto pr-4 -mr-4">
-                 <div className="border rounded-lg">
-                    <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] bg-muted/50 font-bold text-sm border-b rounded-t-lg">
-                        <div className="p-2">Overnight & Drive Time</div>
-                        <div className="p-2 border-l">Itinerary & Details</div>
-                    </div>
-                    {itinerary && itinerary.itinerary && itinerary.itinerary.map((dayPlan) => (
-                        <ItineraryDayRow key={dayPlan.day} dayPlan={dayPlan} />
+                 <Accordion type="single" collapsible className="w-full" defaultValue="day-1">
+                    {itinerary.itinerary.map((dayPlan) => (
+                        <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
+                            <AccordionTrigger>
+                                <div className="flex items-center gap-4">
+                                    <div className="flex flex-col items-center justify-center h-12 w-12 rounded-lg bg-primary text-primary-foreground">
+                                        <span className="text-xs">DAY</span>
+                                        <span className="font-bold text-xl">{dayPlan.day}</span>
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-left">{dayPlan.title}</h4>
+                                        <p className="text-sm text-muted-foreground text-left">{dayPlan.location}</p>
+                                    </div>
+                                </div>
+                            </AccordionTrigger>
+                            <AccordionContent>
+                                <div className="pl-4 border-l-2 border-primary ml-6">
+                                     <div 
+                                        className="prose prose-sm max-w-none dark:prose-invert prose-p:text-foreground prose-strong:text-foreground"
+                                        dangerouslySetInnerHTML={{ __html: marked.parse(dayPlan.details) as string }} 
+                                    />
+                                    {dayPlan.budget && (
+                                        <div className="mt-4 pt-2 border-t border-dashed border-border">
+                                            <h5 className="font-semibold text-xs uppercase text-muted-foreground">Est. Budget</h5>
+                                            <div 
+                                                className="prose prose-sm max-w-none dark:prose-invert prose-p:text-foreground prose-strong:text-foreground"
+                                                dangerouslySetInnerHTML={{ __html: marked.parse(dayPlan.budget) as string }} 
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            </AccordionContent>
+                        </AccordionItem>
                     ))}
-                </div>
+                </Accordion>
 
                  {chatHistory.length > 0 && (
                     <div ref={chatContainerRef} className="mt-4 border-t pt-4 space-y-4 max-h-[200px] overflow-y-auto">
@@ -568,9 +599,9 @@ export function ItineraryDialog({ planData, open, onOpenChange }: ItineraryDialo
                 </DialogHeader>
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full overflow-hidden flex-grow flex flex-col">
                     <TabsList className="grid w-full grid-cols-3">
-                        <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
-                        <TabsTrigger value="packing-list">Packing List</TabsTrigger>
-                        <TabsTrigger value="language-guide">Language</TabsTrigger>
+                        <TabsTrigger value="itinerary" onClick={handleGenerateItinerary}>Itinerary</TabsTrigger>
+                        <TabsTrigger value="packing-list" onClick={handleGeneratePackingList}>Packing List</TabsTrigger>
+                        <TabsTrigger value="language-guide" onClick={handleGenerateLanguageGuide}>Language</TabsTrigger>
                     </TabsList>
                     <div className="flex-grow overflow-y-auto">
                         <TabsContent value="itinerary" className="mt-4 h-full">
@@ -589,15 +620,6 @@ export function ItineraryDialog({ planData, open, onOpenChange }: ItineraryDialo
                         </TabsContent>
                         <TabsContent value="packing-list" className="pr-4 mt-0">
                             <div className="py-4 min-h-[400px]">
-                                {!packingList && !isLoading.packingList && (
-                                    <div className="text-center p-8 flex flex-col items-center justify-center h-full">
-                                        <p className="mb-4 text-muted-foreground">Click the button below to generate a personalized packing list.</p>
-                                        <Button onClick={handleGeneratePackingList} disabled={isLoading.packingList}>
-                                            {isLoading.packingList ? <LoaderCircle className="animate-spin" /> : <Wand2 />}
-                                            <span className="ml-2">{isLoading.packingList ? 'Generating...' : 'Generate Packing List'}</span>
-                                        </Button>
-                                    </div>
-                                )}
                                 {isLoading.packingList && (
                                     <div className="flex h-full min-h-[300px] w-full items-center justify-center">
                                         <div className="text-center">
@@ -620,15 +642,6 @@ export function ItineraryDialog({ planData, open, onOpenChange }: ItineraryDialo
                         </TabsContent>
                         <TabsContent value="language-guide" className="pr-4 mt-0">
                             <div className="py-4 min-h-[400px]">
-                                {!languageGuide && !isLoading.languageGuide && (
-                                    <div className="text-center p-8 flex flex-col items-center justify-center h-full">
-                                        <p className="mb-4 text-muted-foreground">Click the button below to generate a quick language guide.</p>
-                                        <Button onClick={handleGenerateLanguageGuide} disabled={isLoading.languageGuide}>
-                                            {isLoading.languageGuide ? <LoaderCircle className="animate-spin" /> : <Languages />}
-                                            <span className="ml-2">{isLoading.languageGuide ? 'Generating...' : 'Generate Language Guide'}</span>
-                                        </Button>
-                                    </div>
-                                )}
                                 {isLoading.languageGuide && (
                                     <div className="flex h-full min-h-[300px] w-full items-center justify-center">
                                         <div className="text-center">
@@ -676,3 +689,5 @@ export function ItineraryDialog({ planData, open, onOpenChange }: ItineraryDialo
         </Dialog>
     )
 }
+
+    
