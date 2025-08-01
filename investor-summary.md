@@ -43,7 +43,7 @@ Our ecosystem consists of three core components that work in synergy:
 ### **Monetization Strategy**
 Our monetization is designed in two phases to build a sustainable business:
 -   **Phase 1: Affiliate & Lead Generation:** Initially, we will monetize by connecting users from the GoGhana Planner directly to our curated list of drivers and tour operators for a commission or lead-generation fee. This allows for immediate revenue with low overhead.
--   **Phase 2: Direct Bookings & Marketplace:** As `letvisitghanatours.com` is built out, we will transition to a direct booking model, taking a percentage of each tour package sold through the platform. This provides a scalable, long-term revenue stream.
+-   **Phase 2: Direct Bookings & Marketplace:** Our immediate focus is on `letvisitghanatours.com`, which already features our own curated, affordable, and highly competitive tours. The long-term vision is to expand this into a true marketplace that empowers local guides and operators. We'll enable trusted third-party agents to list their services directly on our platform, but with a crucial difference: we'll charge significantly lower commissions than the major international platforms. This creates a highly scalable, long-term revenue stream for us, while also ensuring more money stays within the local community—a win-win that builds a loyal and ethical partner network.
 
 ### **Marketing & Growth Strategy**
 Our marketing approach focuses on organic growth by providing immense value upfront:
