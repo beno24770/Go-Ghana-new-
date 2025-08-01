@@ -26,14 +26,18 @@ Duration: {{duration}} days
 Regions: {{#each region}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
 Travel Style: {{travelStyle}}
 Number of Travelers: {{numTravelers}}
+{{#if interests}}
+Interests: {{#each interests}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
+{{/if}}
 {{#if dailyBudget}}
 Specified Daily Budget per Person: \${{dailyBudget}}
 {{/if}}
 
 Your Task:
 1.  **Determine Daily Cost**:
-    *   **If a 'dailyBudget' is specified**: Use this value as the total per-person, per-day cost. You MUST then allocate this amount across the four categories (accommodation, food, transportation, activities) in a way that is logical for the specified 'travelStyle'.
-    *   **If no 'dailyBudget' is specified**: Use the 'travelStyle' to determine an average per-person, per-day cost from the ranges below.
+    *   **If a 'dailyBudget' is specified**: Use this value as the total per-person, per-day cost. You MUST then allocate this amount across the four categories (accommodation, food, transportation, activities) in a way that is logical for the specified 'travelStyle' and 'interests'.
+    *   **If no 'dailyBudget' is specified**: Use the 'travelStyle' to determine an average per-person, per-day cost from the ranges below. If 'interests' like 'Adventure' or 'Nightlife' are specified, slightly increase the 'activities' portion of the budget.
+
 2.  **Calculate Per-Day Costs**: For each category, determine the per-day cost.
 3.  **Calculate Total Costs**: Multiply the per-day cost by the duration of the trip to get the total for each category.
 4.  **Calculate Grand Total**: Sum the total costs of all categories to get the grand total for the trip. The total per-day cost should match the user's specified 'dailyBudget' if it was provided.

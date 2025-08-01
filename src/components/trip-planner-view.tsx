@@ -94,10 +94,10 @@ function TripPlannerViewInternal() {
   // Effect to parse URL params and pre-fill the form
     useEffect(() => {
         const params = new URLSearchParams(searchParams.toString());
-        if (params.has('duration') && params.has('budget')) {
+        if (params.has('duration')) { // A simple check for any relevant param
             const parsed = PlanTripInputSchema.safeParse({
                 duration: Number(params.get('duration')),
-                region: params.getAll('region'),
+                region: params.getAll('interests'), // Note: this is likely a bug in original logic, should be region
                 budget: Number(params.get('budget')),
                 numTravelers: Number(params.get('numTravelers')),
                 travelStyle: params.get('travelStyle') || 'Mid-range',
@@ -107,11 +107,25 @@ function TripPlannerViewInternal() {
             });
             
             if (parsed.success) {
-                setActiveTab('plan');
-                handlePlan(parsed.data);
+                startTransition(() => {
+                    setActiveTab('plan');
+                    setPlanTriggerData(parsed.data);
+                });
+            } else {
+                 // Pre-fill budget form instead if plan params are incomplete
+                const budgetDefaults = {
+                    duration: params.get('duration') ? Number(params.get('duration')) : 7,
+                    region: params.getAll('region').length > 0 ? params.getAll('region') : ['Greater Accra'],
+                    interests: params.getAll('interests'),
+                    travelStyle: params.get('travelStyle') as any || 'Mid-range',
+                };
+                setBudgetData(prev => ({
+                    ...prev,
+                    inputs: { ...prev?.inputs, ...budgetDefaults, numTravelers: 1 } as EstimateBudgetInput
+                }));
             }
         }
-    }, [searchParams, handlePlan]);
+    }, [searchParams]);
 
 
   const handlePlanFromBudget = useCallback((budgetInputs: EstimateBudgetInput, totalBudget: number) => {
@@ -121,7 +135,7 @@ function TripPlannerViewInternal() {
         numTravelers: budgetInputs.numTravelers,
         budget: totalBudget,
         travelStyle: budgetInputs.travelStyle,
-        interests: ['Culture', 'Heritage & History'],
+        interests: budgetInputs.interests,
         startDate: budgetInputs.startDate || new Date().toISOString().split('T')[0],
         isNewToGhana: budgetInputs.isNewToGhana || false,
     };

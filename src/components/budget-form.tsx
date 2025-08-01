@@ -39,6 +39,15 @@ const travelStyles: { name: EstimateBudgetInput['travelStyle'], description: str
     { name: 'Luxury', description: '($400 - $1000+/day)', range: [400, 1000] },
 ];
 
+const interests = [
+  { id: 'Culture', label: 'Culture' },
+  { id: 'Heritage & History', label: 'Heritage & History' },
+  { id: 'Adventure', label: 'Adventure' },
+  { id: 'Nature & Wildlife', label: 'Nature & Wildlife' },
+  { id: 'Beaches & Relaxation', label: 'Beaches & Relaxation' },
+  { id: 'Nightlife & Urban', label: 'Nightlife & Urban' },
+]
+
 interface BudgetFormProps {
   onSubmit: (data: EstimateBudgetInput) => void;
   isSubmitting: boolean;
@@ -60,6 +69,7 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
       numTravelers: 1,
       startDate: new Date().toISOString().split('T')[0],
       isNewToGhana: false,
+      interests: ['Culture', 'Heritage & History'],
       dailyBudget: 235,
       ...defaultValues
     },
@@ -236,6 +246,56 @@ export default function BudgetForm({ onSubmit, isSubmitting, defaultValues }: Bu
                <FormDescription>
                 Select the regions you want to visit, or let us suggest some if you're new!
               </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="interests"
+          render={() => (
+            <FormItem>
+              <FormLabel>Interests</FormLabel>
+              <Card>
+                <CardContent className="p-4 pt-4">
+                  <div className="grid grid-cols-2 gap-2">
+                  {interests.map((interest) => (
+                    <FormField
+                      key={interest.id}
+                      control={form.control}
+                      name="interests"
+                      render={({ field }) => {
+                        return (
+                          <FormItem
+                            key={interest.id}
+                            className="flex flex-row items-start space-x-3 space-y-0"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(interest.id)}
+                                onCheckedChange={(checked) => {
+                                  const currentValue = field.value || [];
+                                  return checked
+                                    ? field.onChange([...currentValue, interest.id])
+                                    : field.onChange(
+                                        currentValue.filter(
+                                          (value) => value !== interest.id
+                                        )
+                                      );
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {interest.label}
+                            </FormLabel>
+                          </FormItem>
+                        )
+                      }}
+                    />
+                  ))}
+                  </div>
+                </CardContent>
+              </Card>
               <FormMessage />
             </FormItem>
           )}

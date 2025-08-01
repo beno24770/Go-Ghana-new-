@@ -17,6 +17,7 @@ export const EstimateBudgetBaseSchema = z.object({
   numTravelers: z.number().describe('The number of travelers.'),
   startDate: z.string().optional().describe("The start date of the trip in YYYY-MM-DD format."),
   isNewToGhana: z.boolean().optional().describe("A flag indicating the user is new to Ghana and doesn't know which regions to pick."),
+  interests: z.array(z.string()).optional().describe('The interests of the user, e.g., Culture, Heritage, Adventure.'),
   dailyBudget: z.number().optional().describe("A specific daily budget per person, chosen by the user from a slider."),
 });
 
