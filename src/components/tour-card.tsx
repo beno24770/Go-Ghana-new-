@@ -1,20 +1,16 @@
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
-import Link from 'next/link';
 import { ArrowRight, Clock, DollarSign } from 'lucide-react';
+import type { Tour } from '@/lib/types';
 
 interface TourCardProps {
-    id: string;
-    title: string;
-    duration: string;
-    price: string;
-    description: string;
-    bookingUrl: string;
-    "data-ai-hint": string;
+    tour: Tour;
+    onSelectTour: (tour: Tour) => void;
 }
 
-export function TourCard({ title, duration, price, description, bookingUrl }: TourCardProps) {
+export function TourCard({ tour, onSelectTour }: TourCardProps) {
+    const { title, duration, price, description } = tour;
     return (
         <Card className="flex flex-col transition-all duration-300 hover:shadow-xl hover:scale-105 animate-in fade-in zoom-in-95">
             <CardHeader>
@@ -34,11 +30,9 @@ export function TourCard({ title, duration, price, description, bookingUrl }: To
                 <CardDescription>{description}</CardDescription>
             </CardContent>
             <CardFooter>
-                <Button asChild className="w-full">
-                    <Link href={bookingUrl} target="_blank">
-                        View Details & Book
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
+                <Button onClick={() => onSelectTour(tour)} className="w-full">
+                    View Details & Itinerary
+                    <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
             </CardFooter>
         </Card>

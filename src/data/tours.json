@@ -5,39 +5,107 @@
         "title": "Wli Waterfalls & Mountain Adventure",
         "duration": "2 Days",
         "price": "$180",
+        "priceValue": 180,
         "description": "An exciting two-day trip to the Volta Region to hike to Ghana's highest waterfalls and explore the beautiful mountain scenery.",
-        "image": "https://placehold.co/600x400.png",
-        "bookingUrl": "https://letvisitghanatours.com/wli-adventure",
-        "data-ai-hint": "waterfall jungle"
+        "bookingUrl": "https://wa.me/233200635250",
+        "data-ai-hint": "waterfall jungle",
+        "itinerary": [
+            {
+                "day": 1,
+                "title": "Journey to the Volta & Waterfall Hike",
+                "details": "*   Morning pickup from your location in Accra.\n*   Scenic drive to the Volta Region, passing through lush landscapes.\n*   Arrive at Wli and check into your guesthouse.\n*   Afternoon hike to the spectacular Wli Waterfalls, Ghana's highest falls. You can swim in the cool, refreshing pool at the base.\n*   Evening relaxation and dinner.",
+                "overnight": "Wli Guesthouse"
+            },
+            {
+                "day": 2,
+                "title": "Monkey Sanctuary & Return to Accra",
+                "details": "*   Morning visit to the Tafi Atome Monkey Sanctuary to interact with friendly Mona monkeys.\n*   Begin the journey back to Accra.\n*   Stop for a local lunch en route.\n*   Arrive back in Accra in the late afternoon.",
+                "overnight": "N/A"
+            }
+        ]
     },
     {
         "id": "cape-coast-history",
         "title": "Cape Coast & Elmina History Tour",
         "duration": "3 Days",
         "price": "$250",
+        "priceValue": 250,
         "description": "A profound journey into Ghana's past. Visit the historic slave castles of Cape Coast and Elmina, and walk the Kakum canopy.",
-        "image": "https://placehold.co/600x400.png",
-        "bookingUrl": "https://letvisitghanatours.com/cape-coast-history",
-        "data-ai-hint": "castle ocean"
+        "bookingUrl": "https://wa.me/233200635250",
+        "data-ai-hint": "castle ocean",
+        "itinerary": [
+            {
+                "day": 1,
+                "title": "Coastal Drive & Kakum Canopy Walk",
+                "details": "*   Depart from Accra and drive along the scenic coast to the Central Region.\n*   Visit Kakum National Park and experience the thrilling canopy walkway, suspended 40 meters above the rainforest floor.\n*   Check into your hotel in Cape Coast/Elmina.",
+                "overnight": "Hotel in Cape Coast or Elmina"
+            },
+            {
+                "day": 2,
+                "title": "The Slave Castles",
+                "details": "*   In the morning, take a guided tour of the historic Cape Coast Castle, a former slave trading post.\n*   In the afternoon, visit Elmina Castle, the oldest European building in sub-Saharan Africa, and learn about its somber history.\n*   Explore the bustling fishing town of Elmina.",
+                "overnight": "Hotel in Cape Coast or Elmina"
+            },
+            {
+                "day": 3,
+                "title": "Assin Manso & Return Journey",
+                "details": "*   Visit Assin Manso, the site of the 'Last Bath' where enslaved Africans were bathed before being sent to the castles.\n*   Participate in a solemn wreath-laying and naming ceremony.\n*   Begin your journey back to Accra, arriving in the evening.",
+                "overnight": "N/A"
+            }
+        ]
     },
     {
         "id": "mole-safari",
         "title": "Mole National Park Safari",
         "duration": "4 Days",
         "price": "$480",
+        "priceValue": 480,
         "description": "Experience the thrill of a safari in Ghana's largest wildlife refuge. See elephants, antelopes, and hundreds of bird species.",
-        "image": "https://placehold.co/600x400.png",
-        "bookingUrl": "https://letvisitghanatours.com/mole-safari",
-        "data-ai-hint": "elephant safari"
+        "bookingUrl": "https://wa.me/233200635250",
+        "data-ai-hint": "elephant safari",
+        "itinerary": [
+             {
+                "day": 1,
+                "title": "Fly North & Settle In",
+                "details": "*   Morning flight from Accra to Tamale.\n*   Our guide will meet you at the airport and begin the drive to Mole National Park.\n*   Check into your hotel (Mole Motel or Zaina Lodge).\n*   Afternoon jeep safari to get your first glimpse of the park's wildlife.",
+                "overnight": "Mole National Park"
+            },
+            {
+                "day": 2,
+                "title": "Full Day Safari Experience",
+                "details": "*   Early morning walking safari with an armed ranger to track elephants on foot.\n*   Return to the hotel for breakfast and relaxation by the pool, which overlooks a watering hole.\n*   Late afternoon jeep safari to explore a different area of the park and see more animals as they come out to graze.",
+                "overnight": "Mole National Park"
+            },
+            {
+                "day": 3,
+                "title": "Local Culture & Return to Tamale",
+                "details": "*   Optional final morning safari.\n*   Visit the nearby Larabanga Mosque, the oldest mosque in Ghana, and the mystical stone.\n*   Drive back to Tamale and check into your hotel.\n*   Explore the Tamale Central Market.",
+                "overnight": "Hotel in Tamale"
+            },
+            {
+                "day": 4,
+                "title": "Departure",
+                "details": "*   Enjoy a final northern breakfast.\n*   Transfer to Tamale Airport for your flight back to Accra.",
+                "overnight": "N/A"
+            }
+        ]
     },
     {
         "id": "accra-city-tour",
         "title": "Accra City Vibe Tour",
         "duration": "1 Day",
         "price": "$95",
+        "priceValue": 95,
         "description": "Discover the vibrant heart of Ghana's capital. Explore bustling markets, historical landmarks, and the trendy arts scene of Accra.",
-        "image": "https://placehold.co/600x400.png",
-        "bookingUrl": "https://letvisitghanatours.com/accra-city-tour",
-        "data-ai-hint": "city market"
+        "bookingUrl": "https://wa.me/233200635250",
+        "data-ai-hint": "city market",
+        "itinerary": [
+            {
+                "day": 1,
+                "title": "A Day in Accra",
+                "details": "*   **Morning:** Visit the Kwame Nkrumah Memorial Park & Mausoleum and Independence Square, the heart of Ghana's history.\n*   **Mid-day:** Explore the bustling Makola Market to experience the city's vibrant trade. Then head to Jamestown to see the lighthouse and the local fishing community.\n*   **Afternoon:** Visit the W.E.B. Du Bois Centre for Pan-African Culture. End the day with some souvenir shopping at the Arts Centre.\n*   Drop off at your hotel or preferred location.",
+                "overnight": "N/A"
+            }
+        ]
     }
 ]

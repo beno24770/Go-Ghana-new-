@@ -2,12 +2,16 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Filter } from 'lucide-react';
 import Link from 'next/link';
 import tours from '@/data/tours.json';
 import { TourCard } from '@/components/tour-card';
-import { Suspense } from 'react';
+import { Suspense, useState, useMemo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { TourItineraryDialog } from '@/components/tour-itinerary-dialog';
+import type { Tour } from '@/lib/types';
+import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 
 const TourSkeleton = () => (
     <div className="flex flex-col rounded-lg border bg-card shadow-sm p-6 space-y-4">
@@ -24,7 +28,39 @@ const TourSkeleton = () => (
     </div>
 );
 
+const durationFilters = ["All", "1 Day", "2-3 Days", "4+ Days"];
+const priceFilters = ["All", "Under $200", "$200 - $400", "$400+"];
+
 export default function ToursPage() {
+  const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
+  const [activeDuration, setActiveDuration] = useState("All");
+  const [activePrice, setActivePrice] = useState("All");
+
+  const filteredTours = useMemo(() => {
+    return tours.filter(tour => {
+        // Duration Filter
+        const durationMatch = (() => {
+            if (activeDuration === "All") return true;
+            if (activeDuration === "1 Day") return tour.duration === "1 Day";
+            if (activeDuration === "2-3 Days") return tour.duration.includes("2") || tour.duration.includes("3");
+            if (activeDuration === "4+ Days") return !tour.duration.includes("1") && !tour.duration.includes("2") && !tour.duration.includes("3");
+            return false;
+        })();
+
+        // Price Filter
+        const priceMatch = (() => {
+            if (activePrice === "All") return true;
+            if (activePrice === "Under $200") return tour.priceValue < 200;
+            if (activePrice === "$200 - $400") return tour.priceValue >= 200 && tour.priceValue <= 400;
+            if (activePrice === "$400+") return tour.priceValue > 400;
+            return false;
+        })();
+
+        return durationMatch && priceMatch;
+    });
+  }, [activeDuration, activePrice]);
+
+
   return (
     <main className="flex-1">
       <div className="bg-muted py-12 sm:py-20">
@@ -33,7 +69,7 @@ export default function ToursPage() {
                 Cheap Tour Deals
             </h1>
             <p className="mt-4 text-base text-muted-foreground sm:text-lg">
-              Explore our hand-picked selection of tours, designed to offer the best of Ghana at unbeatable prices. When you're ready, book securely on our dedicated tour website.
+              Explore our hand-picked selection of tours, designed to offer the best of Ghana at unbeatable prices. When you're ready, book securely with a real person via WhatsApp.
             </p>
         </div>
       </div>
@@ -45,14 +81,62 @@ export default function ToursPage() {
                 Back to Home
             </Link>
         </Button>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            {tours.map(tour => (
-                 <Suspense key={tour.id} fallback={<TourSkeleton />}>
-                    <TourCard {...tour} />
-                </Suspense>
-            ))}
-        </div>
+
+        <Card className="mb-12 bg-muted/50 p-6">
+            <h3 className="flex items-center font-headline text-xl mb-4"><Filter className="mr-2 h-5 w-5"/> Filter Tours</h3>
+            <div className="space-y-4">
+                <div>
+                    <p className="mb-2 text-sm font-semibold">By Duration</p>
+                    <div className="flex flex-wrap gap-2">
+                        {durationFilters.map(filter => (
+                            <Button key={filter} variant={activeDuration === filter ? 'default' : 'outline'} onClick={() => setActiveDuration(filter)}>
+                                {filter}
+                            </Button>
+                        ))}
+                    </div>
+                </div>
+                 <div>
+                    <p className="mb-2 text-sm font-semibold">By Price</p>
+                    <div className="flex flex-wrap gap-2">
+                        {priceFilters.map(filter => (
+                            <Button key={filter} variant={activePrice === filter ? 'default' : 'outline'} onClick={() => setActivePrice(filter)}>
+                                {filter}
+                            </Button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </Card>
+
+        {filteredTours.length > 0 ? (
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+                {filteredTours.map((tour: Tour) => (
+                    <Suspense key={tour.id} fallback={<TourSkeleton />}>
+                        <TourCard tour={tour} onSelectTour={setSelectedTour} />
+                    </Suspense>
+                ))}
+            </div>
+        ) : (
+             <div className="text-center py-16">
+                <p className="text-lg font-semibold">No Tours Found</p>
+                <p className="text-muted-foreground">Try adjusting your filters to find more deals.</p>
+            </div>
+        )}
+
       </div>
+       <Suspense>
+        {selectedTour && (
+            <TourItineraryDialog
+                tour={selectedTour}
+                open={!!selectedTour}
+                onOpenChange={(isOpen) => {
+                    if (!isOpen) {
+                        setSelectedTour(null);
+                    }
+                }}
+            />
+        )}
+      </Suspense>
     </main>
   );
 }
