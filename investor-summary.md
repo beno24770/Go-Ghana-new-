@@ -52,13 +52,13 @@ Our monetization strategy is diversified across our ecosystem to build a sustain
 
 2.  **Tour Bookings & Marketplace (letvisitghanatours.com & GoGhana Planner):**
     *   **Phase 1: Affiliate & Direct Connections:** Initially, we will monetize by connecting users from the GoGhana Planner directly to our curated list of drivers and tour operators for a commission or lead-generation fee.
-    *   **Phase 2: Marketplace Expansion:** Our immediate focus is on `letvisitghanatours.com`, which features our own curated, affordable, and highly competitive tours. The long-term vision is to expand this into a true marketplace that empowers local guides and operators. We'll enable trusted third-party agents to list their services directly on our platform, but with a crucial difference: we'll charge significantly lower commissions than the major international platforms. This creates a highly scalable, long-term revenue stream for us, while also ensuring more money stays within the local community—a win-win that builds a loyal and ethical partner network.
+    *   **Phase 2: Marketplace Expansion:** Our immediate focus is on `letvisitghanatours.com`, which features our own curated, affordable, and highly competitive tours. The long-term vision is to expand this into a true marketplace that empowers local guides and operators. We'll enable trusted third-party agents to list their services directly on our platform, a crucial difference from our competitors is that we'll charge significantly lower commissions than the major international platforms. This creates a highly scalable, long-term revenue stream for us, while also ensuring more money stays within the local community—a win-win that builds a loyal and ethical partner network.
 
 ### **Marketing & Growth Strategy**
 Our marketing approach focuses on organic growth by providing immense value upfront:
 -   **Content as a Funnel:** `letvisitghana.com` is our primary marketing engine. We will create high-quality, SEO-optimized blog posts and guides that answer the questions travelers are already searching for. This content will establish us as an authority on Ghana travel.
 -   **Strategic Funneling:** Every piece of content on the blog will be a funnel, naturally guiding readers who are seeking solutions to the GoGhana Planner tool. We convert readers into users by offering them a powerful, free tool that solves their biggest planning problems.
--   **Social Proof & Community:** We will leverage social media to share stunning visuals, travel tips, and user-generated content, building a community of Ghana travel enthusiasts who trust our brand.
+-   **Community Partnerships & Social Proof:** We will leverage social media and partnerships with established online communities (like targeted Facebook groups) to share stunning visuals, travel tips, and user-generated content. By promoting our blog content within these groups, we can build a community of Ghana travel enthusiasts who trust our brand and funnel them directly into our ecosystem.
 
 ### **Our Unfair Advantage: The Ghana Travel Graph**
 
