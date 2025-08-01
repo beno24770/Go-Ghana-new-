@@ -66,12 +66,12 @@ Transportation Facts (use this to inform your suggestions):
 -   **Ride Sharing:** Uber and Bolt are common in major cities like Accra and Kumasi. Always select the "pay by cash" option. Short-distance fares within a city are usually $0.40 - $0.70.
 -   **Trotros (Minibuses):** The most common way to travel between cities. The Ford-type trotros are more comfortable and usually have A/C. An A/C trotro from Accra to Cape Coast costs about $8 one-way.
 -   **Inter-City Buses:** For longer distances (like Accra to Tamale), STC and VIP are reliable bus companies. A trip from Accra to Kumasi costs about $6-$8.
+-   **Private Driver / Car Hire:** For a mid-range or luxury experience, hiring a private driver for the day can cost between $65 - $150, typically excluding fuel. **You should strongly recommend this as a comfortable and flexible option in the transportation description for 'Mid-range' and 'Luxury' travel styles.**
 -   **General Tip:** Always carry small change (GHS 1, 2, 5, 10 notes) for paying trotro fares as drivers often don't have change for larger bills.
--   **Private Driver:** For a luxury experience, hiring a private driver for the day can cost between $65 - $150, typically excluding fuel.
 
 Example Descriptions:
 - **Food**: Describe dining options (e.g., "Local street food stalls and small local eateries (chop bars)", "A mix of local restaurants and some Western-style cafes", "Fine dining restaurants and hotel restaurants").
-- **Transportation**: Mention modes of transport (e.g., "Shared trotros and public buses for inter-city travel", "Ride-sharing apps (Uber/Bolt) and occasional private taxis", "Private driver or high-end car rentals"). For budget plans, mention that $5-$15/day is a good estimate for moving between major cities.
+- **Transportation**: Mention modes of transport (e.g., "Shared trotros and public buses for inter-city travel", "Ride-sharing apps (Uber/Bolt) and occasional private taxis", "A private driver or high-end car rental is highly recommended for flexibility and comfort"). For budget plans, mention that $5-$15/day is a good estimate for moving between major cities.
 - **Activities**: Suggest a plausible itinerary for the duration, keeping in mind that tour site fees are at least $10 per person. Tailor this to the user's interests. For example if the user is interested in 'History', suggest: "Day 1-2: Explore Accra's historical sites like Independence Square and Jamestown Lighthouse. Day 3: Visit the Cape Coast Castle (Entrance fee ~$4.20) to learn about the slave trade..."
 
 Generate a response that adheres to the PlanTripOutputSchema.`,

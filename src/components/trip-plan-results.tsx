@@ -27,6 +27,7 @@ import { useMemo, Suspense, useState } from 'react';
 import { marked } from 'marked';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const ItineraryDialog = dynamic(() => import('./itinerary-dialog').then(mod => mod.ItineraryDialog), {
     ssr: false,
@@ -73,7 +74,7 @@ function TripPlanActions({ planData }: { planData: TripPlanData }) {
 }
 
 
-function PlanSection({ title, cost, description, icon, cta }: { title: string; cost: number; description: string; icon: React.ReactNode, cta?: React.ReactNode }) {
+function PlanSection({ title, cost, description, icon, cta, affiliateLink }: { title: string; cost: number; description: string; icon: React.ReactNode, cta?: React.ReactNode, affiliateLink?: string }) {
   const parsedDescription = useMemo(() => marked.parse(description), [description]);
   
   return (
@@ -87,7 +88,16 @@ function PlanSection({ title, cost, description, icon, cta }: { title: string; c
             <div className="mt-2 text-muted-foreground prose prose-sm max-w-none prose-p:my-1 prose-ul:my-2 prose-li:my-0"
               dangerouslySetInnerHTML={{ __html: parsedDescription as string }} 
             />
-            {cta && <div className="mt-4">{cta}</div>}
+            <div className="flex flex-wrap gap-2 mt-4">
+              {cta}
+              {affiliateLink && (
+                  <Button asChild variant="outline">
+                      <Link href={affiliateLink} target="_blank">
+                          View Availability
+                      </Link>
+                  </Button>
+              )}
+            </div>
         </div>
     </div>
   );
@@ -168,12 +178,41 @@ export default function TripPlanResults({ data, isLoading, onBack, showBackButto
         </div>
 
         <div className="space-y-6">
-            <PlanSection title="Accommodation" cost={outputs.accommodation.cost} description={outputs.accommodation.description} icon={categoryIcons.accommodation} />
-            <PlanSection title="Food" cost={outputs.food.cost} description={outputs.food.description} icon={categoryIcons.food} />
-            <PlanSection title="Transportation" cost={outputs.transportation.cost} description={outputs.transportation.description} icon={categoryIcons.transportation} />
-            <PlanSection title="Activities" cost={outputs.activities.cost} description={outputs.activities.description} icon={categoryIcons.activities} cta={
-                <TripPlanActions planData={data} />
-            } />
+            <PlanSection 
+                title="Accommodation" 
+                cost={outputs.accommodation.cost} 
+                description={outputs.accommodation.description} 
+                icon={categoryIcons.accommodation}
+                affiliateLink="#"
+            />
+            <PlanSection 
+                title="Food" 
+                cost={outputs.food.cost} 
+                description={outputs.food.description} 
+                icon={categoryIcons.food}
+                affiliateLink="#"
+             />
+            <PlanSection 
+                title="Transportation" 
+                cost={outputs.transportation.cost} 
+                description={outputs.transportation.description} 
+                icon={categoryIcons.transportation}
+                affiliateLink="#"
+                cta={
+                  <Button asChild>
+                    <Link href="https://wa.me/233200635250" target="_blank">
+                      <Car className="mr-2 h-4 w-4 shrink-0" /> Connect with a Driver
+                    </Link>
+                  </Button>
+                }
+            />
+            <PlanSection 
+                title="Activities" 
+                cost={outputs.activities.cost} 
+                description={outputs.activities.description} 
+                icon={categoryIcons.activities} 
+                cta={ <TripPlanActions planData={data} /> } 
+            />
         </div>
         
         <div className="text-center border-t pt-6">
@@ -200,4 +239,3 @@ export default function TripPlanResults({ data, isLoading, onBack, showBackButto
     </Card>
   );
 }
-
