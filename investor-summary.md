@@ -40,10 +40,18 @@ Our ecosystem consists of three core components that work in synergy:
 
 ## 3. Business Model & Competitive Advantage
 
--   **Phase 1: Affiliate & Lead Generation:** Initially, we will monetize by connecting users from the GoGhana Planner directly to our curated list of drivers and tour operators for a commission or lead-generation fee.
--   **Phase 2: Direct Bookings & Marketplace:** As `letvisitghanatours.com` is built out, we will transition to a direct booking model, taking a percentage of each tour package sold through the platform.
+### **Monetization Strategy**
+Our monetization is designed in two phases to build a sustainable business:
+-   **Phase 1: Affiliate & Lead Generation:** Initially, we will monetize by connecting users from the GoGhana Planner directly to our curated list of drivers and tour operators for a commission or lead-generation fee. This allows for immediate revenue with low overhead.
+-   **Phase 2: Direct Bookings & Marketplace:** As `letvisitghanatours.com` is built out, we will transition to a direct booking model, taking a percentage of each tour package sold through the platform. This provides a scalable, long-term revenue stream.
 
-**Our Unfair Advantage is the Ghana Travel Graph:**
+### **Marketing & Growth Strategy**
+Our marketing approach focuses on organic growth by providing immense value upfront:
+-   **Content as a Funnel:** `letvisitghana.com` is our primary marketing engine. We will create high-quality, SEO-optimized blog posts and guides that answer the questions travelers are already searching for. This content will establish us as an authority on Ghana travel.
+-   **Strategic Funneling:** Every piece of content on the blog will be a funnel, naturally guiding readers who are seeking solutions to the GoGhana Planner tool. We convert readers into users by offering them a powerful, free tool that solves their biggest planning problems.
+-   **Social Proof & Community:** We will leverage social media to share stunning visuals, travel tips, and user-generated content, building a community of Ghana travel enthusiasts who trust our brand.
+
+### **Our Unfair Advantage: The Ghana Travel Graph**
 
 Our core, defensible asset is the proprietary dataset we are building—our "Ghana Travel Graph." This is not just a list of places; it's a rich, interconnected database of:
 -   Vetted Accommodations (with real links)
