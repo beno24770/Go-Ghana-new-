@@ -10,18 +10,17 @@ import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const TourSkeleton = () => (
-    <div className="flex flex-col rounded-lg border bg-card shadow-sm transition-all duration-300">
-        <Skeleton className="h-52 w-full rounded-t-lg" />
-        <div className="p-6 space-y-4">
-            <Skeleton className="h-6 w-3/4 rounded" />
-            <div className="flex items-center gap-4">
-                <Skeleton className="h-5 w-24 rounded" />
-                <Skeleton className="h-5 w-20 rounded" />
-            </div>
-            <Skeleton className="h-4 w-full rounded" />
-            <Skeleton className="h-4 w-full rounded" />
-            <Skeleton className="h-11 w-full rounded-md mt-4" />
+    <div className="flex flex-col rounded-lg border bg-card shadow-sm p-6 space-y-4">
+        <Skeleton className="h-6 w-3/4 rounded" />
+        <div className="flex items-center gap-4">
+            <Skeleton className="h-5 w-24 rounded" />
+            <Skeleton className="h-5 w-20 rounded" />
         </div>
+        <div className="space-y-2">
+            <Skeleton className="h-4 w-full rounded" />
+            <Skeleton className="h-4 w-5/6 rounded" />
+        </div>
+        <Skeleton className="h-11 w-full rounded-md pt-4" />
     </div>
 );
 
