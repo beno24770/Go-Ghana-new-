@@ -32,11 +32,6 @@ export default function Home() {
                                 Start Planning Now
                             </Link>
                         </Button>
-                        <Button asChild variant="ghost" size="lg">
-                            <Link href="/ideas">
-                                See Trip Ideas <ArrowRight />
-                            </Link>
-                        </Button>
                     </div>
                 </div>
 

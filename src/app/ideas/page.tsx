@@ -1,79 +1,47 @@
+import { Button } from "@/components/ui/button";
+import { ArrowRight, Wand2 } from "lucide-react";
+import Link from "next/link";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { PhoneMockup } from "@/components/phone-mockup";
+import { InstallPwaButton } from "@/components/install-pwa-button";
 
-'use client';
+const PhoneSkeleton = () => (
+    <div className="relative mx-auto border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-xl">
+        <Skeleton className="h-full w-full rounded-[2rem] bg-muted/50" />
+    </div>
+)
 
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, ArrowRight, Clock, Tag } from 'lucide-react';
-import Link from 'next/link';
-import sampleItineraries from '@/data/sample-itineraries.json';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { useRouter } from 'next/navigation';
-
-export default function TripIdeasPage() {
-    const router = useRouter();
-
-    const handleCustomize = (itinerary: typeof sampleItineraries[0]) => {
-        // Provide a sensible default budget based on duration ($200/day mid-range estimate)
-        const defaultBudget = itinerary.duration * 200;
-
-        const query = new URLSearchParams({
-            duration: String(itinerary.duration),
-            interests: itinerary.style.join(','),
-            budget: String(defaultBudget),
-            numTravelers: '1', // Default to 1 traveler
-            travelStyle: 'Mid-range', // Default to mid-range
-        }).toString();
-        router.push(`/planner?${query}`);
-    };
-
+export default function Home() {
   return (
-    <main className="flex-1">
-      <div className="bg-muted py-12 sm:py-20">
-        <div className="container mx-auto max-w-3xl px-4 text-center">
-            <h1 className="font-headline text-3xl font-bold sm:text-4xl">
-                Expert-Crafted Trip Ideas
-            </h1>
-            <p className="mt-4 text-base text-muted-foreground sm:text-lg">
-              Get inspired by our collection of proven itineraries. Each plan is designed by local experts to give you an unforgettable Ghanaian experience. Find one you love and customize it in our planner.
-            </p>
-        </div>
-      </div>
-
-      <div className="container mx-auto max-w-5xl px-4 py-16 sm:py-24">
-        <Button asChild variant="outline" className="mb-8">
-            <Link href="/">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Home
-            </Link>
-        </Button>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            {sampleItineraries.map(itinerary => (
-                <Card key={itinerary.id} className="flex flex-col">
-                    <CardHeader>
-                        <CardTitle className="font-headline text-2xl">{itinerary.title}</CardTitle>
-                        <CardDescription>{itinerary.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex-grow space-y-4">
-                        <div className="flex items-center text-sm text-muted-foreground">
-                            <Clock className="mr-2 h-4 w-4" />
-                            <span>{itinerary.duration} Days</span>
-                        </div>
-                         <div className="flex flex-wrap items-center gap-2">
-                            <Tag className="mr-2 h-4 w-4 text-muted-foreground" />
-                            {itinerary.style.map(s => (
-                                <Badge key={s} variant="secondary">{s}</Badge>
-                            ))}
-                        </div>
-                    </CardContent>
-                    <CardFooter>
-                         <Button onClick={() => handleCustomize(itinerary)} className="w-full">
-                            Customize this Plan <ArrowRight className="ml-2 h-4 w-4" />
+    <div className="flex-1 overflow-hidden">
+        <div className="container mx-auto px-4 py-12 sm:py-24">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6 text-center lg:text-left">
+                    <h1 className="text-4xl font-bold text-foreground drop-shadow-md sm:text-5xl md:text-6xl">
+                        Plan Your Dream Ghana Trip in Minutes
+                    </h1>
+                    <p className="text-lg text-muted-foreground">
+                        Stop guessing. Get a realistic budget, a personalized itinerary, and connect with trusted local experts — all built on real data and insight from those who know Ghana best.
+                    </p>
+                    <div className="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <Button asChild size="lg">
+                            <Link href="/planner">
+                                <Wand2 />
+                                Start Planning Now
+                            </Link>
                         </Button>
-                    </CardFooter>
-                </Card>
-            ))}
+                    </div>
+                </div>
+
+                <div className="relative h-full min-h-[600px] flex items-center justify-center">
+                    <Suspense fallback={<PhoneSkeleton />}>
+                        <PhoneMockup />
+                    </Suspense>
+                </div>
+            </div>
         </div>
-      </div>
-    </main>
+        <InstallPwaButton className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg" />
+    </div>
   );
 }
