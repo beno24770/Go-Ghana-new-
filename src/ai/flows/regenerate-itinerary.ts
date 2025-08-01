@@ -46,13 +46,13 @@ User's Edited Itinerary Notes:
 Your Task:
 1.  **Analyze User's Notes**: Carefully read the user's notes to understand their desired changes.
 2.  **Adhere to Format**: You **MUST** structure the output according to the 'DayItinerarySchema'. For each day, provide:
-    *   `dayOfWeek`
-    *   `date` (in DD-Mon-YYYY format, using the 'dayDates' array)
-    *   `location` (overnight city)
-    *   `driveTime` (optional)
-    *   `title`
-    *   `details` (as a Markdown bulleted list)
-    *   `budget` (optional Markdown string)
+    *   \`dayOfWeek\`
+    *   \`date\` (in DD-Mon-YYYY format, using the 'dayDates' array)
+    *   \`location\` (overnight city)
+    *   \`driveTime\` (optional)
+    *   \`title\`
+    *   \`details\` (as a Markdown bulleted list)
+    *   \`budget\` (optional Markdown string)
 
 3.  **Use 'dayDates' Array**: Use the provided 'dayDates' array to correctly populate 'dayOfWeek' and 'date' for each day of the itinerary.
 4.  **Enhance with Tools**: Use 'getLocalPulse', 'getEntertainmentEvents', 'getRestaurants', and 'getArticleLink' to add value, just as you would when creating a new itinerary. Highlight special events.
