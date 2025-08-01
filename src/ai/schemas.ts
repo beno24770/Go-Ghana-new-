@@ -100,8 +100,13 @@ export type GenerateItineraryInput = z.infer<typeof GenerateItineraryInputSchema
 
 export const DayItinerarySchema = z.object({
     day: z.number().describe('The day number of the itinerary.'),
-    title: z.string().describe("A short, catchy title for the day's plan."),
-    details: z.string().describe('A detailed description of the activities for the day, formatted in Markdown.'),
+    dayOfWeek: z.string().describe('The day of the week, e.g., Monday.'),
+    date: z.string().describe('The specific date in DD-Mon-YYYY format, e.g., 28-Jul-2025.'),
+    location: z.string().describe('The primary overnight location or main city for the day.'),
+    driveTime: z.string().optional().describe('Estimated drive time for the day, if applicable, e.g., "3.5 hours".'),
+    title: z.string().describe("A short, descriptive title for the day's activities."),
+    details: z.string().describe('A detailed description of the activities for the day, formatted as a bulleted list in Markdown.'),
+    budget: z.string().optional().describe('A markdown string with the estimated budget for the day. e.g. "- **Transportation:** $20\\n- **Entrance Fees:** $15\\n- **Food:** $30"'),
 });
 
 export const GenerateItineraryOutputSchema = z.object({

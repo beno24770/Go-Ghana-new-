@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import type { GenerateItineraryOutput, GenerateLanguageGuideOutput, GeneratePackingListOutput, PackingListItemSchema, PlanTripInput, PlanTripOutput } from '@/ai/schemas';
+import type { DayItinerarySchema as DayItinerary, GenerateItineraryOutput, GenerateLanguageGuideOutput, GeneratePackingListOutput, PackingListItemSchema, PlanTripInput, PlanTripOutput } from '@/ai/schemas';
 import { getAudio, getItinerary, getLanguageGuide, getPackingList, postItineraryChat, regenerateItinerary } from '@/app/actions';
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
@@ -31,7 +31,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import Link from 'next/link';
 import { marked } from 'marked';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
@@ -43,6 +42,7 @@ import { Logo } from './logo';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Label } from './ui/label';
+import { cn } from '@/lib/utils';
 
 
 type TripPlanData = {
@@ -56,31 +56,64 @@ function getCacheKey(planData: TripPlanData, tool: string) {
     return `${JSON.stringify(planData.inputs)}-${tool}`;
 }
 
+const ItineraryDayRow = ({ dayPlan, isPdf = false }: { dayPlan: z.infer<typeof DayItinerary>, isPdf?: boolean }) => {
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] border-b last:border-b-0">
+            <div className={cn("p-4 font-semibold", isPdf ? "text-sm" : "text-base")}>
+                <p className="font-bold">{dayPlan.dayOfWeek}</p>
+                <p>{dayPlan.date}</p>
+                <p className="mt-2 text-primary">{dayPlan.location}</p>
+                {dayPlan.driveTime && (
+                     <p className="text-xs text-muted-foreground mt-1">{dayPlan.driveTime}</p>
+                )}
+            </div>
+            <div className={cn("p-4 border-t md:border-t-0 md:border-l", isPdf ? "border-black/20" : "border-border")}>
+                 <h4 className={cn("font-bold", isPdf ? "text-base" : "text-lg")}>{dayPlan.title}</h4>
+                 <div 
+                    className={cn(
+                        "prose prose-sm max-w-none",
+                         isPdf ? "prose-p:text-black prose-strong:text-black" : "dark:prose-invert prose-p:text-foreground prose-strong:text-foreground"
+                    )}
+                    dangerouslySetInnerHTML={{ __html: marked.parse(dayPlan.details) as string }} 
+                />
+                {dayPlan.budget && (
+                     <div className="mt-4 pt-2 border-t border-dashed border-border">
+                        <h5 className="font-semibold text-xs uppercase text-muted-foreground">Est. Budget</h5>
+                        <div 
+                            className={cn(
+                                "prose prose-sm max-w-none",
+                                isPdf ? "prose-p:text-black prose-strong:text-black" : "dark:prose-invert prose-p:text-foreground prose-strong:text-foreground"
+                            )}
+                            dangerouslySetInnerHTML={{ __html: marked.parse(dayPlan.budget) as string }} 
+                        />
+                     </div>
+                )}
+            </div>
+        </div>
+    )
+}
+
 const ItineraryForPDF = ({ itinerary, tripData }: { itinerary: GenerateItineraryOutput, tripData: TripPlanData }) => (
     <div id="itinerary-pdf" className="p-8 bg-white text-black w-[800px]">
         <header className="flex justify-between items-center border-b-2 pb-4 border-black">
             <Logo />
             <div className="text-right">
-                <p className="font-bold">{tripData.inputs.duration}-Day Trip to Ghana</p>
-                <p>For {tripData.inputs.numTravelers} traveler(s)</p>
+                <p className="font-bold text-lg">{tripData.inputs.duration}-Day Trip to Ghana</p>
+                <p className="text-sm">For {tripData.inputs.numTravelers} traveler(s)</p>
             </div>
         </header>
-        <main className="py-8">
-             <Accordion type="single" collapsible className="w-full" defaultValue="day-1">
-                {itinerary.itinerary.map((dayPlan) => (
-                    <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
-                        <AccordionTrigger className="font-bold hover:no-underline text-left">{dayPlan.title}</AccordionTrigger>
-                        <AccordionContent>
-                        <div 
-                            className="prose prose-p:text-black prose-strong:text-black max-w-none" 
-                            dangerouslySetInnerHTML={{ __html: marked.parse(dayPlan.details) as string }} 
-                        />
-                        </AccordionContent>
-                    </AccordionItem>
+        <main className="py-4">
+            <div className="border border-black/20 rounded-lg">
+                <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] bg-gray-100 font-bold text-sm border-b border-black/20 rounded-t-lg">
+                     <div className="p-2">Overnight & Drive Time</div>
+                     <div className="p-2 border-l border-black/20">Itinerary & Details</div>
+                </div>
+                 {itinerary.itinerary.map((dayPlan) => (
+                    <ItineraryDayRow key={dayPlan.day} dayPlan={dayPlan} isPdf={true} />
                 ))}
-            </Accordion>
+            </div>
         </main>
-        <footer className="text-center text-xs border-t-2 pt-4 border-black">
+        <footer className="text-center text-xs border-t-2 pt-4 border-black mt-4">
             <p>Generated by GoGhana Planner | LetVisitGhana</p>
             <p>Contact: info@letvisitghana.com | +233 20 063 5250</p>
         </footer>
@@ -146,7 +179,7 @@ const ItineraryContent = ({
         }
 
         setIsDownloading(true);
-        const pdfElement = document.getElementById('pdf-render-area');
+        const pdfElement = document.getElementById('itinerary-pdf');
         if (!pdfElement) {
             setIsDownloading(false);
             return;
@@ -223,23 +256,20 @@ const ItineraryContent = ({
     
     return (
         <div className="flex flex-col h-full">
-             <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
+             <div style={{ position: 'absolute', left: '-9999px', top: 0, zIndex: -1 }}>
                 {itinerary && <ItineraryForPDF itinerary={itinerary} tripData={planData} />}
             </div>
             <div className="flex-grow overflow-y-auto pr-4 -mr-4">
-                <Accordion type="single" collapsible className="w-full" defaultValue="day-1">
+                 <div className="border rounded-lg">
+                    <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] bg-muted/50 font-bold text-sm border-b rounded-t-lg">
+                        <div className="p-2">Overnight & Drive Time</div>
+                        <div className="p-2 border-l">Itinerary & Details</div>
+                    </div>
                     {itinerary && itinerary.itinerary && itinerary.itinerary.map((dayPlan) => (
-                        <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
-                            <AccordionTrigger className="font-bold hover:no-underline text-left">{dayPlan.title}</AccordionTrigger>
-                            <AccordionContent>
-                            <div 
-                                className="prose dark:prose-invert prose-p:text-foreground prose-strong:text-foreground max-w-none" 
-                                dangerouslySetInnerHTML={{ __html: marked.parse(dayPlan.details) as string }} 
-                            />
-                            </AccordionContent>
-                        </AccordionItem>
+                        <ItineraryDayRow key={dayPlan.day} dayPlan={dayPlan} />
                     ))}
-                </Accordion>
+                </div>
+
                  {chatHistory.length > 0 && (
                     <div ref={chatContainerRef} className="mt-4 border-t pt-4 space-y-4 max-h-[200px] overflow-y-auto">
                         {chatHistory.map((chat, index) => (
@@ -542,7 +572,7 @@ export function ItineraryDialog({ planData, open, onOpenChange }: ItineraryDialo
                         <TabsTrigger value="packing-list">Packing List</TabsTrigger>
                         <TabsTrigger value="language-guide">Language</TabsTrigger>
                     </TabsList>
-                    <div className="flex-grow overflow-y-auto" id="pdf-render-area">
+                    <div className="flex-grow overflow-y-auto">
                         <TabsContent value="itinerary" className="mt-4 h-full">
                            <ItineraryContent
                              isLoading={isLoading.itinerary || isLoading.chat}
@@ -646,5 +676,3 @@ export function ItineraryDialog({ planData, open, onOpenChange }: ItineraryDialo
         </Dialog>
     )
 }
-
-    

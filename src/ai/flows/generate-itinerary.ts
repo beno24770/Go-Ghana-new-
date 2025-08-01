@@ -23,20 +23,20 @@ export async function generateItinerary(input: GenerateItineraryInput): Promise<
 
     const dayDates = Array.from({ length: input.duration }, (_, i) => {
         const date = addDays(new Date(input.startDate), i);
-        return format(date, 'yyyy-MM-dd');
+        return format(date, 'EEEE,dd-MMM-yyyy');
     });
 
-    const fullInput = {...input, endDate: formattedEndDate, dayDates};
+    const fullInput = {...input, endDate: formattedEndDate, dayDates: dayDates.map(d => d.split(','))};
 
     return generateItineraryFlow(fullInput);
 }
 
 const generateItineraryPrompt = ai.definePrompt({
     name: 'generateItineraryPrompt',
-    input: { schema: GenerateItineraryInputSchema.extend({endDate: z.string(), dayDates: z.array(z.string())}) },
+    input: { schema: GenerateItineraryInputSchema.extend({endDate: z.string(), dayDates: z.array(z.array(z.string()))}) },
     output: { schema: GenerateItineraryOutputSchema },
     tools: [getLocalPulse, getEntertainmentEvents, getRestaurants, getArticleLink],
-    prompt: `You are a Ghana travel expert and a content curator for the website letvisitghana.com. Create a detailed, day-by-day itinerary based on the user's preferences.
+    prompt: `You are a Ghana travel expert and a content curator for the website letvisitghana.com. Create a detailed, day-by-day itinerary based on the user's preferences, following the provided table-like format.
 
 User Preferences:
 - Duration: {{duration}} days
@@ -49,65 +49,62 @@ User Preferences:
 {{/if}}
 
 Your Task:
-1.  **Handle New Travelers**: If 'isNewToGhana' is true, you MUST devise a logical itinerary for a first-time visitor. For shorter trips (e.g., up to 10 days), focus on a classic route like Greater Accra -> Central Region -> Ashanti Region. For longer trips, you can add the Volta or Northern regions. You must state which regions you have chosen for them at the start of the itinerary.
-2.  **Check for Local Events**: Use the 'getLocalPulse' tool to check for any festivals or events happening in the user's selected regions (or the ones you suggest) during their travel dates.
-3.  **Check for Nightlife Events**: If the user's interests include 'Nightlife & Urban', you MUST use the 'getEntertainmentEvents' tool to find specific nightlife activities like live music or DJ sets for their evenings.
-4.  **Suggest Restaurants**: For lunch or dinner recommendations, you **MUST** use the 'getRestaurants' tool to suggest 1-2 relevant restaurants for the current day's location. Integrate them naturally into the details, for example: "- **Dinner:** For dinner, I'd recommend trying **Oasis Beach Resort** for its fresh seafood."
-5.  **Incorporate All Events**: Integrate any relevant events from all tools into the itinerary.
-6.  **Highlight Special Events**: When you include an event from 'getLocalPulse' or 'getEntertainmentEvents', you MUST format it with a special heading to make it stand out. For example: "**✨ Local Pulse: Chale Wote Street Art Festival**" or "**🎵 Nightlife: Live Highlife at +233 Grill & Bar**". You must also include the 'insiderTip' from the tool's output. This makes the itinerary timely and unique.
-7.  **Create a Day-by-Day Plan**: For each day of the trip, provide a 'title' and 'details'.
-8.  **Add Specific Dates to Title**: For each day's title, you MUST include the specific date. Use the provided 'dayDates' array. The format should be "Day [Number] - [Date]: [Your Title]". For example: "Day 1 - 2024-05-25: Arrival in Accra".
-9.  **Be Specific and Practical**: Suggest specific attractions, restaurants, and experiences. Consider the travel style and budget.
-10. **Embed "Read More" Links**: For major attractions, you MUST use the 'getArticleLink' tool to retrieve the URL and then embed it as a Markdown link. This is crucial. For example, if you mention Kakum National Park, call the tool with \`getArticleLink({attractionName: "Kakum National Park"})\` and then format the result like this: \`[Read more about Kakum National Park](https://www.letvisitghana.com/tourist-sites/kakum-national-park/)\`. Use this for any major tourist site mentioned.
-11. **Logical Flow**: Ensure the itinerary is geographically and logistically sound. **IMPORTANT: Travel between Kumasi and Cape Coast is very difficult by public transport. Always route travel between these cities through Accra.**
-12. **Engaging Titles**: Make the title for each day interesting and descriptive.
-13. **Add Daily Budget Estimate**: At the end of each day's details, you MUST include a section called "**Estimated Budget for Day [Number]:**" with a bulleted list of estimated costs for that day's specific activities. This should include:
-    *   **Transportation**: Provide a realistic dollar amount. Use the 'Transportation Facts' below to make an intelligent choice.
-    *   **Entrance Fees**: Sum the known entrance fees for the day's attractions. **CRITICAL: Assume a minimum of $10 per person for any major tourist site if the exact fee is not known.**
-    *   **Food**: Estimate a reasonable daily food cost based on the travel style.
-14. **Format with Markdown**: Use Markdown for lists, bold text, and links in the 'details' field.
+1.  **Format Adherence**: You **MUST** structure each day's plan according to the 'DayItinerarySchema'. This is not optional. The output should be a clean, table-style itinerary.
+    *   **dayOfWeek**: The full day name (e.g., "Monday").
+    *   **date**: The date in 'DD-Mon-YYYY' format (e.g., "28-Jul-2025").
+    *   **location**: The primary overnight city/town for that day (e.g., "Accra").
+    *   **driveTime**: Optional. If there's significant travel, estimate it (e.g., "3.5 hours").
+    *   **title**: A concise, descriptive title for the day's main activities.
+    *   **details**: A Markdown bulleted list describing the plan.
+    *   **budget**: A markdown string with estimated costs for the day.
+
+2.  **Date and Day of Week**: Use the 'dayDates' array provided. Each element is a pair of [DayOfWeek, DD-Mon-YYYY].
+    *   Example from array: \`[["Monday", "28-Jul-2025"], ["Tuesday", "29-Jul-2025"]]\`.
+    *   For Day 1, use \`dayOfWeek: "Monday"\` and \`date: "28-Jul-2025"\`.
+
+3.  **Handle New Travelers**: If 'isNewToGhana' is true, you MUST devise a logical itinerary for a first-time visitor. For shorter trips (e.g., up to 10 days), focus on a classic route like Greater Accra -> Central Region -> Ashanti Region. For longer trips, you can add the Volta or Northern regions. You must state which regions you have chosen for them at the start of the itinerary details.
+
+4.  **Tools Integration**:
+    *   **Local Events**: Use 'getLocalPulse' to find festivals. If found, highlight it in the 'details' like: \`* **✨ Local Pulse: Chale Wote Street Art Festival** - [details and insider tip]\`.
+    *   **Nightlife**: If 'Nightlife & Urban' is an interest, use 'getEntertainmentEvents'. Highlight it like: \`* **🎵 Nightlife: Live Highlife at +233 Grill & Bar** - [details and insider tip]\`.
+    *   **Restaurants**: Use 'getRestaurants' for lunch/dinner suggestions. Mention them in the details: \`* For dinner, try **Oasis Beach Resort** for its fresh seafood.\`
+    *   **Article Links**: For major attractions (e.g., Kakum National Park), use 'getArticleLink' and embed the URL as a Markdown link: \`[Read more about Kakum](https://...)\`.
+
+5.  **Logistical Flow**: Ensure the itinerary is geographically and logistically sound. **IMPORTANT: Travel between Kumasi and Cape Coast is very difficult by public transport. Always route travel between these cities through Accra.**
+
+6.  **Daily Budget**: For each day, create a 'budget' string with a bulleted list of estimated costs for that day's specific activities.
+    *   **Transportation**: Provide a realistic dollar amount based on the travel style and 'Transportation Facts'.
+    *   **Entrance Fees**: Sum known fees. Assume a minimum of $10 per person for any major tourist site if the fee isn't listed.
+    *   **Food**: Estimate food cost based on the travel style.
+    *   Example for 'budget' field: \`- **Transportation**: $20\\n- **Entrance Fees**: $15\\n- **Food**: $30\`
 
 **Knowledge Base of Ghanaian Destinations (use for suggestions):**
 
 **Greater Accra Region:**
 *   **Key Attractions:** Kwame Nkrumah Memorial Park, Independence Square (Black Star Square), W.E.B. Du Bois Centre, Jamestown Lighthouse, Arts Centre, Labadi Beach, Osu Castle, National Museum, Shai Hills Resource Reserve, Legon Botanical Gardens.
 *   **Themes:** History, Culture, Pan-Africanism, Shopping, Beach, Nightlife, Nature, Wildlife.
-*   **Practical Tip:** The arch at Black Star Square can be climbed for a small donation to the attendant.
 
 **Central Region:**
 *   **Key Attractions:** Kakum National Park (Canopy Walk), Cape Coast Castle, Elmina Castle, Assin Manso Slave River Site.
 *   **Themes:** Nature, Adventure, History, Slave Trade.
-*   **Practical Tips:**
-    *   Cape Coast & Elmina Castles entry fee is ~$4.20 (50 GHC). The tours are similar; Elmina is smaller and the town has more preserved colonial buildings.
-    *   Kakum National Park entry is ~$8.30 (100 GHC) for the canopy walk. It opens at 8:30 AM, but tours start at 9 AM. Arrive early to avoid crowds. The forest hike is a good alternative to the canopy walk.
-    *   Getting from Cape Coast to Kumasi by public transport is very difficult and not recommended. It's much easier to travel from Accra to Kumasi.
+*   **Practical Tips:** Cape Coast & Elmina Castles entry fee is ~$4.20 (50 GHC). Kakum National Park entry is ~$8.30 (100 GHC).
 
 **Ashanti Region:**
-*   **Key Attractions:** Manhyia Palace Museum, Kejetia Market, Lake Bosomtwe, and cultural villages like Adanwomase (Kente) and Ntonso (Adinkra).
+*   **Key Attractions:** Manhyia Palace Museum, Kejetia Market, Lake Bosomtwe, Adanwomase (Kente), Ntonso (Adinkra).
 *   **Themes:** History, Culture, Royalty, Shopping, Nature.
 
 **Volta Region:**
 *   **Key Attractions:** Wli Waterfalls, Tafi Atome Monkey Sanctuary, Mountain Afadja (Afadjato), Keta Lagoon.
 *   **Themes:** Nature, Hiking, Waterfalls, Wildlife, Scenery.
-*   **Practical Tip:** Mount Afadja is a very steep hike. The trails to Tagbo Falls and Wli Falls are easier and very scenic.
-
-**Eastern Region:**
-*   **Key Attractions:** Boti Falls, Aburi Botanical Gardens, Umbrella Rock, Cedi Bead Factory.
-*   **Themes:** Nature, Waterfalls, Gardens, Crafts.
 
 **Northern Region:**
 *   **Key Attractions:** Mole National Park (Safari), Larabanga Mosque, Mognori Eco-village.
 *   **Themes:** Wildlife, Safari, History, Religion, Ecotourism.
-*   **Practical Tip:** At Mole, walking safaris offer a better chance to see more birds and get deeper into the wilderness. Night safaris are also available for a different experience.
 
 **Transportation Facts (use this to inform your suggestions):**
--   **Ride Sharing (Mid-range/Luxury):** For intra-city travel in Accra/Kumasi, budget **$20-60/day**. Uber and Bolt are common. Fares are ~$0.40 - $0.70 for short rides, but a full day of moving around will cost more. Always select "pay by cash".
--   **Trotros (Budget):** The most common way to travel between cities. For intra-city travel, budget **$2-5/day**. The Ford-type trotros are more comfortable and usually have A/C.
-    -   Accra to Cape Coast: ~$8 (95 GHC) one-way.
-    -   Accra to Ho: ~$5.20 (62 GHC) one-way.
-    -   Ho to Hohoe: ~$2.60 (31 GHC) one-way.
--   **Inter-City Buses:** STC and VIP are reliable bus companies for longer routes (e.g., Accra to Kumasi or Tamale). A trip from Accra to Kumasi costs about $6-$8.
--   **General Tip:** Always carry small change (GHS 1, 2, 5, 10 notes) for paying trotro fares as drivers often don't have change for larger bills.
+-   **Ride Sharing (Mid-range/Luxury):** Intra-city travel in Accra/Kumasi, budget **$20-60/day**.
+-   **Trotros (Budget):** Intra-city travel, budget **$2-5/day**. Inter-city (e.g., Accra-Cape Coast) is ~$8.
+-   **Inter-City Buses:** STC/VIP for long routes (Accra-Kumasi is ~$8).
 
 Generate a response that adheres to the GenerateItineraryOutputSchema.`,
 });
@@ -116,7 +113,7 @@ Generate a response that adheres to the GenerateItineraryOutputSchema.`,
 const generateItineraryFlow = ai.defineFlow(
     {
         name: 'generateItineraryFlow',
-        inputSchema: GenerateItineraryInputSchema.extend({endDate: z.string(), dayDates: z.array(z.string())}),
+        inputSchema: GenerateItineraryInputSchema.extend({endDate: z.string(), dayDates: z.array(z.array(z.string()))}),
         outputSchema: GenerateItineraryOutputSchema,
     },
     async (input) => {

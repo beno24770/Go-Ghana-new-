@@ -8,7 +8,7 @@
  */
 
 import { ai } from '@/ai/genkit';
-import { ChatWithItineraryInput, ChatWithItineraryInputSchema, ChatWithItineraryOutput, ChatWithItineraryOutputSchema, DayItinerarySchema } from '@/ai/schemas';
+import { ChatWithItineraryInput, ChatWithItineraryInputSchema, ChatWithItineraryOutput, ChatWithItineraryOutputSchema } from '@/ai/schemas';
 import { getLocalPulse } from '@/ai/tools/get-local-pulse';
 import { getEntertainmentEvents } from '@/ai/tools/get-entertainment-events';
 import addDays from 'date-fns/addDays';
@@ -24,10 +24,10 @@ export async function chatWithItinerary(input: ChatWithItineraryInput): Promise<
     
     const dayDates = Array.from({ length: input.duration }, (_, i) => {
         const date = addDays(new Date(input.startDate), i);
-        return format(date, 'yyyy-MM-dd');
+        return format(date, 'EEEE,dd-MMM-yyyy');
     });
 
-    const fullInput = {...input, endDate: formattedEndDate, dayDates};
+    const fullInput = {...input, endDate: formattedEndDate, dayDates: dayDates.map(d => d.split(','))};
 
     return chatWithItineraryFlow(fullInput);
 }
@@ -48,7 +48,7 @@ const chatItineraryPrompt = ai.definePrompt({
     name: 'chatItineraryPrompt',
     input: { schema: ChatWithItineraryInputSchema.extend({
         endDate: z.string(), 
-        dayDates: z.array(z.string()),
+        dayDates: z.array(z.array(z.string())),
         itinerarySummary: z.string(),
     }) },
     output: { schema: ChatWithItineraryOutputSchema },
@@ -74,7 +74,8 @@ Your primary goal is to be fast and responsive.
     *   **If it's a direct request to CHANGE the itinerary (e.g., "add a museum on day 2", "remove the beach day", "can we go to Kumasi instead?"):**
         *   Only in this case should you perform the more complex task of regenerating the plan.
         *   Provide a conversational response confirming the change (e.g., "Sure, I've updated your plan to include a visit to the National Museum on Day 2.").
-        *   Regenerate the *entire* itinerary object based on the **full original itinerary** provided below, incorporating the user's changes. Ensure it is logistically sound.
+        *   Regenerate the *entire* itinerary object based on the **full original itinerary** provided below, incorporating the user's changes.
+        *   **IMPORTANT**: The regenerated itinerary MUST follow the structured 'DayItinerarySchema' format, including 'dayOfWeek', 'date', 'location', 'title', 'details', etc. for each day. Use the 'dayDates' array for correct date information.
         *   Use your tools ('getLocalPulse', 'getEntertainmentEvents', 'getArticleLink', etc.) to enhance the new plan.
         *   The final output **MUST** include both the 'response' text and the full, updated 'itinerary' object.
 
@@ -86,11 +87,11 @@ Your primary goal is to be fast and responsive.
 **Key Information for you to use:**
 - Trip Dates: {{startDate}} to {{endDate}}
 - Trip Regions: {{#each region}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
-- Day Dates Array: {{#each dayDates}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
+- Day Dates Array: {{#each dayDates}}{{this.[0]}}, {{this.[1]}}{{#unless @last}}; {{/unless}}{{/each}}
 
 **Knowledge Base Snippets (for quick answers):**
 - **Museums:** The National Museum in Accra is a great choice for history and culture.
-- **Transport:** Uber/Bolt are common in cities. Trotros are used for city-to-city travel. STC/VIP buses for long distances.
+- **Transport:** Uber/Bolt are common in cities. Trotros for city-to-city. STC/VIP buses for long distances.
 - **Regions & Attractions:**
     - **Accra:** History, culture, nightlife (Jamestown, Nkrumah Memorial).
     - **Central:** Slave Castles (Cape Coast, Elmina), Nature (Kakum Canopy Walk).
@@ -105,7 +106,7 @@ Generate a valid JSON object that adheres to the ChatWithItineraryOutputSchema.`
 const chatWithItineraryFlow = ai.defineFlow(
     {
         name: 'chatWithItineraryFlow',
-        inputSchema: ChatWithItineraryInputSchema.extend({endDate: z.string(), dayDates: z.array(z.string())}),
+        inputSchema: ChatWithItineraryInputSchema.extend({endDate: z.string(), dayDates: z.array(z.array(z.string()))}),
         outputSchema: ChatWithItineraryOutputSchema,
     },
     async (input) => {
