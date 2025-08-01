@@ -91,6 +91,24 @@
         ]
     },
     {
+        "id": "accra-city-tour",
+        "title": "Accra City Vibe Tour",
+        "duration": "1 Day",
+        "price": "$95",
+        "priceValue": 95,
+        "description": "Discover the vibrant heart of Ghana's capital. Explore bustling markets, historical landmarks, and the trendy arts scene of Accra.",
+        "bookingUrl": "https://wa.me/233200635250",
+        "data-ai-hint": "city market",
+        "itinerary": [
+            {
+                "day": 1,
+                "title": "A Day in Accra",
+                "details": "*   **Morning:** Visit the Kwame Nkrumah Memorial Park & Mausoleum and Independence Square, the heart of Ghana's history.\n*   **Mid-day:** Explore the bustling Makola Market to experience the city's vibrant trade. Then head to Jamestown to see the lighthouse and the local fishing community.\n*   **Afternoon:** Visit the W.E.B. Du Bois Centre for Pan-African Culture. End the day with some souvenir shopping at the Arts Centre.\n*   Drop off at your hotel or preferred location.",
+                "overnight": "N/A"
+            }
+        ]
+    },
+    {
         "id": "coastal-heritage-7-day",
         "title": "Coastal Heritage & Culture",
         "duration": "7 Days",
@@ -156,21 +174,25 @@
         ]
     },
     {
-        "id": "accra-city-tour",
-        "title": "Accra City Vibe Tour",
-        "duration": "1 Day",
-        "price": "$95",
-        "priceValue": 95,
-        "description": "Discover the vibrant heart of Ghana's capital. Explore bustling markets, historical landmarks, and the trendy arts scene of Accra.",
+        "id": "december-in-ghana",
+        "title": "December in Ghana: The Ultimate Experience",
+        "duration": "10 Days",
+        "price": "$1350",
+        "priceValue": 1350,
+        "description": "Experience the legendary 'Detty December' in Ghana. This tour is the perfect blend of parties, culture, history, and beach relaxation.",
         "bookingUrl": "https://wa.me/233200635250",
-        "data-ai-hint": "city market",
+        "data-ai-hint": "ghana party nightlife",
         "itinerary": [
-            {
-                "day": 1,
-                "title": "A Day in Accra",
-                "details": "*   **Morning:** Visit the Kwame Nkrumah Memorial Park & Mausoleum and Independence Square, the heart of Ghana's history.\n*   **Mid-day:** Explore the bustling Makola Market to experience the city's vibrant trade. Then head to Jamestown to see the lighthouse and the local fishing community.\n*   **Afternoon:** Visit the W.E.B. Du Bois Centre for Pan-African Culture. End the day with some souvenir shopping at the Arts Centre.\n*   Drop off at your hotel or preferred location.",
-                "overnight": "N/A"
-            }
+            { "day": 1, "title": "Arrival & Accra Nightlife Intro", "details": "Arrive at Kotoka Airport, Accra. Transfer to your hotel. In the evening, ease into the vibe with dinner and cocktails in the trendy Osu neighborhood.", "overnight": "Accra" },
+            { "day": 2, "title": "History & Culture Grounding", "details": "Morning tour of Accra's historical sites: Jamestown, Nkrumah Memorial Park. Afternoon visit to the Arts Centre for souvenir shopping.", "overnight": "Accra" },
+            { "day": 3, "title": "Afrofuture/Afrochella Experience", "details": "Full day dedicated to one of December's flagship music and culture festivals. Enjoy the music, art installations, and fashion.", "overnight": "Accra" },
+            { "day": 4, "title": "Cape Coast Day Trip", "details": "A sobering and essential trip to Cape Coast Castle to connect with Ghana's history. Return to Accra in the evening.", "overnight": "Accra" },
+            { "day": 5, "title": "Beach Relaxation & Party", "details": "Relax at Labadi Beach. Enjoy horseback riding, local food, and music. As evening approaches, the beach comes alive with parties and bonfires.", "overnight": "Accra" },
+            { "day": 6, "title": "Fashion & Food Tour", "details": "Explore local fashion houses and designer stores. In the evening, embark on a food tour to taste Ghana's diverse culinary delights, from street food to upscale dining.", "overnight": "Accra" },
+            { "day": 7, "title": "Aburi Mountains Escape", "details": "A day trip to the cooler Aburi Botanical Gardens for a relaxing break from the city buzz. Enjoy the serene environment and beautiful landscapes.", "overnight": "Accra" },
+            { "day": 8, "title": "Concert or Live Music Night", "details": "Attend a major concert or a live music session at a venue like +233 Grill & Bar. We will check the event calendar and secure tickets for the best show in town.", "overnight": "Accra" },
+            { "day": 9, "title": "New Year's Eve Celebrations", "details": "Day of leisure to prepare for the night. We'll arrange entry to one of Accra's top New Year's Eve parties or a fireworks display event at the beach.", "overnight": "Accra" },
+            { "day": 10, "title": "Relaxed Departure", "details": "Enjoy a late brunch. Depending on your flight time, one last stroll before we transfer you to the airport for your departure.", "overnight": "N/A" }
         ]
     }
 ]
