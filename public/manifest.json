@@ -1,33 +1,66 @@
-
 {
-    "theme_color": "#b94141",
-    "background_color": "#f2e9d8",
-    "display": "standalone",
-    "scope": "/",
-    "start_url": "/",
-    "name": "GoGhana Planner",
-    "short_name": "GoGhana",
-    "description": "Your trusted guide to Ghana, powered by local expertise. Get realistic budgets, authentic itineraries, and travel tips from a real Ghanaian perspective.",
-    "icons": [
-        {
-            "src": "/icon-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-256x256.png",
-            "sizes": "256x256",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-384x384.png",
-            "sizes": "384x384",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        }
+  "theme_color": "#fde047",
+  "background_color": "#f4f0e6",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "id": "/?utm_source=pwa",
+  "name": "GoGhana Planner",
+  "short_name": "GoGhana",
+  "description": "Your trusted guide to Ghana, powered by local expertise. Get realistic budgets, authentic itineraries, and travel tips from a real Ghanaian perspective.",
+  "orientation": "portrait",
+  "categories": [
+    "travel",
+    "lifestyle",
+    "planning"
+  ],
+  "lang": "en-US",
+  "launch_handler": {
+    "client_mode": [
+      "navigate-existing",
+      "auto"
     ]
+  },
+  "screenshots": [
+    {
+      "src": "/screenshots/screenshot1.png",
+      "type": "image/png",
+      "sizes": "1080x1920",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshots/screenshot2.png",
+      "type": "image/png",
+      "sizes": "1080x1920",
+      "form_factor": "narrow"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/maskable_icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
 }
