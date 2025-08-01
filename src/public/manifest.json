@@ -1,0 +1,49 @@
+{
+  "name": "GoGhana Planner",
+  "short_name": "GoGhana",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#E3DDCB",
+  "theme_color": "#E02424",
+  "description": "Your trusted guide to Ghana, powered by local expertise. Get realistic budgets, authentic itineraries, and travel tips from a real Ghanaian perspective.",
+  "id": "/?source=pwa",
+  "orientation": "portrait",
+  "dir": "ltr",
+  "lang": "en-US",
+  "categories": ["travel", "lifestyle", "planning"],
+  "prefer_related_applications": false,
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/screenshot-1.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Trip Planner Interface"
+    },
+    {
+      "src": "/screenshots/screenshot-2.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Itinerary View"
+    }
+  ]
+}
