@@ -18,7 +18,7 @@ interface TourCardProps {
 
 export function TourCard({ title, duration, price, description, image, bookingUrl, "data-ai-hint": dataAiHint }: TourCardProps) {
     return (
-        <Card className="flex flex-col">
+        <Card className="flex flex-col transition-all duration-300 hover:shadow-xl hover:scale-105 animate-in fade-in zoom-in-95">
             <CardHeader className="p-0">
                 <Image
                     src={image}

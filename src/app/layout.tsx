@@ -55,7 +55,7 @@ export default function RootLayout({
                     <Link href="/ideas">Trip Ideas</Link>
                 </Button>
                  <Button asChild variant="ghost">
-                    <Link href="/tours">Tours</Link>
+                    <Link href="/tours">Cheap Tour Deals</Link>
                 </Button>
                 <Button asChild variant="ghost">
                     <Link href="/planner">Planner</Link>
@@ -84,7 +84,7 @@ export default function RootLayout({
                                 <Link href="/ideas">Trip Ideas</Link>
                             </SheetClose>
                              <SheetClose asChild>
-                                <Link href="/tours">Tours</Link>
+                                <Link href="/tours">Cheap Tour Deals</Link>
                             </SheetClose>
                             <SheetClose asChild>
                                 <Link href="/planner">Planner</Link>

@@ -10,7 +10,7 @@ import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const TourSkeleton = () => (
-    <div className="flex flex-col rounded-lg border bg-card shadow-sm">
+    <div className="flex flex-col rounded-lg border bg-card shadow-sm transition-all duration-300">
         <Skeleton className="h-52 w-full rounded-t-lg" />
         <div className="p-6 space-y-4">
             <Skeleton className="h-6 w-3/4 rounded" />
@@ -31,7 +31,7 @@ export default function ToursPage() {
       <div className="bg-muted py-12 sm:py-20">
         <div className="container mx-auto max-w-3xl px-4 text-center">
             <h1 className="font-headline text-3xl font-bold sm:text-4xl">
-                Our Curated Tours
+                Cheap Tour Deals
             </h1>
             <p className="mt-4 text-base text-muted-foreground sm:text-lg">
               Explore our hand-picked selection of tours, designed to offer the best of Ghana at unbeatable prices. When you're ready, book securely on our dedicated tour website.
