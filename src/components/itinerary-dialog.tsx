@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import {
@@ -49,6 +50,7 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Logo } from './logo';
 import { Label } from './ui/label';
+import { Card } from './ui/card';
 
 type TripPlanData = {
   inputs: PlanTripInput;
@@ -64,10 +66,10 @@ function getCacheKey(planData: TripPlanData, tool: string) {
 const ItineraryDayRow = ({ dayPlan, isPdf = false }: { dayPlan: z.infer<typeof DayItinerary>, isPdf?: boolean }) => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] border-b last:border-b-0">
-            <div className={cn("p-4 font-semibold", isPdf ? "text-sm" : "text-base")}>
+            <div className={cn("p-4 space-y-1", isPdf ? "text-sm" : "text-base")}>
                 <p className="font-bold">{dayPlan.dayOfWeek}</p>
-                <p>{dayPlan.date}</p>
-                <p className="mt-2 text-primary">{dayPlan.location}</p>
+                <p className="text-sm">{dayPlan.date}</p>
+                <p className="mt-2 font-semibold text-primary">{dayPlan.location}</p>
                 {dayPlan.driveTime && (
                      <p className="text-xs text-muted-foreground mt-1">{dayPlan.driveTime}</p>
                 )}
@@ -265,41 +267,15 @@ const ItineraryContent = ({
                 {itinerary && <ItineraryForPDF itinerary={itinerary} tripData={planData} />}
             </div>
             <div className="flex-grow overflow-y-auto pr-4 -mr-4">
-                 <Accordion type="single" collapsible className="w-full" defaultValue="day-1">
+                 <Card className="rounded-lg border">
+                    <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] bg-muted/50 font-bold text-sm border-b rounded-t-lg">
+                        <div className="p-2">Overnight & Drive Time</div>
+                        <div className="p-2 border-l">Itinerary & Details</div>
+                    </div>
                     {itinerary.itinerary.map((dayPlan) => (
-                        <AccordionItem value={`day-${dayPlan.day}`} key={dayPlan.day}>
-                            <AccordionTrigger>
-                                <div className="flex items-center gap-4">
-                                    <div className="flex flex-col items-center justify-center h-12 w-12 rounded-lg bg-primary text-primary-foreground">
-                                        <span className="text-xs">DAY</span>
-                                        <span className="font-bold text-xl">{dayPlan.day}</span>
-                                    </div>
-                                    <div>
-                                        <h4 className="font-bold text-left">{dayPlan.title}</h4>
-                                        <p className="text-sm text-muted-foreground text-left">{dayPlan.location}</p>
-                                    </div>
-                                </div>
-                            </AccordionTrigger>
-                            <AccordionContent>
-                                <div className="pl-4 border-l-2 border-primary ml-6">
-                                     <div 
-                                        className="prose prose-sm max-w-none dark:prose-invert prose-p:text-foreground prose-strong:text-foreground"
-                                        dangerouslySetInnerHTML={{ __html: marked.parse(dayPlan.details) as string }} 
-                                    />
-                                    {dayPlan.budget && (
-                                        <div className="mt-4 pt-2 border-t border-dashed border-border">
-                                            <h5 className="font-semibold text-xs uppercase text-muted-foreground">Est. Budget</h5>
-                                            <div 
-                                                className="prose prose-sm max-w-none dark:prose-invert prose-p:text-foreground prose-strong:text-foreground"
-                                                dangerouslySetInnerHTML={{ __html: marked.parse(dayPlan.budget) as string }} 
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            </AccordionContent>
-                        </AccordionItem>
+                        <ItineraryDayRow key={dayPlan.day} dayPlan={dayPlan} />
                     ))}
-                </Accordion>
+                </Card>
 
                  {chatHistory.length > 0 && (
                     <div ref={chatContainerRef} className="mt-4 border-t pt-4 space-y-4 max-h-[200px] overflow-y-auto">
@@ -689,5 +665,7 @@ export function ItineraryDialog({ planData, open, onOpenChange }: ItineraryDialo
         </Dialog>
     )
 }
+
+    
 
     
