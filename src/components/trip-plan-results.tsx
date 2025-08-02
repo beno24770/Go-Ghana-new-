@@ -6,7 +6,6 @@ import {
   BedDouble,
   Car,
   MessageSquare,
-  Share2,
   Ticket,
   Utensils,
   Wallet,
@@ -66,11 +65,13 @@ function TripPlanActions({ planData }: { planData: TripPlanData }) {
                 </Link>
             </Button>
             <Suspense fallback={<div>Loading...</div>}>
-                <ItineraryDialog 
-                    planData={planData} 
-                    open={isDialogOpen}
-                    onOpenChange={setIsDialogOpen}
-                />
+                {isDialogOpen && (
+                    <ItineraryDialog 
+                        planData={planData} 
+                        open={isDialogOpen}
+                        onOpenChange={setIsDialogOpen}
+                    />
+                )}
             </Suspense>
         </>
     );

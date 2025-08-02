@@ -4,8 +4,12 @@ import { ArrowRight, Wand2 } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PhoneMockup } from "@/components/phone-mockup";
+import dynamic from "next/dynamic";
 import { InstallPwaButton } from "@/components/install-pwa-button";
+
+const PhoneMockup = dynamic(() => import('@/components/phone-mockup').then(mod => mod.PhoneMockup), {
+    suspense: true,
+});
 
 const PhoneSkeleton = () => (
     <div className="relative mx-auto border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-xl">

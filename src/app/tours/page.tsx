@@ -8,9 +8,13 @@ import tours from '@/data/tours.json';
 import { TourCard } from '@/components/tour-card';
 import { Suspense, useState, useMemo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { TourItineraryDialog } from '@/components/tour-itinerary-dialog';
 import type { Tour } from '@/lib/types';
 import { Card } from '@/components/ui/card';
+import dynamic from 'next/dynamic';
+
+const TourItineraryDialog = dynamic(() => import('@/components/tour-itinerary-dialog').then(mod => mod.TourItineraryDialog), {
+    suspense: true,
+});
 
 const TourSkeleton = () => (
     <div className="flex flex-col rounded-lg border bg-card shadow-sm p-6 space-y-4">
