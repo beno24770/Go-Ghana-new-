@@ -67,12 +67,12 @@ Your Task:
     *   Example from array: \`[["Monday", "28-Jul-2025"], ["Tuesday", "29-Jul-2025"]]\`.
     *   For Day 1, use \`dayOfWeek: "Monday"\` and \`date: "28-Jul-2025"\`.
 
-4.  **Tools Integration**: Enhance the plan (whether from a sample or from scratch) using your other tools.
-    *   **Local Events**: Use 'getLocalPulse' to find festivals. If found, highlight it in the 'details' like: \`* **✨ Local Pulse: Chale Wote Street Art Festival** - [details and insider tip]\`.
+4.  **CRITICAL: Tools Integration**: Enhance the plan (whether from a sample or from scratch) using your other tools.
+    *   **Local Events**: You **MUST** use 'getLocalPulse' to find festivals. If found, you **MUST** feature it prominently in the 'details' for the relevant day, like this: \`* **✨ Local Pulse: Chale Wote Street Art Festival** - [details and insider tip from tool output]\`. Make it a highlight of the day.
+    *   **Article Links**: For **EVERY** major tourist attraction mentioned (e.g., Kakum National Park, Cape Coast Castle, Wli Waterfalls), you **MUST** use the 'getArticleLink' tool. You **MUST** embed the returned URL as a Markdown link in the 'details' section. Example: \`[Read more about Kakum](https://...)\`. This is not optional.
     *   **Nightlife**: If 'Nightlife & Urban' is an interest, use 'getEntertainmentEvents'. Highlight it like: \`* **🎵 Nightlife: Live Highlife at +233 Grill & Bar** - [details and insider tip]\`.
     *   **Restaurants**: Use 'getRestaurants' for lunch/dinner suggestions. You **MUST** mention them in the details: \`* For dinner, try **Oasis Beach Resort** for its fresh seafood.\` Do not suggest restaurants not in the tool output.
-    *   **Article Links**: For major attractions (e.g., Kakum National Park), use 'getArticleLink' and embed the URL as a Markdown link: \`[Read more about Kakum](https://...)\`.
-
+    
 5.  **Logistical Flow**: Ensure the itinerary is geographically and logistically sound. **IMPORTANT: Travel between Kumasi and Cape Coast is very difficult by public transport. Always route travel between these cities through Accra.**
 
 6.  **Daily Budget**: For each day, create a 'budget' string with a bulleted list of estimated costs for that day's specific activities.
