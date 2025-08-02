@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
-import { ExternalLink } from 'lucide-react';
+import { MessageSquare } from 'lucide-react';
 
 interface Accommodation {
     id: string;
@@ -36,10 +36,10 @@ export function AccommodationCard({ accommodation }: AccommodationCardProps) {
                  <p className="text-sm text-muted-foreground pt-2">{accommodation.description}</p>
             </CardContent>
             <CardFooter className="p-4 pt-0">
-                <Button asChild className="w-full" disabled={accommodation.link === "#"}>
-                    <Link href={accommodation.link} target="_blank">
-                        {accommodation.link === "#" ? "No Website Available" : "Visit Website"}
-                        {accommodation.link !== "#" && <ExternalLink />}
+                <Button asChild className="w-full">
+                    <Link href="https://wa.me/233200635250" target="_blank">
+                        <MessageSquare />
+                        Contact for Booking
                     </Link>
                 </Button>
             </CardFooter>
