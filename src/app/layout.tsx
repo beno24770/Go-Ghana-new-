@@ -1,5 +1,5 @@
 
-import type { Metadata, Manifest } from 'next';
+import type { Metadata } from 'next';
 import { PT_Sans, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
@@ -26,7 +26,6 @@ const playfairDisplay = Playfair_Display({
 export const metadata: Metadata = {
   title: 'GoGhana Planner',
   description: 'Your trusted guide to Ghana, powered by local expertise. Get realistic budgets, authentic itineraries, and travel tips from a real Ghanaian perspective.',
-  manifest: '/manifest.json',
   icons: {
     apple: '/icon.png',
   },
