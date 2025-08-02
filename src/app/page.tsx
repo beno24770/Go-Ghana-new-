@@ -1,4 +1,6 @@
 
+'use client';
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Wand2 } from "lucide-react";
 import Link from "next/link";
@@ -8,6 +10,7 @@ import dynamic from "next/dynamic";
 import { InstallPwaButton } from "@/components/install-pwa-button";
 
 const PhoneMockup = dynamic(() => import('@/components/phone-mockup').then(mod => mod.PhoneMockup), {
+    ssr: false, // Prevent server-side rendering for this component
     suspense: true,
 });
 

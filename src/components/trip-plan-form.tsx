@@ -56,10 +56,7 @@ interface TripPlanFormProps {
 
 export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: TripPlanFormProps) {
   const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
+  
   const form = useForm<PlanTripInput>({
     resolver: zodResolver(PlanTripInputSchema),
     defaultValues: {
@@ -76,7 +73,12 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
   });
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
     if (defaultValues) {
+      // Reset the form with new defaultValues when they change
       form.reset({
         duration: 7,
         region: ['Greater Accra'],
@@ -89,7 +91,7 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
         ...defaultValues
       });
     }
-  }, [defaultValues, form]);
+  }, [defaultValues, form.reset]);
 
 
     const isNewToGhana = form.watch('isNewToGhana');
