@@ -54,7 +54,7 @@ const AccommodationSkeleton = () => (
 
 const durationFilters = ["All", "1 Day", "2-3 Days", "4+ Days"];
 const priceFilters = ["All", "Under $200", "$200 - $400", "$400+"];
-const allRegions = ["All", ...new Set(accommodationsData.map(item => item.region))].sort();
+const allRegions = ["All", ...Array.from(new Set(accommodationsData.map(item => item.region)))].sort();
 const travelStyles = ["All", "Budget", "Mid-range", "Luxury"];
 
 export default function ToursPage() {
