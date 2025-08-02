@@ -159,8 +159,8 @@ export default function TripPlanResults({ data, isLoading, onBack, showBackButto
                 icon={categoryIcons.accommodation}
                 cta={
                   <Button asChild>
-                      <Link href="https://trip.tpx.li/zxUEYprS" target="_blank">
-                          View Availability
+                      <Link href="/accommodations">
+                          View Options
                       </Link>
                   </Button>
                 }
