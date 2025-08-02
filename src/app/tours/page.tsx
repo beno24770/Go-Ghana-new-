@@ -92,10 +92,10 @@ export default function ToursPage() {
     return accommodationsData.filter(accommodation => {
         const regionMatch = selectedRegion === "All" || accommodation.region === selectedRegion;
         const styleMatch = selectedStyle === "All" || accommodation.travelStyle.includes(selectedStyle);
-        const searchMatch = searchTerm === "" || accommodation.region.toLowerCase().includes(searchTerm.toLowerCase());
+        const searchMatch = searchTerm === "" || accommodation.name.toLowerCase().includes(searchTerm.toLowerCase()) || accommodation.region.toLowerCase().includes(searchTerm.toLowerCase());
         return regionMatch && styleMatch && searchMatch;
     });
-}, [selectedRegion, selectedStyle, searchTerm]);
+  }, [selectedRegion, selectedStyle, searchTerm]);
 
 
   return (
@@ -193,7 +193,7 @@ export default function ToursPage() {
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                         <Input 
-                            placeholder="Search by region..."
+                            placeholder="Search by name or region..."
                             className="pl-10"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
