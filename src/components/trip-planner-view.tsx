@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useEffect, useCallback, useTransition, Suspense } from 'react';
@@ -167,6 +168,20 @@ function TripPlannerViewInternal() {
     });
   }
 
+  const getTripPlanDefaults = () => {
+    if (tripPlanData?.inputs) return tripPlanData.inputs;
+    if (planTriggerData) return planTriggerData;
+    if (budgetData?.inputs) {
+        const { dailyBudget, ...rest } = budgetData.inputs;
+        return {
+            ...rest,
+            budget: budgetData.outputs.total,
+        }
+    }
+    return {};
+  }
+
+
   return (
       <main className="container mx-auto max-w-5xl flex-1 px-4 py-8">
         <div className="mb-8 flex items-center">
@@ -214,7 +229,7 @@ function TripPlannerViewInternal() {
                         <TripPlanForm
                             onSubmit={handlePlan}
                             isSubmitting={isLoading && activeTab === 'plan'}
-                            defaultValues={tripPlanData?.inputs || planTriggerData || budgetData?.inputs}
+                            defaultValues={getTripPlanDefaults()}
                         />
                     </div>
                     <div className="relative">
