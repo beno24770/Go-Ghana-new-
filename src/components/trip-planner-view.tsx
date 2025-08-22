@@ -172,9 +172,8 @@ function TripPlannerViewInternal() {
     if (tripPlanData?.inputs) return tripPlanData.inputs;
     if (planTriggerData) return planTriggerData;
     if (budgetData?.inputs) {
-        const { dailyBudget, ...rest } = budgetData.inputs;
         return {
-            ...rest,
+            ...budgetData.inputs,
             budget: budgetData.outputs.total,
         }
     }
