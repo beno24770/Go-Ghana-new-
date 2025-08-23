@@ -79,7 +79,7 @@ Your Task:
     *   **Transportation**: Provide a realistic dollar amount based on the travel style.
     *   **Entrance Fees**: Sum known fees. Assume a minimum of $10 per person for any major tourist site if the fee isn't listed.
     *   **Food**: Estimate food cost based on the travel style.
-    *   Example for 'budget' field: \`- **Transportation**: $20\\n- **Entrance Fees**: $15\\n- **Food**: $30\`
+    *   Example for 'budget' field: \`- **Transportation**: $20\n- **Entrance Fees**: $15\n- **Food**: $30\`
 
 Generate a response that adheres to the GenerateItineraryOutputSchema.`,
 });

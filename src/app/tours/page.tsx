@@ -121,9 +121,9 @@ export default function ToursPage() {
 
         <h2 className="font-headline text-2xl font-bold mb-2">Cheap Tour Deals</h2>
         <p className="text-muted-foreground mb-6">Book securely with a real person via WhatsApp.</p>
-        <Card className="mb-12 bg-muted/50 p-6">
+        <Card className="mb-12 bg-muted/50 p-4 sm:p-6">
             <h3 className="flex items-center font-headline text-xl mb-4"><Filter className="mr-2 h-5 w-5"/> Filter Tours</h3>
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <p className="mb-2 text-sm font-semibold">By Duration</p>
                     <div className="flex flex-wrap gap-2">
