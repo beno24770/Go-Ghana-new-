@@ -273,7 +273,7 @@ export default function TripPlanForm({ onSubmit, isSubmitting, defaultValues }: 
               <FormLabel>Interests</FormLabel>
               <Card>
                 <CardContent className="p-4 pt-4">
-                  <div className="space-y-2">
+                  <div className="grid grid-cols-2 gap-2">
                   {interests.map((interest) => (
                     <FormField
                       key={interest.id}

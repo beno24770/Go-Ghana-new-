@@ -44,9 +44,15 @@ User's Edited Itinerary Notes:
 {{notes}}
 ---
 
+Key Information:
+- Start Date: {{startDate}}
+- Duration: {{duration}} days
+- Regions: {{#each region}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
+
 Your Task:
-1.  **Analyze User's Notes**: Carefully read the user's notes to understand their desired changes.
+1.  **Analyze User's Notes**: Carefully read the user's notes to understand their desired changes. Interpret their requests and build a new, coherent plan.
 2.  **Adhere to Format**: You **MUST** structure the output according to the 'DayItinerarySchema'. For each day, provide:
+    *   \`day\`
     *   \`dayOfWeek\`
     *   \`date\` (in DD-Mon-YYYY format, using the 'dayDates' array)
     *   \`location\` (overnight city)
@@ -56,8 +62,8 @@ Your Task:
     *   \`budget\` (optional Markdown string)
 
 3.  **Use 'dayDates' Array**: Use the provided 'dayDates' array to correctly populate 'dayOfWeek' and 'date' for each day of the itinerary.
-4.  **Enhance with Tools**: Use 'getLocalPulse', 'getEntertainmentEvents', 'getRestaurants', and 'getArticleLink' to add value, just as you would when creating a new itinerary. Highlight special events.
-5.  **Ensure Feasibility**: Make the regenerated itinerary logistically sound. Remember the Kumasi-Cape Coast travel constraint (route through Accra).
+4.  **Enhance with Tools**: Use 'getLocalPulse', 'getEntertainmentEvents', 'getRestaurants', and 'getArticleLink' to add value, just as you would when creating a new itinerary. Highlight special events with a ✨ icon. Embed article links for major attractions.
+5.  **Ensure Feasibility**: Make the regenerated itinerary logistically sound. Remember the Kumasi-Cape Coast travel constraint (route through Accra). If the user's notes create an impossible route, gently correct it in the plan.
 6.  **Refine and Polish**: Use your expertise to improve the flow, suggest better routes, or add small details. The output should be a complete and practical itinerary in the correct JSON format.
 
 Generate a response that adheres to the GenerateItineraryOutputSchema.`,
@@ -67,7 +73,7 @@ Generate a response that adheres to the GenerateItineraryOutputSchema.`,
 const regenerateItineraryFlow = ai.defineFlow(
     {
         name: 'regenerateItineraryFlow',
-        inputSchema: RegenerateItineraryInputSchema.extend({endDate: z.string(), dayDates: z.array(z.array(z.string()))}),
+        inputSchema: RegenerateItineraryInputSchema.extend({endDate: z.string(), dayDates: z.array(z.array(s: string()))}),
         outputSchema: GenerateItineraryOutputSchema,
     },
     async (input) => {
