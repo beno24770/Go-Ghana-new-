@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -9,18 +10,19 @@
 import { ai } from '@/ai/genkit';
 import { GenerateAudioInput, GenerateAudioInputSchema, GenerateAudioOutput, GenerateAudioOutputSchema } from '@/ai/schemas';
 import wav from 'wav';
+import { z } from 'zod';
 
 export async function generateAudio(input: GenerateAudioInput): Promise<GenerateAudioOutput> {
-    return generateAudioFlow(input);
+    return generateAudioFlow(input.text);
 }
 
 const generateAudioFlow = ai.defineFlow(
     {
         name: 'generateAudioFlow',
-        inputSchema: GenerateAudioInputSchema,
+        inputSchema: z.string(),
         outputSchema: GenerateAudioOutputSchema,
     },
-    async ({ text }) => {
+    async (query) => {
         const { media } = await ai.generate({
             model: 'googleai/gemini-2.5-flash-preview-tts',
             config: {
@@ -31,11 +33,11 @@ const generateAudioFlow = ai.defineFlow(
                     },
                 },
             },
-            prompt: text,
+            prompt: query,
         });
 
         if (!media) {
-            throw new Error('No media was returned from the TTS model.');
+            throw new Error('no media returned');
         }
 
         const audioBuffer = Buffer.from(
@@ -43,37 +45,35 @@ const generateAudioFlow = ai.defineFlow(
             'base64'
         );
 
-        const wavData = await toWav(audioBuffer);
-
         return {
-            media: 'data:audio/wav;base64,' + wavData,
+            media: 'data:audio/wav;base64,' + (await toWav(audioBuffer)),
         };
     }
 );
 
 async function toWav(
-    pcmData: Buffer,
-    channels = 1,
-    rate = 24000,
-    sampleWidth = 2
+  pcmData: Buffer,
+  channels = 1,
+  rate = 24000,
+  sampleWidth = 2
 ): Promise<string> {
-    return new Promise((resolve, reject) => {
-        const writer = new wav.Writer({
-            channels,
-            sampleRate: rate,
-            bitDepth: sampleWidth * 8,
-        });
-
-        const bufs: any[] = [];
-        writer.on('error', reject);
-        writer.on('data', (d) => {
-            bufs.push(d);
-        });
-        writer.on('end', () => {
-            resolve(Buffer.concat(bufs).toString('base64'));
-        });
-
-        writer.write(pcmData);
-        writer.end();
+  return new Promise((resolve, reject) => {
+    const writer = new wav.Writer({
+      channels,
+      sampleRate: rate,
+      bitDepth: sampleWidth * 8,
     });
+
+    let bufs = [] as any[];
+    writer.on('error', reject);
+    writer.on('data', function (d) {
+      bufs.push(d);
+    });
+    writer.on('end', function () {
+      resolve(Buffer.concat(bufs).toString('base64'));
+    });
+
+    writer.write(pcmData);
+    writer.end();
+  });
 }

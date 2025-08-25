@@ -34,6 +34,7 @@ export async function chatWithItinerary(input: ChatWithItineraryInput): Promise<
 
 const summarizeItineraryPrompt = ai.definePrompt({
     name: 'summarizeItineraryPrompt',
+    model: 'googleai/gemini-1.5-flash-latest',
     input: { schema: z.object({ currentItinerary: z.string() }) },
     output: { schema: z.object({ summary: z.string().describe('A concise, one-paragraph summary of the travel itinerary.') }) },
     prompt: `Concisely summarize the following travel itinerary in a single paragraph. Capture the main themes, locations, and duration.
@@ -46,6 +47,7 @@ Itinerary:
 
 const chatItineraryPrompt = ai.definePrompt({
     name: 'chatItineraryPrompt',
+    model: 'googleai/gemini-1.5-flash-latest',
     input: { schema: ChatWithItineraryInputSchema.extend({
         endDate: z.string(), 
         dayDates: z.array(z.array(z.string())),

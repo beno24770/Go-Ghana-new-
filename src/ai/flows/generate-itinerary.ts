@@ -34,6 +34,7 @@ export async function generateItinerary(input: GenerateItineraryInput): Promise<
 
 const generateItineraryPrompt = ai.definePrompt({
     name: 'generateItineraryPrompt',
+    model: 'googleai/gemini-1.5-flash-latest',
     input: { schema: GenerateItineraryInputSchema.extend({endDate: z.string(), dayDates: z.array(z.array(z.string()))}) },
     output: { schema: GenerateItineraryOutputSchema },
     tools: [getLocalPulse, getEntertainmentEvents, getRestaurants, getArticleLink, getSampleItineraries],

@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -15,6 +16,7 @@ export async function generateLanguageGuide(input: GenerateLanguageGuideInput): 
 
 const generateLanguageGuidePrompt = ai.definePrompt({
     name: 'generateLanguageGuidePrompt',
+    model: 'googleai/gemini-1.5-flash-latest',
     input: { schema: GenerateLanguageGuideInputSchema },
     output: { schema: GenerateLanguageGuideOutputSchema },
     prompt: `You are a Ghana travel and language expert. A first-time solo traveler is visiting the following regions in Ghana: {{#each region}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}.

@@ -17,6 +17,7 @@ export async function estimateBudget(input: EstimateBudgetInput): Promise<Estima
 
 const estimateBudgetPrompt = ai.definePrompt({
   name: 'estimateBudgetPrompt',
+  model: 'googleai/gemini-1.5-flash-latest',
   input: {schema: EstimateBudgetInputSchema},
   output: {schema: EstimateBudgetOutputSchema},
   prompt: `You are a travel expert specializing in trips to Ghana. Based on the user's preferences, provide an estimated budget for their trip.

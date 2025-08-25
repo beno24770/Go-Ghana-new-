@@ -16,6 +16,7 @@ export async function generatePackingList(input: GeneratePackingListInput): Prom
 
 const generatePackingListPrompt = ai.definePrompt({
     name: 'generatePackingListPrompt',
+    model: 'googleai/gemini-1.5-flash-latest',
     input: { schema: GeneratePackingListInputSchema },
     output: { schema: GeneratePackingListOutputSchema },
     prompt: `You are a Ghana travel expert. Create a detailed packing list for a first-time solo traveler based on their trip preferences.

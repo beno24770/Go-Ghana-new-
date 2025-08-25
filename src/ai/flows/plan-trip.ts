@@ -18,6 +18,7 @@ export async function planTrip(input: PlanTripInput): Promise<PlanTripOutput> {
 
 const planTripPrompt = ai.definePrompt({
   name: 'planTripPrompt',
+  model: 'googleai/gemini-1.5-flash-latest',
   input: {schema: PlanTripInputSchema},
   output: {schema: PlanTripOutputSchema},
   tools: [getAccommodations, getRestaurants],
@@ -72,7 +73,7 @@ Transportation Facts (use this to inform your suggestions):
 Example Descriptions:
 - **Food**: Describe dining options (e.g., "Local street food stalls and small local eateries (chop bars)", "A mix of local restaurants and some Western-style cafes", "Fine dining restaurants and hotel restaurants").
 - **Transportation**: Mention modes of transport (e.g., "Shared trotros and public buses for inter-city travel", "Ride-sharing apps (Uber/Bolt) and occasional private taxis", "A private driver or high-end car rental is highly recommended for flexibility and comfort"). For budget plans, mention that $5-$15/day is a good estimate for moving between major cities.
-- **Activities**: Suggest a plausible itinerary for the duration, keeping in mind that tour site fees are at least $10 per person. Tailor this to the user's interests. For example if the user is interested in 'History', suggest: "Day 1-2: Explore Accra's historical sites like Independence Square and Jamestown Lighthouse. Day 3: Visit the Cape Coast Castle (Entrance fee ~$4.20) to learn about the slave trade..."
+- **Activities**: Suggest a plausible itinerary for the. duration, keeping in mind that tour site fees are at least $10 per person. Tailor this to the user's interests. For example if the user is interested in 'History', suggest: "Day 1-2: Explore Accra's historical sites like Independence Square and Jamestown Lighthouse. Day 3: Visit the Cape Coast Castle (Entrance fee ~$4.20) to learn about the slave trade..."
 
 Generate a response that adheres to the PlanTripOutputSchema.`,
 });

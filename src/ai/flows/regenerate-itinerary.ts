@@ -33,6 +33,7 @@ export async function regenerateItineraryFromNotes(input: RegenerateItineraryInp
 
 const regenerateItineraryPrompt = ai.definePrompt({
     name: 'regenerateItineraryPrompt',
+    model: 'googleai/gemini-1.5-flash-latest',
     input: { schema: RegenerateItineraryInputSchema.extend({endDate: z.string(), dayDates: z.array(z.array(z.string()))}) },
     output: { schema: GenerateItineraryOutputSchema },
     tools: [getLocalPulse, getEntertainmentEvents, getRestaurants, getArticleLink],
