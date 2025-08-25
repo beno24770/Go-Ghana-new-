@@ -36,15 +36,15 @@ Specified Daily Budget per Person: \${{dailyBudget}}
 
 Your Task:
 1.  **Determine Daily Cost**:
-    *   **If a 'dailyBudget' is specified**: Use this value as the total per-person, per-day cost. You MUST then allocate this amount across the four categories (accommodation, food, transportation, activities) in a way that is logical for the specified 'travelStyle' and 'interests'.
+    *   **If a 'dailyBudget' is specified**: This is the most important instruction. You **MUST** use this value as the total per-person, per-day cost. You will then allocate this amount across the four categories (accommodation, food, transportation, activities) in a way that is logical for the specified 'travelStyle' and 'interests'. The sum of your per-day allocations for the categories MUST equal the user's 'dailyBudget'.
     *   **If no 'dailyBudget' is specified**: Use the 'travelStyle' to determine an average per-person, per-day cost from the ranges below. If 'interests' like 'Adventure' or 'Nightlife' are specified, slightly increase the 'activities' portion of the budget.
 
-2.  **Calculate Per-Day Costs**: For each category, determine the per-day cost.
+2.  **Calculate Per-Day Costs**: For each category, determine the per-day cost based on the logic from step 1.
 3.  **Calculate Total Costs**: Multiply the per-day cost by the duration of the trip to get the total for each category.
 4.  **Calculate Grand Total**: Sum the total costs of all categories to get the grand total for the trip. The total per-day cost should match the user's specified 'dailyBudget' if it was provided.
 5.  **Format the Output**: Provide the breakdown in the specified JSON schema format, including both 'perDay' and 'total' for each category.
 
-Cost Ranges (per person, per day in USD):
+Cost Ranges (per person, per day in USD) - Use these as a reference ONLY if no daily budget is provided:
 Budget:
   - Accommodation: $20-60
   - Food: $10-20
